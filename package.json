@@ -11,15 +11,14 @@
         "test:functional": "dotenv -e .env -- jest --projects ./test --runInBand ---detectOpenHandles --forceExit",
         "test:unit": "dotenv -e .env -- jest",
         "start": "node dist/index.js",
-        "start:local": "nodemon --exec babel-node src/index.js | pino-pretty -c",
+        "start:dev": "yarn migrate && nodemon --exec babel-node src/index.js | pino-pretty -c",
         "build": "babel src -d dist",
         "migrate": "sequelize db:migrate ",
         "migrate:reset": "sequelize db:migrate:undo:all",
         "seed": "sequelize db:seed:all",
-        "migrate:seed": "npm run migrate && npm run seed",
-        "start:dev": "npm run migrate && nodemon --exec babel-node ./src/index.js",
-        "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
-        "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'"
+        "migrate:seed": "yarn migrate && yarn seed",
+        "style:check": "prettier --check 'src/**/*.js' 'test/**/*.js'",
+        "style:fix": "prettier --write 'src/**/*.js' 'test/**/*.js'"
     },
     "repository": {
         "type": "git",

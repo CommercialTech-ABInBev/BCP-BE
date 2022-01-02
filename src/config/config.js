@@ -1,6 +1,6 @@
 import env from './env';
 const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = env;
-console.log(DB_HOST, DB_PASSWORD);
+
 module.exports = {
     production: {
         host: DB_HOST,

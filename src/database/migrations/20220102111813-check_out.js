@@ -1,23 +1,31 @@
 'use strict';
 
-module.exports = {
-  up: (queryInterface, Sequelize) => {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-    */
-  },
-
-  down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
-  }
-};
+export function up(queryInterface, Sequelize) {
+    return queryInterface.createTable('CheckOuts', {
+        id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER
+        },
+        title: Sequelize.STRING,
+        location: Sequelize.STRING,
+        stockType: Sequelize.STRING,
+        status: Sequelize.STRING,
+        brand: Sequelize.STRING,
+        quantity: Sequelize.INTEGER,
+        requestDate: Sequelize.DATE,
+        deletedAt: Sequelize.DATE,
+        createdAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+        },
+        updatedAt: {
+            allowNull: false,
+            type: Sequelize.DATE
+        }
+    });
+}
+export function down(queryInterface, Sequelize) {
+    return queryInterface.dropTable('CheckOuts');
+}

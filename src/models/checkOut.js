@@ -1,13 +1,13 @@
 'use strict';
 export default (sequelize, DataTypes) => {
     const check_out = sequelize.define('CheckOuts', {
-        title: sequelize.STRING,
-        location: sequelize.STRING,
-        stockType: sequelize.STRING,
-        status: sequelize.STRING,
-        brand: sequelize.STRING,
-        quantity: sequelize.INTEGER,
-        requestDate: sequelize.DATE,
+        title: DataTypes.STRING,
+        location: DataTypes.STRING,
+        stockType: DataTypes.STRING,
+        status: DataTypes.STRING,
+        brand: DataTypes.STRING,
+        quantity: DataTypes.INTEGER,
+        requestDate: DataTypes.DATE,
     }, {
         timestamps: true,
         paranoid: true

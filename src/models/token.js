@@ -1,9 +1,9 @@
 'use strict';
 export default (sequelize, DataTypes) => {
     const Token = sequelize.define('Tokens', {
-        type: sequelize.STRING,
-        token: sequelize.STRING,
-        email: sequelize.STRING,
+        type: DataTypes.STRING,
+        token: DataTypes.STRING,
+        email: DataTypes.STRING,
     }, {
         timestamps: true,
     });

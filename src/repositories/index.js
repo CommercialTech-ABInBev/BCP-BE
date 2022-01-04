@@ -1,54 +1,57 @@
 import { HttpError } from '@src/middlewares/api-error-validator';
 
-export default class BaseRepository {
-    constructor(model) {
-        this.model = model;
-    }
 
-    async addEntity(data) {
-        const { dataValues: value } = await this.model.create(data);
-        return value;
-    }
-    async findByKeys(keys = {}) {
-        const results = this.model.findOne({ where: keys });
+const BaseRepository = {
+
+    async addEntity(model, data) {
+        try {
+            const { dataValues: value } = await model.create(data);
+            return value;
+        } catch (error) {
+            throw new HttpError(404, error.message);
+        }
+    },
+    async findByKeys(model, keys = {}) {
+        const results = model.findOne({ where: keys });
         if (!results) throw new HttpError(404, ` Not Found in ${this.model} schema!!`);
         return results;
-    }
+    },
 
-    async findMultipleByKey(keys = {}) {
-        const results = this.model.findAll({
+    async findMultipleByKey(model, keys = {}) {
+        const results = model.findAll({
             where: keys
         });;
         if (!results) throw new HttpError(404, ` Not Found in ${this.model} schema!!`);
         return results;
-    }
+    },
 
-    async updateByKey(updateData, keys) {
+    async updateByKey(model, updateData, keys) {
 
-        const rowaffected = await this.model.update(
+        const rowaffected = await model.update(
             updateData, { returning: true, where: keys }
         );
         return rowaffected;
-    }
+    },
 
-    async deleteByKey(keys) {
+    async deleteByKey(model, keys) {
         try {
-            const numberOfRowsDeleted = await this.model.destroy({ where: keys });
+            const numberOfRowsDeleted = await model.destroy({ where: keys });
             if (!numberOfRowsDeleted) throw new HttpError(404, ` Not Found in ${this.model} schema!!`);
             return true;
         } catch (error) {
             throw new Error(error);
         }
-    }
+    },
 
-    async allEntities() {
-        const entities = await this.model.findAll({ where: {} });
+    async allEntities(model) {
+        const entities = await model.findAll({ where: {} });
         return entities
-    }
+    },
 
-    async rowCountByKey(keys) {
-        const entities = await this.model.findAndCountAll({ returning: true, where: keys });
+    async rowCountByKey(model, keys) {
+        const entities = await model.findAndCountAll({ returning: true, where: keys });
         if (!entities) throw new HttpError(404, ` Not Found in ${this.model} schema!!`);
         return entities;
-    }
+    },
 }
+export default BaseRepository

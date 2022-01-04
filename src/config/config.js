@@ -8,6 +8,12 @@ module.exports = {
         username: DB_USER,
         password: DB_PASSWORD,
         dialect: 'mysql',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false // <<<<<<< YOU NEED THIS
+            }
+        },
 
     },
     development: {
@@ -16,6 +22,12 @@ module.exports = {
         username: DB_USER,
         password: DB_PASSWORD,
         dialect: 'mysql',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false // <<<<<<< YOU NEED THIS
+            }
+        },
     },
     test: {
         url: "env.DATABASE_URL_TEST",

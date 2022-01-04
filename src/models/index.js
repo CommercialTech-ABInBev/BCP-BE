@@ -14,18 +14,17 @@ if (environ === 'test') config.logging = false;
 
 // Production URL setup
 const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    dialect: 'mysql',
-    ssl: true,
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
-    }
+  host: env.DB_HOST,
+  port: env.DB_PORT,
+  dialect: 'mysql',
+  ssl: true,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
-
 
 //  Development Url
 // const sequelize = new Sequelize(
@@ -34,23 +33,20 @@ const sequelize = new Sequelize(env.DB_NAME, env.DB_USER, env.DB_PASSWORD, {
 // );
 
 fs.readdirSync(__dirname)
-    .filter(
-        (file) => file.indexOf('.') !== 0 &&
-        file !== basename &&
-        file.slice(-3) === '.js'
-    )
-    .forEach((file) => {
-        const model = sequelize.import(path.join(__dirname, file));
-        db[model.name] = model;
-    });
+  .filter(
+    (file) =>
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+  )
+  .forEach((file) => {
+    const model = sequelize.import(path.join(__dirname, file));
+    db[model.name] = model;
+  });
 
 Object.keys(db).forEach((modelName) => {
-
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
-    }
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
 });
-
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

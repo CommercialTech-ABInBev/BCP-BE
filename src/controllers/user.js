@@ -19,4 +19,18 @@ export class UserController {
             next(error);
         }
     }
+
+    async resetPassword(req, res, next) {
+        try {
+            const userId = req.context.userId;
+            await userService.resetPassword(req.body, userId);
+
+            res.send({
+                message: 'Password reset sucessfully. Proceed to login!',
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }

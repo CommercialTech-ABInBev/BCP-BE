@@ -7,7 +7,7 @@ import { HttpError } from '@src/middlewares/api-error-validator';
 import db from '../models';
 const { Tokens, Users } = db;
 
-const { addEntity, findByKeys } = DbService;
+const { addEntity, findByKeys, updateByKey } = DbService;
 
 const {
     RESET_PASSWORD_QUEUE,
@@ -24,7 +24,6 @@ export default class AuthService {
         const { email, firstName, password } = userData;
 
         const token = CommonService.generateToken(email);
-
         await addEntity(Tokens, {
             type: 'signup-verify-token',
             token,
@@ -71,10 +70,7 @@ export default class AuthService {
     async login({ email, password }) {
         const user = await findByKeys(Users, { email });
         if (!user || !user.emailVerified) {
-            throw new HttpError(
-                401,
-                `User not found,Try verifying your email address!!!`
-            );
+            throw new HttpError(401, `User not found,Try verifying your email address!!!`);
         }
 
         if (!(await AuthUtils.comparePasswords(password, user.password))) {
@@ -83,5 +79,25 @@ export default class AuthService {
         const token = CommonService.generateToken(user.id);
 
         return { user, token };
+    }
+
+    async resetPassword({ oldPassword, newPassword }, id) {
+
+        const user = await findByKeys(Users, { id });
+
+        if (!user) {
+            throw new HttpError(404, 'User Not Found!');
+        };
+
+        if (!(await AuthUtils.comparePasswords(oldPassword, user.password))) {
+            throw new HttpError(401, 'Password does not match!');
+        };
+
+        await updateByKey(Users, {
+            password: await AuthUtils.hashPassword(newPassword),
+        }, { id });
+        const updatedUser = await findByKeys(Users, { id });
+
+        return updatedUser;
     }
 }

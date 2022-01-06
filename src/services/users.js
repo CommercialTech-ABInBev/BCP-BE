@@ -69,7 +69,6 @@ export default class AuthService {
     }
 
     async login({ email, password }) {
-        console.log(password, '=========');
         const user = await findByKeys(Users, { email });
         if (!user || !user.emailVerified) {
             throw new HttpError(

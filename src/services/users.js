@@ -33,6 +33,7 @@ export default class AuthService {
     const body = {
       ...userData,
       role: 'user',
+      emailVerified: false,
       inviteStatus: 'non-verified',
     };
 

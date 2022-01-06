@@ -10,4 +10,13 @@ export class UserController {
       next(error);
     }
   }
+
+  async login(req, res, next) {
+    try {
+      const newUser = await userService.login(req.body);
+      res.status(201).send(newUser);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

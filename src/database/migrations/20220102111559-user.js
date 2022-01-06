@@ -13,6 +13,7 @@ export function up(queryInterface, Sequelize) {
     email: Sequelize.STRING,
     password: Sequelize.STRING,
     inviteStatus: Sequelize.STRING,
+    emailVerified: Sequelize.BOOLEAN,
     role: Sequelize.STRING,
     deletedAt: Sequelize.DATE,
     createdAt: {

@@ -8,6 +8,7 @@ export default (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       inviteStatus: DataTypes.STRING,
+      emailVerified: DataTypes.BOOLEAN,
       role: DataTypes.STRING,
     },
     {

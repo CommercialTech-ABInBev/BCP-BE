@@ -7,7 +7,7 @@ import { HttpError } from '@src/middlewares/api-error-validator';
 import db from '../models';
 const { Tokens, Users } = db;
 
-const { addEntity, findByKeys, updateByKey } = DbService;
+const { addEntity, findByKeys, updateByKey, deleteByKey } = DbService;
 
 const {
     RESET_PASSWORD_QUEUE,
@@ -99,5 +99,15 @@ export default class AuthService {
         const updatedUser = await findByKeys(Users, { id });
 
         return updatedUser;
+    }
+
+    async softDeleteUser({ id }) {
+        const user = await findByKeys(Users, { id });
+
+        if (!user) {
+            throw new HttpError(404, 'User Not Found!');
+        };
+        const deleteProfile = await deleteByKey(Users, { id });
+        return deleteProfile;
     }
 }

@@ -33,4 +33,14 @@ export class UserController {
         }
     }
 
+    async adminDeleteUserProfile(req, res, next) {
+        try {
+            await userService.softDeleteUser(req.query)
+            res.send({
+                message: 'User Softdeleted!',
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }

@@ -5,7 +5,8 @@ import { authMiddleware } from '../middlewares/auth'
 import {
     signupSchema,
     loginSchema,
-    resetPassword
+    resetPassword,
+
 } from '../validations/auth.validation';
 
 const router = Router();
@@ -13,6 +14,7 @@ const usercontroller = new UserController();
 
 router.post('/signup', validationMiddleware(signupSchema), usercontroller.create);
 router.post('/login', validationMiddleware(loginSchema), usercontroller.login);
-router.post('/resetpassword', authMiddleware, validationMiddleware(resetPassword), usercontroller.resetPassword)
+router.post('/resetpassword', authMiddleware, validationMiddleware(resetPassword), usercontroller.resetPassword);
+router.delete('/deleteUser', usercontroller.adminDeleteUserProfile)
 
 export default router;

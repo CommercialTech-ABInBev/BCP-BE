@@ -62,8 +62,8 @@ export class SetupServer {
         this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
         await new OpenApiValidator({
             apiSpec: apiSchema,
-            validateRequests: true, //we do it
-            validateResponses: true,
+            validateRequests: false, //we do it
+            validateResponses: false,
         }).install(this.app);
     }
 

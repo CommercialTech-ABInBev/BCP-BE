@@ -14,7 +14,7 @@ const usercontroller = new UserController();
 router.put('/accept-invite', usercontroller.acceptInvite);
 router.delete('/delete-user', usercontroller.adminDeleteUserProfile)
 router.post('/login', validationMiddleware(loginSchema), usercontroller.login);
-router.post('/send-invite', usercontroller.adminSendInvite);
+router.post('/send-invite', validationMiddleware(signupSchema), usercontroller.adminSendInvite);
 router.post('/reset-password', authMiddleware, validationMiddleware(resetPassword), usercontroller.resetPassword);
 
 export default router;

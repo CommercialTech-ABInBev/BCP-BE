@@ -11,6 +11,19 @@ services:
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
         - invmgt-network
+  app:
+    container_name: inventory-mgt-app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "4500:4800"
+    volumes:
+      - ~/inv:/data/app
+    networks:
+      - invmgt-network
   consumer:
     build:
       context: .
@@ -24,6 +37,7 @@ services:
       AMQP_URL: ${AMQP_URL}
     networks:
       - invmgt-network
+  
 networks:
   invmgt-network:
     driver: bridge

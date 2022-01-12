@@ -2,7 +2,7 @@ import amqplib from 'amqplib';
 import env from '@src/config/env';
 import logger from '@src/logger';
 
-const { AMQP_URL } = env;
+const { CLOUDAMQP_URL } = env;
 
 export default class RabbitMQService {
     static async publisher(payload, queue, exchange, routingKey) {

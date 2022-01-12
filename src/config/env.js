@@ -22,7 +22,6 @@ const schema = joi
         RESET_EXCHANGE: joi.string().required(),
         APP_LOGGER: joi.boolean().required(),
         APP_LEVEL: joi.string().required(),
-        AMQP_URL: joi.string().required(),
         SIGNUP_QUEUE: joi.string().required(),
         SIGNUP_ROUTING_KEY: joi.string().required(),
         SIGNUP_EXCHANGE: joi.string().required(),

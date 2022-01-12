@@ -34,10 +34,10 @@ services:
     command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=30 -- yarn start:dev'
     environment:
       NODE_ENV: production
-      AMQP_URL: ${AMQP_URL}
+      CLOUDAMQP_URL: ${CLOUDAMQP_URL}
     networks:
       - invmgt-network
-  
+
 networks:
   invmgt-network:
     driver: bridge

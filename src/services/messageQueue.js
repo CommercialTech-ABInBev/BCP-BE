@@ -37,7 +37,7 @@ export default class RabbitMQService {
     }
 
     static async consumer(queue, service) {
-        const connection = await amqplib.connect(AMQP_URL, 'heartbeat=60');
+        const connection = await amqplib.connect(CLOUDAMQP_URL, 'heartbeat=60');
         const channel = await connection.createChannel();
         channel.prefetch(10);
 

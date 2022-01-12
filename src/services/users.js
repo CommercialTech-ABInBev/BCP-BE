@@ -20,8 +20,8 @@ const {
 } = env;
 
 export default class AuthService {
-    async signup(userData) {
-        const { email, firstName, password } = userData;
+    async createInvite(userData) {
+        const { email, fullName } = userData;
 
         const token = CommonService.generateToken(email);
         await addEntity(Tokens, {
@@ -32,9 +32,7 @@ export default class AuthService {
 
         const body = {
             ...userData,
-            password: await AuthUtils.hashPassword(password),
-            role: 'user',
-            emailVerified: true,
+            emailVerified: false,
             inviteStatus: 'non-verified',
         };
 
@@ -50,8 +48,8 @@ export default class AuthService {
             to: email,
             subject: 'Please confirm your account',
             html: `<h1>Email Confirmation</h1>
-                  <h5>Hello, ${firstName}</h5>
-                  <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
+                  <h5>Hello, ${fullName}</h5>
+                  <p>An invite have been sent to you</p>
 
                   <a href=https://localhost:4800/v1/auth/confirm-email?email=${email}&token=${token}> Click here</a>
                   </div>`,
@@ -67,6 +65,22 @@ export default class AuthService {
         return newUser;
     }
 
+    async acceptInviteService({ password }, email, token) {
+        const user = await findByKeys(Users, { email });
+        if (!user) {
+            throw new HttpError(401, `No invite was sent across!`);
+        }
+
+        await updateByKey(Users, {
+            password: await AuthUtils.hashPassword(password),
+            emailVerified: true
+        }, { email });
+
+        await deleteByKey(Tokens, { token });
+        const updatedUser = await findByKeys(Users, { email });
+
+        return updatedUser;
+    }
     async login({ email, password }) {
         const user = await findByKeys(Users, { email });
         if (!user || !user.emailVerified) {

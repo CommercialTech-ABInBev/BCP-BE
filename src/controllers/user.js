@@ -2,10 +2,22 @@ import UserService from '../services/users';
 
 const userService = new UserService();
 export class UserController {
-    async create(req, res, next) {
+    async adminSendInvite(req, res, next) {
         try {
-            const newUser = await userService.signup(req.body);
+
+            const newUser = await userService.createInvite(req.body);
             res.status(201).send(newUser);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async acceptInvite(req, res, next) {
+        try {
+            const { email, token } = req.query;
+            const updateUser = await userService.acceptInviteService(req.body, email, token);
+
+            res.status(200).send(updateUser);
         } catch (error) {
             next(error);
         }

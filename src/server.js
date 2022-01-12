@@ -2,13 +2,12 @@ import './utils/module-alias';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-// import swaggerUi from 'swagger-ui-express';
-// import { OpenApiValidator } from 'express-openapi-validator';
-// import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+import swaggerUi from 'swagger-ui-express';
+import { OpenApiValidator } from 'express-openapi-validator';
 import expressPino from 'express-pino-logger';
 import logger from './logger';
 import routes from './routes';
-// import apiSchema from './api-schema.json';
+import apiSchema from './api-schema.json';
 
 export class SetupServer {
     app = express();
@@ -28,7 +27,7 @@ export class SetupServer {
      */
     async init() {
         this.setupExpress();
-        // await this.docsSetup();
+        await this.docsSetup();
         this.setupControllers();
         //must be the last
 
@@ -59,14 +58,14 @@ export class SetupServer {
         this.app.all('*', (req, res) => res.send({ message: 'route not found' }));
     }
 
-    // async docsSetup() {
-    //     this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
-    //     await new OpenApiValidator({
-    //         apiSpec: apiSchema as OpenAPIV3.Document,
-    //         validateRequests: true, //we do it
-    //         validateResponses: true,
-    //     }).install(this.app);
-    // }
+    async docsSetup() {
+        this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
+        await new OpenApiValidator({
+            apiSpec: apiSchema,
+            validateRequests: true, //we do it
+            validateResponses: true,
+        }).install(this.app);
+    }
 
     setupErrorHandlers() {
         this.app.use((err, _, res, __) => {

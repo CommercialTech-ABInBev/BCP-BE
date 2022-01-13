@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
-import { OpenApiValidator } from 'express-openapi-validator';
 import expressPino from 'express-pino-logger';
 import logger from './logger';
 import routes from './routes';
@@ -27,9 +26,11 @@ export class SetupServer {
      */
     async init() {
         this.setupExpress();
-        await this.docsSetup();
+        this.docsSetup();
         this.setupControllers();
         //must be the last
+
+        this.setupErrorHandlers();
     }
 
     setupExpress() {
@@ -47,7 +48,6 @@ export class SetupServer {
     }
 
     setupControllers() {
-        this.setupErrorHandlers();
         this.app.get('/', (req, res) =>
             res.status(200).send({
                 message: 'Welcome to Inventory Management System',
@@ -59,11 +59,7 @@ export class SetupServer {
 
     async docsSetup() {
         this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
-        await new OpenApiValidator({
-            apiSpec: apiSchema,
-            validateRequests: false, //we do it
-            validateResponses: false,
-        }).install(this.app);
+
     }
 
     setupErrorHandlers() {

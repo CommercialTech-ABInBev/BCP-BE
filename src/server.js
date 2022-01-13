@@ -30,8 +30,6 @@ export class SetupServer {
         await this.docsSetup();
         this.setupControllers();
         //must be the last
-
-        this.setupErrorHandlers();
     }
 
     setupExpress() {
@@ -49,6 +47,7 @@ export class SetupServer {
     }
 
     setupControllers() {
+        this.setupErrorHandlers();
         this.app.get('/', (req, res) =>
             res.status(200).send({
                 message: 'Welcome to Inventory Management System',

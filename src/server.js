@@ -27,8 +27,8 @@ export class SetupServer {
      */
     async init() {
         this.setupExpress();
-        this.setupControllers();
         await this.docsSetup();
+        this.setupControllers();
         //must be the last
 
         this.setupErrorHandlers();

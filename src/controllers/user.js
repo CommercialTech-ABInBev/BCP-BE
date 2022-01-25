@@ -34,7 +34,7 @@ export class UserController {
 
     async resetPassword(req, res, next) {
         try {
-            const userId = req.context.userId;
+            const userId = req.tokenData.id;
             await userService.resetPassword(req.body, userId);
 
             res.send({

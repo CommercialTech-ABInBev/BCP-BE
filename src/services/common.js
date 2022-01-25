@@ -23,6 +23,12 @@ export default class CommonService {
         });
     }
 
+    static generateAuthToken(payload) {
+        return jwt.sign(payload, JWT_SECRET_KEY, {
+            expiresIn: TOKEN_EXPIRES,
+        });
+    }
+
     static decodeToken(token) {
         return jwt.verify(token, JWT_SECRET_KEY);
     }

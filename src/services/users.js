@@ -83,6 +83,7 @@ export default class AuthService {
     }
     async login({ email, password }) {
         const user = await findByKeys(Users, { email });
+
         if (!user || !user.emailVerified) {
             throw new HttpError(401, `User not found,Try verifying your email address!!!`);
         }
@@ -90,7 +91,13 @@ export default class AuthService {
         if (!(await AuthUtils.comparePasswords(password, user.password))) {
             throw new HttpError(401, 'Password does not match!');
         }
-        const token = CommonService.generateToken(user.id);
+        const tokenPayload = {
+            email: user.email,
+            id: user.id,
+            role: user.role,
+        };
+
+        const token = CommonService.generateAuthToken(tokenPayload);
 
         return { user, token };
     }

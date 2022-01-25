@@ -40,4 +40,14 @@ export class StockController {
             next(error);
         }
     }
+
+    async checkOut(req, res, next) {
+        try {
+            const { id } = req.query;
+            const checkOutData = await stockService.checkOut(id, req.body);
+            res.status(201).send(checkOutData);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

@@ -5,7 +5,7 @@ import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 import db from '../models';
 
-const { Tokens, Users, Stocks } = db;
+const { Stocks, CheckOuts } = db;
 
 const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } = DbService;
 
@@ -42,5 +42,31 @@ export default class stockService {
     async getCheckIns() {
         const data = await findMultipleByKey(Stocks);
         return data;
+    }
+
+    async checkOut(id, { comment, newQty }) {
+
+        const getStock = await findByKeys(Stocks, { id });
+
+        if (getStock.prevQty < newQty) {
+            throw new HttpError(404, 'Number cannot be higher the total stock in the db')
+        }
+        await updateByKey(Stocks, { currQty: getStock.prevQty - newQty }, { id });
+        const date = new Date();
+
+        const data = {
+            title: getStock.title,
+            location: getStock.location,
+            stockType: getStock.stockType,
+            status: getStock.status,
+            brand: getStock.brand,
+            quantity: newQty,
+            comment: comment,
+            requestDate: date.toISOString()
+        }
+
+        const checkOutData = await addEntity(CheckOuts, data);
+
+        return checkOutData;
     }
 }

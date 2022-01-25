@@ -27,6 +27,8 @@ router.get('/get-approved-stocks',
     verifyRoles(['Admin']),
     stockcontroller.getApprovedStocks)
 
-router.get('/get-check-ins', authMiddleware, verifyRoles(['Admin', 'WM']), stockcontroller.getAllCheckIns)
+router.get('/get-check-ins', authMiddleware, verifyRoles(['Admin', 'WM']), stockcontroller.getAllCheckIns);
+
+router.post('/check-out', authMiddleware, stockcontroller.checkOut)
 
 export default router;

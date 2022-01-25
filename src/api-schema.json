@@ -15,7 +15,7 @@
             "description": "Production Server"
         },
         {
-            "url": "http://localhost:4500",
+            "url": "https://localhost:4800",
             "description": "Local server"
         }
     ],
@@ -270,6 +270,50 @@
                     }
                 }
             }
+        },
+        "/v1.0/api/check-in": {
+            "post": {
+                "description": "Ware-House Manager create a new stock",
+                "operationId": "createStock",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Stocks"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Stocks created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Stocks"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Invalid parameters",
+                                    "code": "400",
+                                    "error": "Bad Request"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -308,6 +352,18 @@
             "password": {
                 "type": "string",
                 "example": "12345#@$$%"
+            },
+            "title": {
+                "type": "string",
+                "example": "Bags"
+            },
+            "location": {
+                "type": "string",
+                "example": "Ilesha"
+            },
+            "prevQty": {
+                "type": "integer",
+                "example": 40
             },
             "id": {
                 "type": "string",
@@ -409,6 +465,27 @@
                                 "$ref": "#/components/schemas/jwtToken"
                             }
                         }
+                    }
+                }
+            },
+            "Stocks": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "$ref": "#/components/schemas/title"
+                    },
+                    "brand": {
+                        "$ref": "#/components/schemas/brand"
+                    },
+                    "location": {
+                        "$ref": "#/components/schemas/location"
+                    },
+                    "prevQty": {
+                        "$ref": "#/components/schemas/prevQty"
+                    },
+                    "file": {
+                        "type": "string",
+                        "format": "binary"
                     }
                 }
             },

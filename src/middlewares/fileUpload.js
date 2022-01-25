@@ -1,6 +1,5 @@
 import multer from 'multer';
 
-console.log('hey hey');
 export const upload = multer({
     limits: {
         fileSize: 10 * 1000 * 1000

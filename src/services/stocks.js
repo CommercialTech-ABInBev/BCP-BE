@@ -13,9 +13,9 @@ const { addEntity, findByKeys, updateByKey, deleteByKey } = DbService;
 export default class stockService {
     async createStock(body, file) {
         const imageUrl = await CommonService.uploadImage(file);
-        console.log(imageUrl, 'ingurl');
         const data = {
             ...body,
+            status: 'Pending',
             supportDocFile: imageUrl
         }
 

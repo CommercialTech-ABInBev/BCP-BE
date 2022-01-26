@@ -2,14 +2,17 @@
 export default (sequelize, DataTypes) => {
     const Stock = sequelize.define(
         'Stocks', {
+            brand: DataTypes.STRING,
             title: DataTypes.STRING,
+            status: DataTypes.STRING,
+            currQty: DataTypes.INTEGER,
             location: DataTypes.STRING,
+            prevQty: DataTypes.INTEGER,
             stockType: DataTypes.STRING,
             supportDocFile: DataTypes.STRING,
-            status: DataTypes.STRING,
-            brand: DataTypes.STRING,
-            prevQty: DataTypes.INTEGER,
-            currQty: DataTypes.INTEGER,
+            stockAdjustTo: DataTypes.INTEGER,
+            stockAdjustFrom: DataTypes.INTEGER,
+            stockAdjustStatus: DataTypes.STRING,
         }, {
             timestamps: true,
             paranoid: true,

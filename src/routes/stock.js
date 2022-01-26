@@ -11,24 +11,20 @@ import {
 const router = Router();
 const stockcontroller = new StockController();
 
-router.post('/check-in',
-    authMiddleware,
-    upload.single('file'),
-    validationMiddleware(checkInSchema),
-    stockcontroller.stockCheckIn)
+router.post('/check-in', authMiddleware, upload.single('file'), validationMiddleware(checkInSchema), stockcontroller.stockCheckIn)
 
-router.patch('/approve-check-in',
-    authMiddleware,
-    verifyRoles(['Admin', 'WM']),
-    stockcontroller.approveCheckIn);
+router.patch('/approve-check-in', authMiddleware, verifyRoles(['AM', 'WM']), stockcontroller.approveCheckIn);
 
-router.get('/get-approved-stocks',
-    authMiddleware,
-    verifyRoles(['Admin']),
-    stockcontroller.getApprovedStocks)
+router.get('/get-approved-stocks', authMiddleware, verifyRoles(['AM', 'BM']), stockcontroller.getApprovedStocks)
 
-router.get('/get-check-ins', authMiddleware, verifyRoles(['Admin', 'WM']), stockcontroller.getAllCheckIns);
+router.get('/get-check-ins', authMiddleware, verifyRoles(['AM', 'BM', 'WM']), stockcontroller.getAllCheckIns);
 
-router.post('/check-out', authMiddleware, stockcontroller.checkOut)
+router.post('/check-out', authMiddleware, verifyRoles(['BM', 'WM']), stockcontroller.checkOut);
+
+router.get('/get-check-outs', authMiddleware, verifyRoles(['AM', 'BM', 'WM']), stockcontroller.getCheckOut);
+
+router.patch('/reject-check-out', authMiddleware, verifyRoles(['AM', 'WM']), stockcontroller.rejectCheckOut);
+
+router.patch('/reject-check-in', authMiddleware, verifyRoles(['AM', 'WM']), stockcontroller.rejectCheckIn);
 
 export default router;

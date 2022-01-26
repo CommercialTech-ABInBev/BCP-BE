@@ -34,7 +34,8 @@ export class StockController {
 
     async getAllCheckIns(req, res, next) {
         try {
-            const stocks = await stockService.getCheckIns();
+            const { role, id } = req.tokenData;
+            const stocks = await stockService.getCheckIns(role, id);
             res.status(200).send(stocks);
         } catch (error) {
             next(error);
@@ -46,6 +47,39 @@ export class StockController {
             const { id } = req.query;
             const checkOutData = await stockService.checkOut(id, req.body);
             res.status(201).send(checkOutData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getCheckOut(req, res, next) {
+        try {
+            const { role, id } = req.tokenData;
+            const checkOutData = await stockService.getCheckOuts(role, id);
+
+            res.status(200).send(checkOutData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async rejectCheckOut(req, res, next) {
+        try {
+            const { id } = req.query;
+
+            const rejectedCheckOut = await stockService.rejectCheckOuts(id);
+            res.status(200).send(rejectedCheckOut);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async rejectCheckIn(req, res, next) {
+        try {
+            const { id } = req.query;
+
+            const rejectedCheckIn = await stockService.rejectCheckIns(id);
+            res.status(200).send(rejectedCheckIn);
         } catch (error) {
             next(error);
         }

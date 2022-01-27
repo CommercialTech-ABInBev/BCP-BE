@@ -81,6 +81,8 @@ router.patch(
     stockcontroller.approveStockAdjustment
 );
 
+router.patch('/approve-check-out', authMiddleware, verifyRoles(['AM', 'WM']), stockcontroller.approveCheckOut)
+
 
 
 export default router;

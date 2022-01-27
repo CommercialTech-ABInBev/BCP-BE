@@ -151,7 +151,7 @@ export default class StockService {
             location: getStock.location,
             stockId: getStock.id,
             stockType: getStock.stockType,
-            status: getStock.status,
+            status: 'Awaiting Admin',
             brand: getStock.brand,
             quantity: newQty,
             comment: comment,
@@ -170,6 +170,28 @@ export default class StockService {
         await addEntity(Notifications, stockNotificationData);
 
         return checkOutData;
+    }
+
+    async approveCheckOuts({ role, id }, stockId) {
+        role === 'AM' ?
+            await updateByKey(CheckOuts, { status: 'Approved' }, {
+                id: stockId
+            }) :
+            await updateByKey(CheckOuts, { status: 'Awaiting WM' }, {
+                id: stockId
+            });
+
+        const getStockToApprove = await findByKeys(CheckOuts, { id: stockId });
+
+        const stockNotificationData = {
+            fromId: id,
+            stockId: stockId,
+            subject: 'Check-out Approval',
+            message: `Stock check-out: ${stockId} was approved by ${roleData[role]}`
+        };
+        await addEntity(Notifications, stockNotificationData);
+
+        return getStockToApprove;
     }
 
     async getCheckOuts(role, id) {

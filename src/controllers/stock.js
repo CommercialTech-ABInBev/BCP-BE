@@ -23,6 +23,17 @@ export class StockController {
         }
     }
 
+    async approveCheckOut(req, res, next) {
+        try {
+            const { id } = req.query;
+            const updatedCheckOut = await stockService.approveCheckOuts(req.tokenData, id);
+
+            res.status(200).send(updatedCheckOut);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getApprovedStocks(req, res, next) {
         try {
             const approvedStocks = await stockService.getApprovedStocks();

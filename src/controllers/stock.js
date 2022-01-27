@@ -4,7 +4,7 @@ const stockService = new StockService();
 export class StockController {
     async stockCheckIn(req, res, next) {
         try {
-            const newStock = await stockService.createStock(req.body, req.file);
+            const newStock = await stockService.createStock(req.body, req.file, req.tokenData);
             res.status(201).send(newStock);
         } catch (error) {
             next(error);
@@ -14,8 +14,8 @@ export class StockController {
     async approveCheckIn(req, res, next) {
         try {
             const { id } = req.query;
-            const { role } = req.tokenData;
-            const updatedCheckIn = await stockService.approveStock(role, id);
+
+            const updatedCheckIn = await stockService.approveStock(req.tokenData, id);
 
             res.status(200).send(updatedCheckIn);
         } catch (error) {
@@ -45,7 +45,7 @@ export class StockController {
     async checkOut(req, res, next) {
         try {
             const { id } = req.query;
-            const checkOutData = await stockService.checkOut(id, req.body);
+            const checkOutData = await stockService.checkOut(id, req.body, req.tokenData);
             res.status(201).send(checkOutData);
         } catch (error) {
             next(error);
@@ -67,7 +67,7 @@ export class StockController {
         try {
             const { id } = req.query;
 
-            const rejectedCheckOut = await stockService.rejectCheckOuts(id);
+            const rejectedCheckOut = await stockService.rejectCheckOuts(req.tokenData, id);
             res.status(200).send(rejectedCheckOut);
         } catch (error) {
             next(error);
@@ -78,7 +78,7 @@ export class StockController {
         try {
             const { id } = req.query;
 
-            const rejectedCheckIn = await stockService.rejectCheckIns(id);
+            const rejectedCheckIn = await stockService.rejectCheckIns(req.tokenData, id);
             res.status(200).send(rejectedCheckIn);
         } catch (error) {
             next(error);
@@ -89,7 +89,7 @@ export class StockController {
         try {
             const { id } = req.query;
 
-            const adjustedStock = await stockService.adjustedStock(id, req.body);
+            const adjustedStock = await stockService.adjustedStock(id, req.body, req.tokenData);
             res.status(200).send(adjustedStock);
         } catch (error) {
             next(error);
@@ -99,8 +99,8 @@ export class StockController {
     async approveStockAdjustment(req, res, next) {
         try {
             const { id } = req.query;
-            console.log('hehehehehehehhehehhehheheh');
-            const adjustedStock = await stockService.approveAdjustment(id, req.body);
+
+            const adjustedStock = await stockService.approveAdjustment(id, req.body, req.tokenData);
             res.status(200).send(adjustedStock);
         } catch (error) {
             next(error);

@@ -1,18 +1,20 @@
 const { Op } = require('sequelize');
 import CommonService from './common';
-import env from '../config/env';
 import DbService from '../repositories';
-import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 import db from '../models';
 
-const { Stocks, CheckOuts, Users } = db;
-
-const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } =
+const { Stocks, CheckOuts, Users, Notifications } = db;
+const { addEntity, findByKeys, updateByKey, findMultipleByKey } =
 DbService;
+const roleData = {
+    BM: 'Brand Manager',
+    WM: 'Ware-House Manager',
+    AM: 'Admin'
+}
 
-export default class stockService {
-    async createStock(body, file) {
+export default class StockService {
+    async createStock(body, file, { id, role }) {
         const imageUrl = await CommonService.uploadImage(file);
         const data = {
             ...body,
@@ -22,20 +24,43 @@ export default class stockService {
         };
 
         const stockItem = await addEntity(Stocks, data);
+        const getUser = await findByKeys(Users, { id });
+
+        const stockNotificationData = {
+            fromId: id,
+            stockId: stockItem.id,
+            subject: 'Check-in',
+            fromName: getUser.fullName,
+            message: `Stock check-in ${stockItem.id} was requested by ${roleData[role]} - ${getUser.fullName}`
+        }
+        await addEntity(Notifications, stockNotificationData);
+
         return stockItem;
     }
 
-    async approveStock(role, id) {
+    async approveStock({ role, id }, stockId) {
         role === 'WM' ?
-            await updateByKey(Stocks, { status: 'Approved' }, { id }) :
-            await updateByKey(Stocks, { status: 'Awaiting WM' }, { id });
+            await updateByKey(Stocks, { status: 'Approved' }, {
+                id: stockId
+            }) :
+            await updateByKey(Stocks, { status: 'Awaiting WM' }, {
+                id: stockId
+            });
 
-        const getStockToApprove = await findByKeys(Stocks, { id });
+        const getStockToApprove = await findByKeys(Stocks, { id: stockId });
+
+        const stockNotificationData = {
+            fromId: id,
+            stockId: stockId,
+            subject: 'Check-in Approval',
+            message: `Stock check-in: ${stockId} was approved by ${roleData[role]}`
+        };
+        await addEntity(Notifications, stockNotificationData);
 
         return getStockToApprove;
     }
 
-    async rejectCheckOuts(id) {
+    async rejectCheckOuts({ role, id: userId }, id) {
         const checkoutData = await findByKeys(CheckOuts, { id });
         const getStock = await findByKeys(Stocks, { id: checkoutData.stockId });
 
@@ -48,12 +73,31 @@ export default class stockService {
         await updateByKey(CheckOuts, { status: 'Rejected' }, { id });
 
         const getRejectedCheckOut = await findByKeys(CheckOuts, { id });
+
+
+        const stockNotificationData = {
+            fromId: userId,
+            stockId: id,
+            subject: 'Check-out Rejection',
+            message: `Stock check-out: ${id} was rejected by ${roleData[role]} - ${userId}`
+        };
+        await addEntity(Notifications, stockNotificationData);
+
         return getRejectedCheckOut;
     }
 
-    async rejectCheckIns(id) {
+    async rejectCheckIns({ role, id: userId }, id) {
         await updateByKey(Stocks, { status: 'Rejected' }, { id });
         const getRejectedCheckIn = await findByKeys(Stocks, { id });
+
+        const stockNotificationData = {
+            fromId: userId,
+            stockId: id,
+            subject: 'Check-in Rejection',
+            message: `Stock check-in: ${id} was rejected by ${roleData[role]} - ${userId}`
+        };
+        await addEntity(Notifications, stockNotificationData);
+
         return getRejectedCheckIn;
     }
 
@@ -82,7 +126,7 @@ export default class stockService {
         return data;
     }
 
-    async checkOut(id, { comment, newQty }) {
+    async checkOut(id, { comment, newQty }, { role, id: userId }) {
         const getStock = await findByKeys(Stocks, { id });
         if (getStock.status !== 'Approved') {
             throw new HttpError(404, 'Not allowed, Stock not approved yet !!');
@@ -115,6 +159,15 @@ export default class stockService {
         };
 
         const checkOutData = await addEntity(CheckOuts, data);
+        const getUser = await findByKeys(Users, { id: userId });
+        const stockNotificationData = {
+            stockId: id,
+            fromId: userId,
+            fromName: getUser.fullName,
+            subject: 'Check-out Request',
+            message: `Stock check-out ${id} was requested by ${roleData[role]} - ${getUser.fullName}`
+        }
+        await addEntity(Notifications, stockNotificationData);
 
         return checkOutData;
     }
@@ -132,7 +185,7 @@ export default class stockService {
         return data;
     }
 
-    async adjustedStock(id, { newQty }) {
+    async adjustedStock(id, { newQty }, { role, id: userId }) {
         const getStock = await findByKeys(Stocks, { id });
 
         if (!getStock) throw new HttpError(404, 'Stocks Not Found!');
@@ -144,11 +197,20 @@ export default class stockService {
 
         const data = await findByKeys(Stocks, { id });
 
+        const getUser = await findByKeys(Users, { id: userId });
+        const stockNotificationData = {
+            stockId: id,
+            fromId: userId,
+            fromName: getUser.fullName,
+            subject: 'Stock Adjustment Request',
+            message: `Stock Adjustment for stock-${id} was requested by ${roleData[role]} - ${getUser.fullName}`
+        }
+
+        await addEntity(Notifications, stockNotificationData);
         return data;
     }
 
-    async approveAdjustment(id, { status }) {
-        console.log(status, '=======<<<>>>><<<>>>><<<<>>>><');
+    async approveAdjustment(id, { status }, { role, id: userId }) {
         const getStock = await findByKeys(Stocks, { id });
 
         if (!getStock) throw new HttpError(404, 'Stocks Not Found!');
@@ -161,6 +223,17 @@ export default class stockService {
             }, { id });
 
         const data = await findByKeys(Stocks, { id });
+
+        const getUser = await findByKeys(Users, { id: userId });
+        const stockNotificationData = {
+            stockId: id,
+            fromId: userId,
+            fromName: getUser.fullName,
+            subject: 'Stock Adjectment Approval/rejection',
+            message: `Stock Adjustment for stock-${id} was ${status} by ${roleData[role]} - ${getUser.fullName}`
+        }
+
+        await addEntity(Notifications, stockNotificationData);
 
         return data;
     }

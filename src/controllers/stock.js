@@ -43,6 +43,24 @@ export class StockController {
         }
     }
 
+    async csvDownloadStocks(req, res, next) {
+        try {
+            const csvData = await stockService.printAprrovedSTocks(res);
+            res.status(200).send(csvData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async csvDownloadCheckOuts(req, res, next) {
+        try {
+            const csvData = await stockService.printCheckOuts(res);
+            res.status(200).send(csvData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getAllCheckIns(req, res, next) {
         try {
             const { role, id } = req.tokenData;

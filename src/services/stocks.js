@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 import CommonService from './common';
 import DbService from '../repositories';
+import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 import db from '../models';
 
@@ -12,6 +13,45 @@ const roleData = {
     WM: 'Ware-House Manager',
     AM: 'Admin'
 }
+
+const fields = [{
+    label: 'ID',
+    value: 'id'
+}, {
+    label: 'BRAND',
+    value: 'brand'
+}, {
+    label: 'TITLE',
+    value: 'title'
+}, {
+    label: 'STATUS',
+    value: 'status'
+}, {
+    label: 'LOCATION',
+    value: 'location'
+}, {
+    label: 'CURRENT QTY',
+    value: 'currQty'
+}, {
+    label: 'PREVIOUS QTY',
+    value: 'prevQty'
+}, {
+    label: 'STOCK TYPE',
+    value: 'stockType'
+}, {
+    label: 'SUPPORTING DOCYYPE',
+    value: 'supportDocFile'
+
+}, {
+    label: 'RECENT ADJUSTMENT(from)',
+    value: 'stockAdjustFrom'
+}, {
+    label: 'RECENT ADJUSTMENT(to)',
+    value: 'stockAdjustTo'
+}, {
+    label: 'ADJUSTMENT STATUS',
+    value: 'stockAdjustStatus'
+}];
 
 export default class StockService {
     async createStock(body, file, { id, role }) {
@@ -74,7 +114,6 @@ export default class StockService {
 
         const getRejectedCheckOut = await findByKeys(CheckOuts, { id });
 
-
         const stockNotificationData = {
             fromId: userId,
             stockId: id,
@@ -104,6 +143,11 @@ export default class StockService {
     async getApprovedStocks() {
         const data = await findMultipleByKey(Stocks, { status: 'Approved' });
         return data;
+    }
+
+    async printAprrovedSTocks(res) {
+        const data = await findMultipleByKey(Stocks);
+        await AuthUtils.downloadResource(res, 'stocks.csv', fields, data);
     }
 
     async getCheckIns(role, id) {
@@ -205,6 +249,11 @@ export default class StockService {
             (data = await findMultipleByKey(CheckOuts));
 
         return data;
+    }
+
+    async printCheckOuts(res) {
+        const data = await findMultipleByKey(CheckOuts);
+        await AuthUtils.downloadResource(res, 'checkout.csv', fields, data);
     }
 
     async adjustedStock(id, { newQty }, { role, id: userId }) {

@@ -27,7 +27,7 @@ router.patch(
 router.get(
     '/get-approved-stocks',
     authMiddleware,
-    verifyRoles(['AM', 'BM']),
+    // verifyRoles(['AM', 'BM']),
     stockcontroller.getApprovedStocks
 );
 
@@ -66,6 +66,17 @@ router.patch(
     verifyRoles(['AM', 'WM']),
     stockcontroller.rejectCheckIn
 );
+
+router.get('/csvDownloadStocksOrCheckIns',
+    authMiddleware,
+    verifyRoles(['AM', 'BM', 'WM']),
+    stockcontroller.csvDownloadStocks)
+
+router.get('/csvDownloadCheckOuts',
+    authMiddleware,
+    verifyRoles(['AM', 'BM', 'WM']),
+    stockcontroller.csvDownloadCheckOuts)
+
 
 router.patch(
     '/stock-adjustment',

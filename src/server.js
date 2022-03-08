@@ -48,7 +48,7 @@ export class SetupServer {
   setupControllers() {
     this.app.get('/', (req, res) =>
       res.status(200).send({
-        message: 'Welcome to Inventory Management System',
+        message: 'Welcome to BCP-API',
       })
     );
     this.app.use('/v1.0/api', routes);

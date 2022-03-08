@@ -14,6 +14,9 @@ module.exports = {
       masterCodeId: {
         type: Sequelize.STRING
       },
+      accountType: {
+        type: Sequelize.STRING
+      },
       district: {
         type: Sequelize.STRING
       },

@@ -10,7 +10,7 @@ const {
 } = AddData;
 
 router.delete('/reset', resetCustomerDB);
-router.get('/users', getAllEligibleCustomers);
+router.get('/customer', getAllEligibleCustomers);
 router.post('/createBulkUser', csvUpload.single('file'), createBulkCustomers);
 
 module.exports = router;

@@ -15,7 +15,10 @@ const {
   resetTruckDB,
   createBulkInventories,
   getAllEligibleInventories,
-  resetInventoriesDB
+  resetInventoriesDB,
+  createBulkBalance,
+  getAllEligibleBalance,
+  resetBalanceDB,
 } = AddData;
 
 router.delete('/cust/reset', resetCustomerDB);
@@ -30,6 +33,9 @@ router.post('/trucks', csvUpload.single('file'), createBulkTruck);
 router.delete('/inventories/reset', resetInventoriesDB);
 router.get('/inventories', getAllEligibleInventories);
 router.post('/inventories', csvUpload.single('file'), createBulkInventories);
+router.delete('/balance/reset', resetBalanceDB);
+router.get('/balance', getAllEligibleBalance);
+router.post('/balance', csvUpload.single('file'), createBulkBalance);
 
 
 module.exports = router;

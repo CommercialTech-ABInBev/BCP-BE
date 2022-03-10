@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
     Customer.hasOne(models.CustomerAddress, {
       as: 'customer',
       foreignKey: 'customerId'
+    });
+    Customer.hasOne(models.Balance, {
+      as: 'creditDetails',
+      foreignKey: 'customerId'
     })
   };
   return Customer;

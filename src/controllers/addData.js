@@ -3,7 +3,7 @@ const csv = require("fast-csv");
 const database = require('../models');
 const { ToolBox } = require('../utils');
 const { GeneralService } = require('../services');
-const { Customer, CustomerAddress, Truck, Inventory } = database;
+const { Customer, CustomerAddress, Truck, Inventory, Balance } = database;
 const { allEntities } = GeneralService;
 const { successResponse, errorResponse } = ToolBox;
 
@@ -346,6 +346,93 @@ const addDataController = {
   async resetInventoriesDB(req, res) {
     try {
       await Inventory.destroy({ truncate: true })
+      return successResponse(res, { message: 'trucks Deleted Successfully' }, 200)
+    } catch (error) {
+      errorResponse(res, { error })
+    }
+  },
+
+
+  /**
+   * Admin bulk create eligible Balance
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with truck details
+   * @memberof const AddDataController
+   */
+  async createBulkBalance(req, res) {
+
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send("Please upload a CSV file!");
+      }
+
+      let balance = [];
+      console.log(balance);
+      let path = req.file.path
+      fs.createReadStream(path)
+        .pipe(csv.parse({ headers: true }))
+        .on("error", (error) => {
+          throw error.message;
+        })
+        .on("data", (row) => {
+          balance.push(row);
+        })
+        .on("end", () => {
+          Balance.bulkCreate(balance)
+            .then(() => {
+              res.status(200).send({
+                message: "Uploaded the file successfully: " + req.file.originalname,
+              });
+            }).then(
+              fs.unlink(path, (err) => {
+                if (err) throw err
+              })
+            )
+            .catch((error) => {
+              res.status(500).send({
+                message: "Fail to import data into database!",
+                error: error.message,
+              });
+            });
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        message: "Could not upload the file: " + req.file.originalname,
+      });
+    }
+  },
+
+  /**
+   * Admin get all Balance
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with customers in db
+   * @memberof const AddDataController
+   */
+  async getAllEligibleBalance(req, res) {
+    try {
+      const balance = await allEntities(Balance);
+      return successResponse(res, { balance }, 200)
+    } catch (error) {
+      errorResponse(res, { error })
+    }
+  },
+
+  /**
+   * Admin reset Balance DB
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with customers in db
+   * @memberof const AddDataController
+   */
+  async resetBalanceDB(req, res) {
+    try {
+      await Balance.destroy({ truncate: true })
       return successResponse(res, { message: 'trucks Deleted Successfully' }, 200)
     } catch (error) {
       errorResponse(res, { error })

@@ -10,6 +10,9 @@ const {
   createBulkAddress,
   getAllEligibleAddress,
   resetAddressDB,
+  createBulkTruck,
+  getAllEligibleTrucks,
+  resetTruckDB
 } = AddData;
 
 router.delete('/cust/reset', resetCustomerDB);
@@ -18,6 +21,9 @@ router.post('/cust/createBulkUser', csvUpload.single('file'), createBulkCustomer
 router.delete('/address/reset', resetAddressDB);
 router.get('/address', getAllEligibleAddress);
 router.post('/address', csvUpload.single('file'), createBulkAddress);
+router.delete('/truck/reset', resetTruckDB);
+router.get('/trucks', getAllEligibleTrucks);
+router.post('/trucks', csvUpload.single('file'), createBulkTruck);
 
 
 module.exports = router;

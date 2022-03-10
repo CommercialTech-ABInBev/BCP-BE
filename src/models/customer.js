@@ -1,4 +1,3 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Customer = sequelize.define('Customer', {
     customerId: DataTypes.STRING,
@@ -24,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     buyerSegment: DataTypes.STRING,
   }, {});
   Customer.associate = function (models) {
-    // associations can be defined here
+    Customer.hasOne(models.CustomerAddress, {
+      as: 'customer',
+      foreignKey: 'customerId'
+    })
   };
   return Customer;
 };

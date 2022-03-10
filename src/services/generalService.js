@@ -1,4 +1,4 @@
-const { ApiError } = require('../utils');
+import { HttpError } from '../middlewares/api-error-validator';
 
 const GeneralService = {
   /**
@@ -89,7 +89,7 @@ const GeneralService = {
   async deleteByKey(model, keys) {
     try {
       const numberOfRowsDeleted = await model.destroy({ where: keys });
-      if (!numberOfRowsDeleted) throw new ApiError(404, 'Not Found');
+      if (!numberOfRowsDeleted) throw new HttpError(404, 'Not Found');
       return true;
     } catch (error) {
       throw new Error(error);
@@ -127,7 +127,7 @@ const GeneralService = {
         returning: true,
         where: keys,
       });
-      if (!rowaffected) throw new ApiError(404, 'Not Found');
+      if (!rowaffected) throw new HttpError(404, 'Not Found');
       return rowaffected;
     } catch (error) {
       throw new Error(error);
@@ -149,7 +149,7 @@ const GeneralService = {
         returning: true,
         where: keys,
       });
-      if (!rowaffected) throw new ApiError(404, 'Not Found');
+      if (!rowaffected) throw new HttpError(404, 'Not Found');
       return rowaffected;
     } catch (error) {
       throw new Error(error);
@@ -170,7 +170,7 @@ const GeneralService = {
         returning: true,
         where: keys,
       });
-      if (!entities) throw new ApiError(404, 'Not Found');
+      if (!entities) throw new HttpError(404, 'Not Found');
       return entities;
     } catch (error) {
       throw new Error(error);
@@ -178,4 +178,4 @@ const GeneralService = {
   },
 };
 
-module.exports = GeneralService;
+export default GeneralService;

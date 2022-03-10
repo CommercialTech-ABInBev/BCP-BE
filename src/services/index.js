@@ -1,3 +1,1 @@
-module.exports = {
-  GeneralService: require('./generalService'),
-};
+export const GeneralService = require('./generalService').default;

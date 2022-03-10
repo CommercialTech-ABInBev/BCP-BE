@@ -3,7 +3,7 @@ const csv = require("fast-csv");
 const database = require('../models');
 const { ToolBox } = require('../utils');
 const { GeneralService } = require('../services');
-const { Customer, CustomerAddress, Truck, Inventory, Balance } = database;
+const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } = database;
 const { allEntities } = GeneralService;
 const { successResponse, errorResponse } = ToolBox;
 
@@ -352,6 +352,91 @@ const addDataController = {
     }
   },
 
+  /**
+   * Admin bulk create eligible StockPrice
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with StockPrice details
+   * @memberof const AddDataController
+   */
+  async createBulkStockPrice(req, res) {
+
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send("Please upload a CSV file!");
+      }
+
+      let stocks = [];
+      console.log(stocks);
+      let path = req.file.path
+      fs.createReadStream(path)
+        .pipe(csv.parse({ headers: true }))
+        .on("error", (error) => {
+          throw error.message;
+        })
+        .on("data", (row) => {
+          stocks.push(row);
+        })
+        .on("end", () => {
+          StockPrice.bulkCreate(stocks)
+            .then(() => {
+              res.status(200).send({
+                message: "Uploaded the file successfully: " + req.file.originalname,
+              });
+            }).then(
+              fs.unlink(path, (err) => {
+                if (err) throw err
+              })
+            )
+            .catch((error) => {
+              res.status(500).send({
+                message: "Fail to import data into database!",
+                error: error.message,
+              });
+            });
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        message: "Could not upload the file: " + req.file.originalname,
+      });
+    }
+  },
+
+  /**
+   * Admin get all StockPrice
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with StockPrice in db
+   * @memberof const AddDataController
+   */
+  async getAllEligibleStockPrice(req, res) {
+    try {
+      const stocks = await allEntities(StockPrice);
+      return successResponse(res, { stocks }, 200)
+    } catch (error) {
+      errorResponse(res, { error })
+    }
+  },
+
+  /**
+   * Admin reset StockPrice DB
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with StockPrice in db
+   * @memberof const AddDataController
+   */
+  async resetStockPriceDB(req, res) {
+    try {
+      await StockPrice.destroy({ truncate: true })
+      return successResponse(res, { message: 'trucks Deleted Successfully' }, 200)
+    } catch (error) {
+      errorResponse(res, { error })
+    }
+  },
 
   /**
    * Admin bulk create eligible Balance

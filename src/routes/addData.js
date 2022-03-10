@@ -19,6 +19,9 @@ const {
   createBulkBalance,
   getAllEligibleBalance,
   resetBalanceDB,
+  createBulkStockPrice,
+  getAllEligibleStockPrice,
+  resetStockPriceDB,
 } = AddData;
 
 router.delete('/cust/reset', resetCustomerDB);
@@ -36,6 +39,9 @@ router.post('/inventories', csvUpload.single('file'), createBulkInventories);
 router.delete('/balance/reset', resetBalanceDB);
 router.get('/balance', getAllEligibleBalance);
 router.post('/balance', csvUpload.single('file'), createBulkBalance);
+router.delete('/stockprice/reset', resetStockPriceDB);
+router.get('/stockprice', getAllEligibleStockPrice);
+router.post('/stockprice', csvUpload.single('file'), createBulkStockPrice);
 
 
 module.exports = router;

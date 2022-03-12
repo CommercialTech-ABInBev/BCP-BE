@@ -10,18 +10,39 @@ const router = Router();
 const ordercontroller = new OrderController();
 
 router.post(
-    '/createOrder',
-    authMiddleware,
-    verifyRoles(['cic']),
-    validationMiddleware(createOrderchema),
-    ordercontroller.createOrder
+  '/createOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  validationMiddleware(createOrderchema),
+  ordercontroller.createOrder
 );
 
 router.get(
-    '/getOrders',
-    authMiddleware,
-    verifyRoles(['cic']),
-    ordercontroller.getOrders);
+  '/getOrders',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.getOrders
+);
 
+router.get(
+  '/getSpecificOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.getSpecificOrder
+);
+
+router.get(
+  '/getSpecificOrderByWarehouse',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.getSpecificOrderByWarehouse
+);
+
+router.get(
+  '/downloadOrders',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.csvDownloadOrders
+);
 
 export default router;

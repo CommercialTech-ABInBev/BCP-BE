@@ -5,8 +5,38 @@ import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 
 const { Order, Order_items } = db;
-const { findByKeys, updateByKey, deleteByKey, addEntity, findMultipleByKey } =
-  DbService;
+const { addEntity, findMultipleByKey } = DbService;
+
+const fields = [
+  {
+    label: 'Sales order no',
+    value: 'salesOrderId',
+  },
+  {
+    label: 'Warehouse code',
+    value: 'warehouseId',
+  },
+  {
+    label: 'Account',
+    value: 'account',
+  },
+  {
+    label: 'Created By',
+    value: 'createdBy',
+  },
+  {
+    label: 'Total Amount',
+    value: 'totalAmount',
+  },
+  {
+    label: 'Status',
+    value: 'status',
+  },
+  {
+    label: 'Date Created',
+    value: 'createdAt',
+  },
+];
 
 export default class OrderService {
   async createOrder(data, { name }) {
@@ -58,5 +88,26 @@ export default class OrderService {
   async getAllOrders() {
     const data = await Order.findAll({ include: ['orderItems'] });
     return data;
+  }
+
+  async getSpecificOrderById(id) {
+    const data = await Order.findOne({
+      where: { id },
+      include: ['orderItems'],
+    });
+    return data;
+  }
+
+  async getSpecificOrderByWarehouseId(warehouseId) {
+    const data = await Order.findAll({
+      where: { warehouseId },
+      include: ['orderItems'],
+    });
+    return data;
+  }
+
+  async printOrders(res) {
+    const data = await findMultipleByKey(Order);
+    await AuthUtils.downloadResource(res, 'orders.csv', fields, data);
   }
 }

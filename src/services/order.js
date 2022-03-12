@@ -7,47 +7,49 @@ import { HttpError } from '@src/middlewares/api-error-validator';
 const { Order, Order_items } = db;
 const { findByKeys, updateByKey, deleteByKey, addEntity } = DbService;
 
-
-
 export default class OrderService {
-    async createOrder(data, { name }) {
-        console.log(name);
-        const {
-            warehouseId,
-            account,
-            deliveryDate,
-            vatAmount,
-            subTotalAmount,
-            totalAmount,
-            items
-        } = data;
+  async createOrder(data, { name }) {
+    const {
+      items,
+      account,
+      vatAmount,
+      customerId,
+      warehouseId,
+      totalAmount,
+      deliveryDate,
+      subTotalAmount,
+    } = data;
 
-        const orderBodyData = {
-            warehouseId,
-            account,
-            deliveryDate,
-            vatAmount,
-            subTotalAmount,
-            totalAmount,
-            createdBy: name,
-            status: 'captured',
-            salesOrderId: 'example 1'
+    const orderBodyData = {
+      account,
+      vatAmount,
+      customerId,
+      totalAmount,
+      warehouseId,
+      deliveryDate,
+      subTotalAmount,
+      createdBy: name,
+      status: 'captured',
+      salesOrderId: CommonService.generateReference('CTO_'),
+    };
+
+    const order = await addEntity(Order, { ...orderBodyData });
+
+    const orderItems = items.map((stock) => {
+      return Object.assign(
+        {},
+        {
+          orderId: order.id,
+          total: stock.total,
+          cases: stock.cases,
+          productCode: stock.productCode,
+          productName: stock.productName,
         }
+      );
+    });
 
-        const order = await addEntity(Order, {...orderBodyData });
-
-        const orderItems = items.map(stock => {
-            return Object.assign({}, {
-                orderId: order.id,
-                total: stock.total,
-                cases: stock.cases,
-                productCode: stock.productCode,
-                productName: stock.productName,
-            })
-        })
-
-        const orderitems = await Order_items.bulkCreate(orderItems);
-        order.item = orderitems
-        return order;
-    }
+    const orderitems = await Order_items.bulkCreate(orderItems);
+    order.item = orderitems;
+    return order;
+  }
 }

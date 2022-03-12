@@ -24,6 +24,7 @@ export default class AuthService {
       email: user.email,
       id: user.id,
       role: user.role,
+      name: user.name,
     };
 
     const token = CommonService.generateAuthToken(tokenPayload);

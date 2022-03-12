@@ -1,3 +1,3 @@
 module.exports = {
-    AddData: require('./addData')
+  AddData: require('./addData').default,
 };

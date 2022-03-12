@@ -6,83 +6,83 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       customerId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       masterCodeId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       accountType: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       district: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       state: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       lga: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       long: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       lat: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       customerName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       region: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       hos: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       dm: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       dd: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       cicAgent: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       stages: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       priceCode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       creditBucket: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       currentBalance: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       currentValueInvoice: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       noPurchaseReason: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       buyerSegment: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
 
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Customers');
-  }
+  },
 };

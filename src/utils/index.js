@@ -1,5 +1,3 @@
-module.exports = {
-    ToolBox: require('./toolbox'),
-    response: require('./response'),
-    Paginate: rerequire("./paginate").default
-};
+export const ToolBox = require('./toolbox');
+export const response = require('./response');
+export const Paginate = require('./paginate');

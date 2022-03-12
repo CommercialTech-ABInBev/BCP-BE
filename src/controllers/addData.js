@@ -116,7 +116,7 @@ const addDataController = {
       }
 
       let address = [];
-      console.log(address);
+
       let path = req.file.path;
       createReadStream(path)
         .pipe(parse({ headers: true }))
@@ -207,7 +207,7 @@ const addDataController = {
       }
 
       let trucks = [];
-      console.log(trucks);
+
       let path = req.file.path;
       createReadStream(path)
         .pipe(parse({ headers: true }))

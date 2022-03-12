@@ -5,7 +5,8 @@ import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 
 const { Order, Order_items } = db;
-const { findByKeys, updateByKey, deleteByKey, addEntity } = DbService;
+const { findByKeys, updateByKey, deleteByKey, addEntity, findMultipleByKey } =
+  DbService;
 
 export default class OrderService {
   async createOrder(data, { name }) {
@@ -50,6 +51,12 @@ export default class OrderService {
 
     const orderitems = await Order_items.bulkCreate(orderItems);
     order.item = orderitems;
+
     return order;
+  }
+
+  async getAllOrders() {
+    const data = await Order.findAll({ include: ['orderItems'] });
+    return data;
   }
 }

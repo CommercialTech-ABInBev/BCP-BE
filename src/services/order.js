@@ -2,40 +2,11 @@ import db from '../models';
 import DbService from './dbservice';
 import CommonService from './common';
 import AuthUtils from '../utils/auth';
+import { orderfields } from '../utils/tableFields'
 import { HttpError } from '@src/middlewares/api-error-validator';
 
 const { Order, Order_items } = db;
 const { addEntity, findMultipleByKey } = DbService;
-
-const fields = [{
-        label: 'Sales order no',
-        value: 'salesOrderId',
-    },
-    {
-        label: 'Warehouse code',
-        value: 'warehouseId',
-    },
-    {
-        label: 'Account',
-        value: 'account',
-    },
-    {
-        label: 'Created By',
-        value: 'createdBy',
-    },
-    {
-        label: 'Total Amount',
-        value: 'totalAmount',
-    },
-    {
-        label: 'Status',
-        value: 'status',
-    },
-    {
-        label: 'Date Created',
-        value: 'createdAt',
-    },
-];
 
 export default class OrderService {
     async createOrder(data, { name }) {
@@ -105,6 +76,6 @@ export default class OrderService {
 
     async printOrders(res) {
         const data = await findMultipleByKey(Order);
-        await AuthUtils.downloadResource(res, 'orders.csv', fields, data);
+        await AuthUtils.downloadResource(res, 'orders.csv', orderfields, data);
     }
 }

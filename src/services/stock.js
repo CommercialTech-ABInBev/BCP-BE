@@ -13,7 +13,6 @@ export default class StockService {
         let totalInTransit = 0;
         const inventories = await allEntities(Inventory);
 
-
         const stockData = inventories.map(stock => {
             totalFreeStock += Number(stock.freeStockCs);
             totalInTransit += Number(stock.inTransitCs);
@@ -27,6 +26,7 @@ export default class StockService {
                 freeStock: stock.freeStockCs
             })
         })
+
         return {
             totalFreeStock,
             totalInTransit,

@@ -1,37 +1,50 @@
 'use strict';
 export function up(queryInterface, Sequelize) {
-  return queryInterface.createTable('CustomerAddresses', {
+  return queryInterface.createTable('Orders', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
+    warehouseId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    salesOrderId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
     customerId: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
-    name: {
+    comment: {
       type: Sequelize.STRING,
     },
-    contact: {
+    deliveryDate: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    account: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    totalAmount: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    createdBy: {
       type: Sequelize.STRING,
     },
-    phoneNumber: {
+    status: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    vatAmount: {
       type: Sequelize.STRING,
     },
-    shipToAddr1: {
-      type: Sequelize.STRING,
-    },
-    shipToAddr2: {
-      type: Sequelize.STRING,
-    },
-    shipToAddr3: {
-      type: Sequelize.STRING,
-    },
-    shipToAddr4: {
-      type: Sequelize.STRING,
-    },
-    shipToAddr5: {
+    subTotalAmount: {
       type: Sequelize.STRING,
     },
     createdAt: {
@@ -45,5 +58,5 @@ export function up(queryInterface, Sequelize) {
   });
 }
 export function down(queryInterface, Sequelize) {
-  return queryInterface.dropTable('CustomerAddresses');
+  return queryInterface.dropTable('Orders');
 }

@@ -1,29 +1,31 @@
 'use strict';
 export function up(queryInterface, Sequelize) {
-  return queryInterface.createTable('Trucks', {
+  return queryInterface.createTable('Order_items', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    shipRegister: {
+    productCode: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
-    shipSize: {
+    productName: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
-    shipOwner: {
-      type: Sequelize.STRING,
+    cases: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
     },
-    truckStatus: {
-      type: Sequelize.STRING,
+    orderId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
     },
-    supplierName: {
-      type: Sequelize.STRING,
-    },
-    depot: {
-      type: Sequelize.STRING,
+    total: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
     },
     createdAt: {
       allowNull: false,
@@ -36,5 +38,5 @@ export function up(queryInterface, Sequelize) {
   });
 }
 export function down(queryInterface, Sequelize) {
-  return queryInterface.dropTable('Trucks');
+  return queryInterface.dropTable('Order_items');
 }

@@ -1,4 +1,3 @@
-import '@babel/polyfill'
 import cors from 'cors';
 import './utils/module-alias';
 import express from 'express';

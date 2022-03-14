@@ -1,4 +1,5 @@
-const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = require("./env");
+import env from './env';
+const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD } = env;
 
 module.exports = {
     production: {

@@ -2,7 +2,9 @@
   "presets": [
      "@babel/preset-env"
   ],
-  "plugins": ["@babel/plugin-transform-runtime"],
+  "plugins": [
+        ["@babel/transform-runtime"]
+    ],
   "retainLines": true,
   "sourceMaps": true
 }

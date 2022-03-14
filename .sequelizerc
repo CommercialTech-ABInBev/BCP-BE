@@ -1,16 +1,16 @@
 const isProduction = process.env.NODE_ENV === 'production';
 
 if (!isProduction) require('@babel/register');
-import { resolve } from 'path';
+const path = require('path');
 
-export default isProduction ? {
-    "config": resolve('./dist/config', 'config.js'),
-    "models-path": resolve('./dist/models'),
-    "seeders-path": resolve('./dist/database/seeders'),
-    "migrations-path": resolve('./dist/database/migrations')
+module.exports = isProduction ? {
+    "config": path.resolve('./dist/config', 'config.js'),
+    "models-path": path.resolve('./dist/models'),
+    "seeders-path": path.resolve('./dist/database/seeders'),
+    "migrations-path": path.resolve('./dist/database/migrations')
 } : {
-    "config": resolve('./src/config', 'config.js'),
-    "models-path": resolve('./src/models'),
-    "seeders-path": resolve('./src/database/seeders'),
-    "migrations-path": resolve('./src/database/migrations')
+    "config": path.resolve('./src/config', 'config.js'),
+    "models-path": path.resolve('./src/models'),
+    "seeders-path": path.resolve('./src/database/seeders'),
+    "migrations-path": path.resolve('./src/database/migrations')
 };

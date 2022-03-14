@@ -3,7 +3,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 if (!isProduction) require('@babel/register');
 const { resolve } = require('path');
 
-export default isProduction = {
+module.exports = {
     "config": resolve('./src/config', 'config.js'),
     "models-path": resolve('./src/models'),
     "seeders-path": resolve('./src/database/seeders'),

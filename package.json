@@ -10,7 +10,7 @@
         "lint:fix": "eslint ./src ./test --ext .js --fix",
         "test:functional": "dotenv -e .env -- jest --projects ./test --runInBand ---detectOpenHandles --forceExit",
         "test:unit": "dotenv -e .env -- jest",
-        "start": "yarn migrate && node src/index.js",
+        "start": "yarn migrate && node dist/index.js",
         "start:dev": "yarn migrate && nodemon --exec babel-node src/index.js | pino-pretty -c",
         "build": "babel src -d dist",
         "migrate": "sequelize db:migrate ",
@@ -82,6 +82,5 @@
         "eslint-plugin-import": "^2.22.1",
         "pino-pretty": "^4.0.0",
         "prettier": "^2.0.5"
-    },
-    "type": "module"
+    }
 }

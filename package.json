@@ -1,7 +1,6 @@
 {
     "name": "bcp-backend",
     "version": "1.0.0",
-    "type": "module",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -11,8 +10,8 @@
         "lint:fix": "eslint ./src ./test --ext .js --fix",
         "test:functional": "dotenv -e .env -- jest --projects ./test --runInBand ---detectOpenHandles --forceExit",
         "test:unit": "dotenv -e .env -- jest",
-        "start": "yarn migrate && node dist/index.js",
-        "start:dev": "yarn migrate && nodemon --exec babel-node src/index.js | pino-pretty -c",
+        "start": "npm run migrate && node dist/index.js",
+        "start:dev": "npm run migrate && nodemon --exec babel-node src/index.js | pino-pretty -c",
         "build": "babel src -d dist",
         "migrate": "sequelize db:migrate ",
         "migrate:reset": "sequelize db:migrate:undo:all",

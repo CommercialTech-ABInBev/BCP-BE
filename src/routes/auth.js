@@ -11,10 +11,10 @@ const usercontroller = new UserController();
 router.delete('/delete-user', usercontroller.adminDeleteUserProfile);
 router.post('/login', validationMiddleware(loginSchema), usercontroller.login);
 router.post(
-  '/reset-password',
-  authMiddleware,
-  validationMiddleware(resetPassword),
-  usercontroller.resetPassword
+    '/reset-password',
+    authMiddleware,
+    validationMiddleware(resetPassword),
+    usercontroller.resetPassword
 );
 
 export default router;

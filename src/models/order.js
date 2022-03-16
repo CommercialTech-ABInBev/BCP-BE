@@ -14,6 +14,12 @@ export default (sequelize, DataTypes) => {
       status: DataTypes.STRING,
       vatAmount: DataTypes.INTEGER,
       subTotalAmount: DataTypes.INTEGER,
+      truckId: DataTypes.STRING,
+      loadId: DataTypes.STRING,
+      invoiceId: DataTypes.STRING,
+      picked: DataTypes.BOOLEAN,
+      shipTo: DataTypes.STRING,
+      truckOwner: DataTypes.STRING,
     },
     {}
   );

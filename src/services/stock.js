@@ -4,15 +4,15 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 
-const { Inventory } = db;
-const { addEntity, findMultipleByKey, allEntities } = DbService;
+const { Inventory, Truck } = db;
+const { addEntity, findMultipleByKey, allEntities, updateByKey } = DbService;
 
 export default class StockService {
   async getStocks() {
     let totalFreeStock = 0;
     let totalInTransit = 0;
-    const inventories = await allEntities(Inventory);
 
+    const inventories = await allEntities(Inventory);
     const stockData = inventories.map((stock) => {
       totalFreeStock += Number(stock.freeStockCs);
       totalInTransit += Number(stock.inTransitCs);
@@ -30,10 +30,14 @@ export default class StockService {
       );
     });
 
+    const getUnique = [
+      ...new Map(stockData.map((item) => [item.stockCode, item])).values(),
+    ];
+
     return {
       totalFreeStock,
       totalInTransit,
-      data: stockData,
+      data: getUnique,
     };
   }
 

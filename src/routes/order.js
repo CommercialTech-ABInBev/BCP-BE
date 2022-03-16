@@ -38,4 +38,24 @@ router.get(
   ordercontroller.csvDownloadOrders
 );
 
+router.put(
+  '/pickOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.pickOrder
+);
+router.post(
+  '/loadOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.OrderLoad
+);
+
+router.put(
+  '/generateInvoice',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.generateOrderInvoice
+);
+
 export default router;

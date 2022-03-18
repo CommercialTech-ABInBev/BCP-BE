@@ -10,16 +10,23 @@ const router = Router();
 const stockcontroller = new StockController();
 
 router.get(
-  '/fetchStocks',
-  authMiddleware,
-  verifyRoles(['cic']),
-  stockcontroller.getStocks
+    '/fetchStocks',
+    authMiddleware,
+    verifyRoles(['cic']),
+    stockcontroller.getStocks
 );
 router.get(
-  '/searchStock',
-  authMiddleware,
-  verifyRoles(['cic']),
-  stockcontroller.conditionalFindStock
+    '/searchStock',
+    authMiddleware,
+    verifyRoles(['cic']),
+    stockcontroller.conditionalFindStock
+);
+
+router.get(
+    '/getStockPrice',
+    authMiddleware,
+    verifyRoles(['cic']),
+    stockcontroller.getStockPrices
 );
 
 export default router;

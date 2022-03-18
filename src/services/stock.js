@@ -4,7 +4,7 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 
-const { Inventory, Truck } = db;
+const { Inventory, Truck, StockPrice } = db;
 const { addEntity, findMultipleByKey, allEntities, updateByKey } = DbService;
 
 export default class StockService {
@@ -62,5 +62,13 @@ export default class StockService {
         });
 
         return stockData;
+    }
+
+    async getStockPrice({ stockCode }) {
+        const stockPrice = await StockPrice.findAll({
+            where: { stockCode },
+        })
+
+        return stockPrice;
     }
 }

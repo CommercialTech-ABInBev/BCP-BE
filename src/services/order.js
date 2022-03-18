@@ -4,9 +4,10 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import { orderfields } from '../utils/tableFields';
 import { HttpError } from '@src/middlewares/api-error-validator';
+import { get } from 'request';
 
-const { Order, Order_items } = db;
-const { addEntity, findMultipleByKey } = DbService;
+const { Order, Order_items, Truck, CustomerAddress } = db;
+const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class OrderService {
   async createOrder(data, { name }) {
@@ -76,5 +77,65 @@ export default class OrderService {
   async printOrders(res) {
     const data = await findMultipleByKey(Order);
     await AuthUtils.downloadResource(res, 'orders.csv', orderfields, data);
+  }
+
+  async planOrderLoad(data) {
+    const { orderId, truckId } = data;
+    const getTruck = await findByKeys(Truck, { shipRegister: truckId });
+    orderId.map(async (id) => {
+      await updateByKey(
+        Order,
+        {
+          truckId,
+          loadId: CommonService.generateReference('G00'),
+          status: 'planned',
+          truckOwner: getTruck.shipOwner,
+        },
+        { salesOrderId: id }
+      );
+    });
+
+    return { status: 'success', data: 'Order Successfully Planned' };
+  }
+
+  async generateOrderInvoice({ id }) {
+    const getOrder = await Order.findOne({ where: { id } });
+    const customerDetails = await findByKeys(CustomerAddress, {
+      customerId: getOrder.customerId,
+    });
+
+    await updateByKey(
+      Order,
+      {
+        status: 'invoiced',
+        shipTo: customerDetails.shipToAddr1,
+        invoiceId: CommonService.generateReference('RTY'),
+      },
+      { id }
+    );
+    const getOrders = await Order.findOne({
+      where: { id },
+      include: ['orderItems'],
+    });
+
+    return getOrders;
+  }
+
+  async pickOrder({ id }) {
+    await updateByKey(
+      Order,
+      {
+        picked: true,
+        status: 'picked',
+      },
+      { id }
+    );
+
+    const getOrders = await Order.findOne({
+      where: { id },
+      include: ['orderItems'],
+    });
+
+    return getOrders;
   }
 }

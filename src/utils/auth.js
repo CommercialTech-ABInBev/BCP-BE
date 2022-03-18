@@ -13,8 +13,6 @@ export default class AuthService {
 
   static createPasswordResetLink(id) {
     const token = CommonService.generateToken(id);
-    //Note: Link for the client side, where the id and token from query will be supplied
-    //alongside a newpassword string hiting the veriypassword endpoint
     return {
       link: `http:localhost:3000/users/blank?id=${id}&token=${token}`,
       token,

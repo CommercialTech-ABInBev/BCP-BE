@@ -38,4 +38,31 @@ export class OrderController {
       next(error);
     }
   }
+
+  async OrderLoad(req, res, next) {
+    try {
+      const load = await orderService.planOrderLoad(req.body);
+      res.status(200).send(load);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async generateOrderInvoice(req, res, next) {
+    try {
+      const data = await orderService.generateOrderInvoice(req.query);
+      res.status(200).send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async pickOrder(req, res, next) {
+    try {
+      const data = await orderService.pickOrder(req.query);
+      res.status(200).send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

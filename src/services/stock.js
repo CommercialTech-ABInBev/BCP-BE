@@ -4,63 +4,63 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 
-const { Inventory } = db;
-const { addEntity, findMultipleByKey, allEntities } = DbService;
+const { Inventory, Truck } = db;
+const { addEntity, findMultipleByKey, allEntities, updateByKey } = DbService;
 
 export default class StockService {
-  async getStocks() {
-    let totalFreeStock = 0;
-    let totalInTransit = 0;
-    const inventories = await allEntities(Inventory);
+    async getStocks() {
+        let totalFreeStock = 0;
+        let totalInTransit = 0;
 
-    const stockData = inventories.map((stock) => {
-      totalFreeStock += Number(stock.freeStockCs);
-      totalInTransit += Number(stock.inTransitCs);
+        const inventories = await allEntities(Inventory);
+        const stockData = inventories.map((stock) => {
+            totalFreeStock += Number(stock.freeStockCs);
+            totalInTransit += Number(stock.inTransitCs);
 
-      return Object.assign(
-        {},
-        {
-          volume: stock.size,
-          stockCode: stock.stockCode,
-          stockName: stock.description,
-          container: stock.packageType,
-          inTransit: stock.inTransitCs,
-          freeStock: stock.freeStockCs,
-        }
-      );
-    });
+            return Object.assign({}, {
+                volume: stock.size,
+                stockCode: stock.stockCode,
+                stockName: stock.description,
+                container: stock.packageType,
+                inTransit: stock.inTransitCs,
+                freeStock: stock.freeStockCs,
+            });
+        });
 
-    return {
-      totalFreeStock,
-      totalInTransit,
-      data: stockData,
-    };
-  }
+        const getUnique = [
+            ...new Map(stockData.map((item) => [item.stockCode, item])).values(),
+        ];
 
-  async stockParamSearch({ location, container, volume }) {
-    let whereStatement = {};
-    if (location) whereStatement.site = location;
-    if (container) whereStatement.packageType = container;
-    if (volume) whereStatement.size = volume;
+        return {
+            totalFreeStock,
+            totalInTransit,
+            data: getUnique,
+        };
+    }
 
-    const filterStockData = await Inventory.findAll({
-      where: whereStatement,
-    });
+    async stockParamSearch({ location, container, volume, warehouseId }) {
+        let whereStatement = {};
+        if (volume) whereStatement.size = volume;
+        if (location) whereStatement.site = location;
+        if (container) whereStatement.packageType = container;
+        if (warehouseId) whereStatement.warehouse = warehouseId;
 
-    const stockData = filterStockData.map((stock) => {
-      return Object.assign(
-        {},
-        {
-          volume: stock.size,
-          stockCode: stock.stockCode,
-          stockName: stock.description,
-          container: stock.packageType,
-          inTransit: stock.inTransitCs,
-          freeStock: stock.freeStockCs,
-        }
-      );
-    });
+        const filterStockData = await Inventory.findAll({
+            where: whereStatement,
+        });
 
-    return stockData;
-  }
+        const stockData = filterStockData.map((stock) => {
+            return Object.assign({}, {
+                volume: stock.size,
+                stockCode: stock.stockCode,
+                warehouseId: stock.warehouse,
+                stockName: stock.description,
+                container: stock.packageType,
+                inTransit: stock.inTransitCs,
+                freeStock: stock.freeStockCs,
+            });
+        });
+
+        return stockData;
+    }
 }

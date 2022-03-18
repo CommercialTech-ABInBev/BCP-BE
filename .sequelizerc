@@ -1,5 +1,4 @@
 const isProduction = process.env.NODE_ENV === 'production';
-
 if (!isProduction) require('@babel/register');
 const path = require('path');
 

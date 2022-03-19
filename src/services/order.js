@@ -6,8 +6,9 @@ import { orderfields } from '../utils/tableFields';
 import paginate from '../utils/paginate'
 import { HttpError } from '@src/middlewares/api-error-validator';
 import {get } from 'request';
+import { UserController } from '../controllers/auth';
 
-const { Order, Order_items, Truck, CustomerAddress } = db;
+const { Order, Order_items, Truck, CustomerAddress, User } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class OrderService {
@@ -63,7 +64,22 @@ export default class OrderService {
         });
         return data;
     }
+    async getWHMorders({ id }, query) {
 
+        const { limit, offset } = paginate(query);
+        const userData = await User.findOne({ where: { id } });
+
+        const data = await Order.findAll({
+            where: {
+                warehouseId: userData.inviteStatus
+            },
+            include: ['orderItems'],
+            limit,
+            offset
+        });
+
+        return data;
+    }
     async queryOrders({ id, warehouseId, status }) {
         let whereStatement = {};
         if (id) whereStatement.id = id;

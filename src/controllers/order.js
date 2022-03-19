@@ -21,6 +21,15 @@ export class OrderController {
         }
     }
 
+    async getWHMOrders(req, res, next) {
+        try {
+            const orders = await orderService.getWHMorders(req.tokenData, req.query);
+            res.status(200).send(orders);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async queryOrderByCondition(req, res, next) {
         try {
             const orders = await orderService.queryOrders(req.query);

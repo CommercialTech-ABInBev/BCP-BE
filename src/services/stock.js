@@ -65,7 +65,7 @@ export default class StockService {
     }
 
     async getStockPrice({ stockCode }) {
-        const stockPrice = await StockPrice.findAll({
+        const stockPrice = await StockPrice.findOne({
             where: { stockCode },
         })
 

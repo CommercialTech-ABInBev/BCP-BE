@@ -65,4 +65,7 @@ router.put(
     ordercontroller.generateOrderInvoice
 );
 
+router.get('/searchOrder', authMiddleware,
+    verifyRoles(['cic']), ordercontroller.searchOrder)
+
 export default router;

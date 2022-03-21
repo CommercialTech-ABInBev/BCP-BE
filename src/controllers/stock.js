@@ -28,4 +28,13 @@ export class StockController {
             next(error);
         }
     }
+
+    async searchStocks(req, res, next) {
+        try {
+            const stockPrice = await stockService.searchStock(req.query.search);
+            res.status(200).send(stockPrice);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

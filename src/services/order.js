@@ -1,3 +1,7 @@
+5
+
+import sequelize from 'sequelize';
+
 import db from '../models';
 import DbService from './dbservice';
 import CommonService from './common';
@@ -7,6 +11,7 @@ import paginate from '../utils/paginate'
 import { HttpError } from '@src/middlewares/api-error-validator';
 import {get } from 'request';
 import { UserController } from '../controllers/auth';
+
 
 const { Order, Order_items, Truck, CustomerAddress, User } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
@@ -159,5 +164,28 @@ export default class OrderService {
         });
 
         return getOrders;
+    }
+
+    async searchOrder(query) {
+
+        let options = {
+            where: {
+                [sequelize.Op.or]: [{
+                        'salesOrderId': {
+                            [sequelize.Op.like]: '%' + query + '%'
+                        }
+                    },
+                    {
+                        'account': {
+                            [sequelize.Op.like]: '%' + query + '%'
+                        }
+                    }
+                ]
+            },
+            include: ['orderItems']
+        };
+
+        const orders = await Order.findAll(options);
+        return orders;
     }
 }

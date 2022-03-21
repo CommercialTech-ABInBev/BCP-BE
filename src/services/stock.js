@@ -1,3 +1,5 @@
+import sequelize from 'sequelize';
+
 import db from '../models';
 import DbService from './dbservice';
 import CommonService from './common';
@@ -71,5 +73,27 @@ export default class StockService {
         })
 
         return stockPrice;
+    }
+
+    async searchStock(query) {
+        let options = {
+            where: {
+                [sequelize.Op.or]: [{
+                        'stockCode': {
+                            [sequelize.Op.like]: '%' + query + '%'
+                        }
+                    },
+                    {
+                        'description': {
+                            [sequelize.Op.like]: '%' + query + '%'
+                        }
+                    }
+                ]
+            }
+        };
+
+        const stocks = await Inventory.findAll(options);
+
+        return stocks;
     }
 }

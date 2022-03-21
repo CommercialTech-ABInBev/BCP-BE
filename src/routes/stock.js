@@ -29,4 +29,7 @@ router.get(
     stockcontroller.getStockPrices
 );
 
+router.get('/queryStock', authMiddleware,
+    verifyRoles(['cic']), stockcontroller.searchStocks);
+
 export default router;

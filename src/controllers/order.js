@@ -74,4 +74,13 @@ export class OrderController {
             next(error);
         }
     }
+
+    async searchOrder(req, res, next) {
+        try {
+            const data = await orderService.searchOrder(req.query.search);
+            res.status(200).send(data);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

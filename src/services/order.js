@@ -57,28 +57,37 @@ export default class OrderService {
 
     async getAllOrders(query) {
         const { limit, offset } = paginate(query);
-        const data = await Order.findAll({
+        const { count, rows } = await Order.findAndCountAll({
             include: ['orderItems'],
             limit,
-            offset
+            offset,
+            distinct: true
         });
-        return data;
+
+        return {
+            TotalCount: count,
+            data: rows
+        }
     }
     async getWHMorders({ id }, query) {
 
         const { limit, offset } = paginate(query);
         const userData = await User.findOne({ where: { id } });
 
-        const data = await Order.findAll({
+        const { count, rows } = await Order.findAndCountAll({
             where: {
                 warehouseId: userData.inviteStatus
             },
             include: ['orderItems'],
             limit,
-            offset
+            offset,
+            distinct: true
         });
 
-        return data;
+        return {
+            TotalCount: count,
+            data: rows
+        }
     }
     async queryOrders({ id, warehouseId, status }) {
         let whereStatement = {};

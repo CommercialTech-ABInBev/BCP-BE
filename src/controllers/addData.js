@@ -73,11 +73,12 @@ const addDataController = {
     async getAllEligibleCustomers(req, res) {
         try {
             const { limit, offset } = paginate(req.query);
-            const customers = await Customer.findAll({
+            const { count, rows } = await Customer.findAndCountAll({
                 limit,
-                offset
+                offset,
+                distinct: true
             });
-            return successResponse(res, { customers }, 200);
+            return successResponse(res, { TotalCount: count, customers: rows }, 200);
         } catch (error) {
             errorResponse(res, { error });
         }
@@ -166,11 +167,12 @@ const addDataController = {
     async getAllEligibleAddress(req, res) {
         try {
             const { limit, offset } = paginate(req.query);
-            const address = await CustomerAddress.findAll({
+            const { count, rows } = await CustomerAddress.findAndCountAll({
                 limit,
-                offset
+                offset,
+                distinct: true
             });
-            return successResponse(res, { address }, 200);
+            return successResponse(res, { TotalCount: count, address: rows }, 200);
         } catch (error) {
             errorResponse(res, { error });
         }
@@ -259,11 +261,11 @@ const addDataController = {
     async getAllEligibleTrucks(req, res) {
         try {
             const { limit, offset } = paginate(req.query);
-            const trucks = await Truck.findAll({
+            const { count, rows } = await Truck.findAndCountAll({
                 limit,
                 offset
             });
-            return successResponse(res, { trucks }, 200);
+            return successResponse(res, { TotalCount: count, trucks: rows }, 200);
         } catch (error) {
             errorResponse(res, { error });
         }
@@ -353,11 +355,11 @@ const addDataController = {
         try {
             const { limit, offset } = paginate(req.query);
 
-            const inventories = await Inventory.findAll({
+            const { count, rows } = await Inventory.findAndCountAll({
                 limit,
                 offset
             });
-            return successResponse(res, { inventories }, 200);
+            return successResponse(res, { TotalCount: count, Inventories: rows }, 200);
         } catch (error) {
             errorResponse(res, { error });
         }

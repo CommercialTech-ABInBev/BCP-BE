@@ -43,4 +43,6 @@ router.get(
   stockcontroller.getWHMstocks
 );
 
+router.put('/addStock', stockcontroller.addStock);
+
 export default router;

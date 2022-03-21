@@ -46,4 +46,13 @@ export class StockController {
       next(error);
     }
   }
+
+  async addStock(req, res, next) {
+    try {
+      const stocks = await stockService.updateStock(req.body);
+      res.status(200).send(stocks);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

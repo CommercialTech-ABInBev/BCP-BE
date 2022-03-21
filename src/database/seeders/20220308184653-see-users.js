@@ -29,7 +29,7 @@ export async function up(queryInterface, Sequelize) {
         {
             name: 'Oyinlola Evelyn',
             email: 'Oyinlola@gmail.com',
-            inviteStatus: 'Active',
+            inviteStatus: 'D0M0',
             location: 'Lagos',
             password: await hashPassword('Hilarious3'),
             role: 'whm',

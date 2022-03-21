@@ -1,4 +1,4 @@
-5
+5;
 
 import sequelize from 'sequelize';
 
@@ -6,11 +6,8 @@ import db from '../models';
 import DbService from './dbservice';
 import CommonService from './common';
 import AuthUtils from '../utils/auth';
+import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
-import paginate from '../utils/paginate'
-import { HttpError } from '@src/middlewares/api-error-validator';
-import {get } from 'request';
-import { UserController } from '../controllers/auth';
 
 
 const { Order, Order_items, Truck, CustomerAddress, User } = db;
@@ -66,33 +63,32 @@ export default class OrderService {
             include: ['orderItems'],
             limit,
             offset,
-            distinct: true
+            distinct: true,
         });
 
         return {
             TotalCount: count,
-            data: rows
-        }
+            data: rows,
+        };
     }
     async getWHMorders({ id }, query) {
-
         const { limit, offset } = paginate(query);
         const userData = await User.findOne({ where: { id } });
 
         const { count, rows } = await Order.findAndCountAll({
             where: {
-                warehouseId: userData.inviteStatus
+                warehouseId: userData.inviteStatus,
             },
             include: ['orderItems'],
             limit,
             offset,
-            distinct: true
+            distinct: true,
         });
 
         return {
             TotalCount: count,
-            data: rows
-        }
+            data: rows,
+        };
     }
     async queryOrders({ id, warehouseId, status }) {
         let whereStatement = {};
@@ -167,22 +163,21 @@ export default class OrderService {
     }
 
     async searchOrder(query) {
-
         let options = {
             where: {
                 [sequelize.Op.or]: [{
-                        'salesOrderId': {
-                            [sequelize.Op.like]: '%' + query + '%'
-                        }
+                        salesOrderId: {
+                            [sequelize.Op.like]: '%' + query + '%',
+                        },
                     },
                     {
-                        'account': {
-                            [sequelize.Op.like]: '%' + query + '%'
-                        }
-                    }
-                ]
+                        account: {
+                            [sequelize.Op.like]: '%' + query + '%',
+                        },
+                    },
+                ],
             },
-            include: ['orderItems']
+            include: ['orderItems'],
         };
 
         const orders = await Order.findAll(options);

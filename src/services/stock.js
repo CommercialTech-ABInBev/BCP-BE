@@ -1,13 +1,9 @@
 import sequelize from 'sequelize';
 
 import db from '../models';
-import DbService from './dbservice';
-import CommonService from './common';
-import AuthUtils from '../utils/auth';
-import { HttpError } from '@src/middlewares/api-error-validator';
+import paginate from '../utils/paginate';
 
-const { Inventory, Truck, StockPrice } = db;
-const { addEntity, findMultipleByKey, allEntities, updateByKey } = DbService;
+const { Inventory, StockPrice, User } = db;
 
 export default class StockService {
     async getStocks() {
@@ -70,7 +66,7 @@ export default class StockService {
     async getStockPrice({ stockCode }) {
         const stockPrice = await StockPrice.findOne({
             where: { stockCode },
-        })
+        });
 
         return stockPrice;
     }
@@ -79,21 +75,49 @@ export default class StockService {
         let options = {
             where: {
                 [sequelize.Op.or]: [{
-                        'stockCode': {
-                            [sequelize.Op.like]: '%' + query + '%'
-                        }
+                        stockCode: {
+                            [sequelize.Op.like]: '%' + query + '%',
+                        },
                     },
                     {
-                        'description': {
-                            [sequelize.Op.like]: '%' + query + '%'
-                        }
-                    }
-                ]
-            }
+                        description: {
+                            [sequelize.Op.like]: '%' + query + '%',
+                        },
+                    },
+                ],
+            },
         };
 
         const stocks = await Inventory.findAll(options);
 
         return stocks;
+    }
+
+    async getWHstocks({ id }, query) {
+        let totalFreeStock = 0;
+        let totalInTransit = 0;
+        const { limit, offset } = paginate(query);
+        const userData = await User.findOne({ where: { id } });
+
+        const { count, rows } = await Inventory.findAndCountAll({
+            where: {
+                warehouse: userData.inviteStatus,
+            },
+            limit,
+            offset,
+            distinct: true,
+        });
+
+        rows.map((stock) => {
+            totalFreeStock += Number(stock.freeStockCs);
+            totalInTransit += Number(stock.inTransitCs);
+        });
+
+        return {
+            TotalCount: count,
+            totalFreeStock,
+            totalInTransit,
+            data: rows,
+        };
     }
 }

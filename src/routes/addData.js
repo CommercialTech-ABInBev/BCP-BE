@@ -22,10 +22,14 @@ const {
   createBulkStockPrice,
   getAllEligibleStockPrice,
   resetStockPriceDB,
+  getSingleCustomer,
+  searchForCustomer
 } = AddData;
 
 router.delete('/cust/reset', resetCustomerDB);
 router.get('/customers', getAllEligibleCustomers);
+router.get('/customer', getSingleCustomer); // ?customerId=3
+router.get('/customer/search', searchForCustomer); // ?query=3
 router.post(
   '/cust/createBulkUser',
   csvUpload.single('file'),

@@ -28,6 +28,10 @@ export default (sequelize, DataTypes) => {
     Order.hasMany(models.Order_items, {
       as: 'orderItems',
     });
+    Order.belongsTo(models.Customer, {
+      as: 'customer',
+      foreignKey: 'customerId',
+    });
   };
   return Order;
 };

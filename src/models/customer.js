@@ -28,11 +28,15 @@ export default (sequelize, DataTypes) => {
   );
   Customer.associate = function (models) {
     Customer.hasOne(models.CustomerAddress, {
-      as: 'customer',
+      as: 'address',
       foreignKey: 'customerId',
     });
     Customer.hasOne(models.Balance, {
       as: 'creditDetails',
+      foreignKey: 'customerId',
+    });
+    Customer.hasMany(models.Order, {
+      as: 'orders',
       foreignKey: 'customerId',
     });
   };

@@ -129,19 +129,22 @@ export default class StockService {
     };
   }
 
-  async updateStock({ quantity, stockCode }) {
-    const stock = await Inventory.findOne({
-      where: { stockCode },
+  async updateStock(data) {
+    data.forEach(async (elem) => {
+      const { stockCode, quantity } = elem;
+      const stock = await Inventory.findOne({
+        where: { stockCode },
+      });
+
+      await updateByKey(
+        Inventory,
+        {
+          freeStockCs: Number(stock.freeStockCs) + quantity,
+        },
+        { stockCode }
+      );
     });
 
-    await updateByKey(
-      Inventory,
-      {
-        freeStockCs: Number(stock.freeStockCs) + quantity,
-      },
-      { stockCode }
-    );
-
-    return { message: `Stock with ID ${stockCode} was updated!!` };
+    return { message: `Stocks Successfully Updated!!` };
   }
 }

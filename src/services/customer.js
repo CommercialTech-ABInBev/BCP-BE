@@ -1,10 +1,9 @@
-5
+5;
 
 import sequelize from 'sequelize';
 
 import db from '../models';
 import DbService from './dbservice';
-
 
 const { Order, Order_items, Truck, CustomerAddress, User, Customer } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
@@ -21,7 +20,7 @@ export default class CustomerService {
           {
             model: Order,
             as: 'orders',
-            include: ['orderItems']
+            include: ['orderItems'],
           },
         ],
         where: key,
@@ -34,21 +33,20 @@ export default class CustomerService {
   }
 
   async searchCustomer(query) {
-
     let options = {
       where: {
         [sequelize.Op.or]: [
           {
-            'customerId': {
-              [sequelize.Op.like]: '%' + query + '%'
-            }
+            customerId: {
+              [sequelize.Op.like]: '%' + query + '%',
+            },
           },
           {
-            'customerName': {
-              [sequelize.Op.like]: '%' + query + '%'
-            }
-          }
-        ]
+            customerName: {
+              [sequelize.Op.like]: '%' + query + '%',
+            },
+          },
+        ],
       },
       include: [
         {
@@ -58,7 +56,7 @@ export default class CustomerService {
         {
           model: Order,
           as: 'orders',
-          include: ['orderItems']
+          include: ['orderItems'],
         },
       ],
     };

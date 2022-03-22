@@ -4,11 +4,15 @@ import { createReadStream, unlink } from 'fs';
 import database from '../models';
 import { ToolBox } from '../utils';
 import paginate from '../utils/paginate'
-import { GeneralService } from '../services';
+import { GeneralService, CustomerService } from '../services';
 const { allEntities } = GeneralService;
 const { successResponse, errorResponse } = ToolBox;
 const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } =
 database;
+
+const customerService = new CustomerService();
+const { getOrdersByCustomerId, searchCustomer } = customerService;
+
 
 const addDataController = {
     /**
@@ -538,6 +542,47 @@ const addDataController = {
         try {
             const balance = await allEntities(Balance);
             return successResponse(res, { balance }, 200);
+        } catch (error) {
+            errorResponse(res, { error });
+        }
+    },
+
+
+    /**
+     * Admin get single customers
+     * @async
+     * @param {object} req
+     * @param {object} res
+     * @returns {JSON} a JSON response with customers in db
+     * @memberof const AddDataController
+     */
+    async getSingleCustomer(req, res) {
+        try {
+            if (!req.query.customerId) return errorResponse(res, { message: 'customerId is required' });
+
+            const customer = await getOrdersByCustomerId({ customerId: req.query.customerId });
+
+            return successResponse(res, { customer }, 200);
+        } catch (error) {
+            errorResponse(res, { error });
+        }
+    },
+
+    /**
+     * Admin get single customers
+     * @async
+     * @param {object} req
+     * @param {object} res
+     * @returns {JSON} a JSON response with customers in db
+     * @memberof const AddDataController
+     */
+    async searchForCustomer(req, res) {
+        try {
+            if (!req.query.search) return errorResponse(res, { message: 'search name is required' });
+
+            const customer = await searchCustomer(req.query.search);
+
+            return successResponse(res, { customer }, 200);
         } catch (error) {
             errorResponse(res, { error });
         }

@@ -3,16 +3,14 @@ import { createReadStream, unlink } from 'fs';
 
 import database from '../models';
 import { ToolBox } from '../utils';
-import paginate from '../utils/paginate'
+import paginate from '../utils/paginate';
 import { GeneralService, CustomerService } from '../services';
+const customerService = new CustomerService();
+const { getOrdersByCustomerId, searchCustomer } = customerService;
 const { allEntities } = GeneralService;
 const { successResponse, errorResponse } = ToolBox;
 const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } =
-database;
-
-const customerService = new CustomerService();
-const { getOrdersByCustomerId, searchCustomer } = customerService;
-
+    database;
 
 const addDataController = {
     /**
@@ -44,7 +42,8 @@ const addDataController = {
                     Customer.bulkCreate(customers)
                         .then(() => {
                             res.status(200).send({
-                                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                                message:
+                                    'Uploaded the file successfully: ' + req.file.originalname,
                             });
                         })
                         .then(
@@ -80,7 +79,7 @@ const addDataController = {
             const { count, rows } = await Customer.findAndCountAll({
                 limit,
                 offset,
-                distinct: true
+                distinct: true,
             });
             return successResponse(res, { TotalCount: count, customers: rows }, 200);
         } catch (error) {
@@ -100,7 +99,8 @@ const addDataController = {
         try {
             await Customer.destroy({ truncate: true });
             return successResponse(
-                res, { message: 'Customers Deleted Successfully' },
+                res,
+                { message: 'Customers Deleted Successfully' },
                 200
             );
         } catch (error) {
@@ -137,7 +137,8 @@ const addDataController = {
                     CustomerAddress.bulkCreate(address)
                         .then(() => {
                             res.status(200).send({
-                                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                                message:
+                                    'Uploaded the file successfully: ' + req.file.originalname,
                             });
                         })
                         .then(
@@ -174,7 +175,7 @@ const addDataController = {
             const { count, rows } = await CustomerAddress.findAndCountAll({
                 limit,
                 offset,
-                distinct: true
+                distinct: true,
             });
             return successResponse(res, { TotalCount: count, address: rows }, 200);
         } catch (error) {
@@ -194,7 +195,8 @@ const addDataController = {
         try {
             await CustomerAddress.destroy({ truncate: true });
             return successResponse(
-                res, { message: 'address Deleted Successfully' },
+                res,
+                { message: 'address Deleted Successfully' },
                 200
             );
         } catch (error) {
@@ -231,7 +233,8 @@ const addDataController = {
                     Truck.bulkCreate(trucks)
                         .then(() => {
                             res.status(200).send({
-                                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                                message:
+                                    'Uploaded the file successfully: ' + req.file.originalname,
                             });
                         })
                         .then(
@@ -267,7 +270,7 @@ const addDataController = {
             const { limit, offset } = paginate(req.query);
             const { count, rows } = await Truck.findAndCountAll({
                 limit,
-                offset
+                offset,
             });
             return successResponse(res, { TotalCount: count, trucks: rows }, 200);
         } catch (error) {
@@ -287,7 +290,8 @@ const addDataController = {
         try {
             await Truck.destroy({ truncate: true });
             return successResponse(
-                res, { message: 'trucks Deleted Successfully' },
+                res,
+                { message: 'trucks Deleted Successfully' },
                 200
             );
         } catch (error) {
@@ -324,7 +328,8 @@ const addDataController = {
                     Inventory.bulkCreate(inventories)
                         .then(() => {
                             res.status(200).send({
-                                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                                message:
+                                    'Uploaded the file successfully: ' + req.file.originalname,
                             });
                         })
                         .then(
@@ -340,7 +345,6 @@ const addDataController = {
                         });
                 });
         } catch (error) {
-
             res.status(500).send({
                 message: 'Could not upload the file: ' + req.file.originalname,
             });
@@ -361,9 +365,13 @@ const addDataController = {
 
             const { count, rows } = await Inventory.findAndCountAll({
                 limit,
-                offset
+                offset,
             });
-            return successResponse(res, { TotalCount: count, Inventories: rows }, 200);
+            return successResponse(
+                res,
+                { TotalCount: count, Inventories: rows },
+                200
+            );
         } catch (error) {
             errorResponse(res, { error });
         }
@@ -381,7 +389,8 @@ const addDataController = {
         try {
             await Inventory.destroy({ truncate: true });
             return successResponse(
-                res, { message: 'trucks Deleted Successfully' },
+                res,
+                { message: 'trucks Deleted Successfully' },
                 200
             );
         } catch (error) {
@@ -418,7 +427,8 @@ const addDataController = {
                     StockPrice.bulkCreate(stocks)
                         .then(() => {
                             res.status(200).send({
-                                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                                message:
+                                    'Uploaded the file successfully: ' + req.file.originalname,
                             });
                         })
                         .then(
@@ -434,7 +444,6 @@ const addDataController = {
                         });
                 });
         } catch (error) {
-
             res.status(500).send({
                 message: 'Could not upload the file: ' + req.file.originalname,
             });
@@ -470,7 +479,8 @@ const addDataController = {
         try {
             await StockPrice.destroy({ truncate: true });
             return successResponse(
-                res, { message: 'trucks Deleted Successfully' },
+                res,
+                { message: 'trucks Deleted Successfully' },
                 200
             );
         } catch (error) {
@@ -507,7 +517,8 @@ const addDataController = {
                     Balance.bulkCreate(balance)
                         .then(() => {
                             res.status(200).send({
-                                message: 'Uploaded the file successfully: ' + req.file.originalname,
+                                message:
+                                    'Uploaded the file successfully: ' + req.file.originalname,
                             });
                         })
                         .then(
@@ -523,7 +534,6 @@ const addDataController = {
                         });
                 });
         } catch (error) {
-
             res.status(500).send({
                 message: 'Could not upload the file: ' + req.file.originalname,
             });
@@ -542,6 +552,27 @@ const addDataController = {
         try {
             const balance = await allEntities(Balance);
             return successResponse(res, { balance }, 200);
+        } catch (error) {
+            errorResponse(res, { error });
+        }
+    },
+
+    /**
+     * Admin reset Balance DB
+     * @async
+     * @param {object} req
+     * @param {object} res
+     * @returns {JSON} a JSON response with customers in db
+     * @memberof const AddDataController
+     */
+    async resetBalanceDB(req, res) {
+        try {
+            await Balance.destroy({ truncate: true });
+            return successResponse(
+                res,
+                { message: 'trucks Deleted Successfully' },
+                200
+            );
         } catch (error) {
             errorResponse(res, { error });
         }
@@ -583,26 +614,6 @@ const addDataController = {
             const customer = await searchCustomer(req.query.search);
 
             return successResponse(res, { customer }, 200);
-        } catch (error) {
-            errorResponse(res, { error });
-        }
-    },
-
-    /**
-     * Admin reset Balance DB
-     * @async
-     * @param {object} req
-     * @param {object} res
-     * @returns {JSON} a JSON response with customers in db
-     * @memberof const AddDataController
-     */
-    async resetBalanceDB(req, res) {
-        try {
-            await Balance.destroy({ truncate: true });
-            return successResponse(
-                res, { message: 'trucks Deleted Successfully' },
-                200
-            );
         } catch (error) {
             errorResponse(res, { error });
         }

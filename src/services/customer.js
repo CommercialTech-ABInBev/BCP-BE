@@ -1,5 +1,3 @@
-5;
-
 import sequelize from 'sequelize';
 
 import db from '../models';
@@ -12,20 +10,15 @@ export default class CustomerService {
   async getOrdersByCustomerId(key) {
     try {
       const entities = await Customer.findOne({
-        include: [
-          {
-            model: CustomerAddress,
-            as: 'address',
-          },
-          {
-            model: Order,
-            as: 'orders',
-            include: ['orderItems'],
-          },
-        ],
         where: key,
       });
-      return entities;
+     
+      const orders = await Order.findAll({
+          include: ['orderItems'],
+          where: key
+        },
+      )
+      return { ...entities.dataValues, orders };
     } catch (error) {
       console.error(error);
       throw new Error(error);

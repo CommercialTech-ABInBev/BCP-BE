@@ -55,4 +55,13 @@ export class StockController {
       next(error);
     }
   }
+
+  async csvDownloadStock(req, res, next) {
+    try {
+      const csvData = await stockService.printStocks(res);
+      res.status(200).send(csvData);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

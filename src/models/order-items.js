@@ -11,6 +11,7 @@ export default (sequelize, DataTypes) => {
       orderId: DataTypes.INTEGER,
       cases: DataTypes.INTEGER,
       total: DataTypes.INTEGER,
+      pallets: DataTypes.INTEGER,
     },
     {}
   );

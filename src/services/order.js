@@ -4,8 +4,8 @@ import db from '../models';
 import DbService from './dbservice';
 import CommonService from './common';
 import AuthUtils from '../utils/auth';
-import { orderfields } from '../utils/tableFields';
 import paginate from '../utils/paginate';
+import { orderfields } from '../utils/tableFields';
 
 const { Order, Order_items, Truck, CustomerAddress, User } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
@@ -112,7 +112,7 @@ export default class OrderService {
   async planOrderLoad(data) {
     const { orderId, truckId } = data;
     const getTruck = await findByKeys(Truck, { shipRegister: truckId });
-    orderId.map(async (id) => {
+    orderId.forEach(async (id) => {
       await updateByKey(
         Order,
         {
@@ -186,9 +186,10 @@ export default class OrderService {
         ],
       },
       include: ['orderItems'],
+      distinct: true,
     };
 
-    const orders = await Order.findAll(options);
-    return orders;
+    const { count, rows } = await Order.findAndCountAll(options);
+    return { TotalCount: count, orders: rows };
   }
 }

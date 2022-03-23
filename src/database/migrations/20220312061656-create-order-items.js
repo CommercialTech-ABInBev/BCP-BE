@@ -27,6 +27,10 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    pallets: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

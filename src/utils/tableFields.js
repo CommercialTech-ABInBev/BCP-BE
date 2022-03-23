@@ -28,3 +28,30 @@ export const orderfields = [
     value: 'createdAt',
   },
 ];
+
+export const stockField = [
+  {
+    label: 'Volume',
+    value: 'size',
+  },
+  {
+    label: 'Stock Code',
+    value: 'stockCode',
+  },
+  {
+    label: 'Stock Name',
+    value: 'description',
+  },
+  {
+    label: 'Container',
+    value: 'packageType',
+  },
+  {
+    label: 'In Transit',
+    value: 'inTransitCs',
+  },
+  {
+    label: 'Free Stock',
+    value: 'freeStockCs',
+  },
+];

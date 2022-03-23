@@ -61,7 +61,7 @@ router.post(
 router.put(
   '/generateInvoice',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['admin']),
   ordercontroller.generateOrderInvoice
 );
 

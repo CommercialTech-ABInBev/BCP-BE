@@ -37,6 +37,34 @@ export function up(queryInterface, Sequelize) {
     createdBy: {
       type: Sequelize.STRING,
     },
+    loadId: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    truckId: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    invoiceId: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    picked: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+    },
+    invoiceId: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    shipTo: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    truckOwner: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     status: {
       type: Sequelize.STRING,
       allowNull: false,

@@ -43,6 +43,18 @@ router.get(
   stockcontroller.getWHMstocks
 );
 
-router.put('/addStock', stockcontroller.addStock);
+router.put(
+  '/addStock',
+  authMiddleware,
+  verifyRoles(['whm']),
+  stockcontroller.addStock
+);
+
+router.get(
+  '/downloadStocks',
+  authMiddleware,
+  verifyRoles(['cic', 'admin']),
+  stockcontroller.csvDownloadStock
+);
 
 export default router;

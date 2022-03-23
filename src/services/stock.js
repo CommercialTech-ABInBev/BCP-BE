@@ -2,10 +2,12 @@ import sequelize from 'sequelize';
 
 import db from '../models';
 import DbService from './dbservice';
+import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
+import { stockField } from '../utils/tableFields';
 
 const { Inventory, StockPrice, User } = db;
-const { updateByKey } = DbService;
+const { updateByKey, findMultipleByKey } = DbService;
 export default class StockService {
   async getStocks() {
     let totalFreeStock = 0;
@@ -39,6 +41,11 @@ export default class StockService {
       totalCount: count,
       data: getUnique,
     };
+  }
+
+  async printStocks(res) {
+    const data = await findMultipleByKey(Inventory);
+    await AuthUtils.downloadResource(res, 'stock.csv', stockField, data);
   }
 
   async stockParamSearch({ location, container, volume, warehouseId }) {
@@ -94,11 +101,12 @@ export default class StockService {
           },
         ],
       },
+      distinct: true,
     };
 
-    const stocks = await Inventory.findAll(options);
+    const { count, rows } = await Inventory.findAndCountAll(options);
 
-    return stocks;
+    return { TotalCount: count, stocks: rows };
   }
 
   async getWHstocks({ id }, query) {
@@ -129,19 +137,22 @@ export default class StockService {
     };
   }
 
-  async updateStock({ quantity, stockCode }) {
-    const stock = await Inventory.findOne({
-      where: { stockCode },
+  async updateStock(data) {
+    data.forEach(async (elem) => {
+      const { stockCode, quantity } = elem;
+      const stock = await Inventory.findOne({
+        where: { stockCode },
+      });
+
+      await updateByKey(
+        Inventory,
+        {
+          freeStockCs: Number(stock.freeStockCs) + quantity,
+        },
+        { stockCode }
+      );
     });
 
-    await updateByKey(
-      Inventory,
-      {
-        freeStockCs: Number(stock.freeStockCs) + quantity,
-      },
-      { stockCode }
-    );
-
-    return { message: `Stock with ID ${stockCode} was updated!!` };
+    return { message: `Stocks Successfully Updated!!` };
   }
 }

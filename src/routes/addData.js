@@ -23,7 +23,7 @@ const {
   getAllEligibleStockPrice,
   resetStockPriceDB,
   getSingleCustomer,
-  searchForCustomer
+  searchForCustomer,
 } = AddData;
 
 router.delete('/cust/reset', resetCustomerDB);

@@ -13,7 +13,7 @@
         "start": "yarn migrate && yarn seed && babel-node src/index.js ",
         "start:dev": "yarn migrate && nodemon --exec babel-node src/index.js | pino-pretty -c",
         "build": "babel src -d dist",
-        "migrate": "sequelize db:migrate ",
+        "migrate": "sequelize db:migrate",
         "migrate:reset": "sequelize db:migrate:undo:all",
         "seed": "sequelize db:seed:all",
         "migrate:seed": "yarn migrate && yarn seed",

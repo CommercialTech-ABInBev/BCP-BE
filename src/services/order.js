@@ -4,8 +4,8 @@ import db from '../models';
 import DbService from './dbservice';
 import CommonService from './common';
 import AuthUtils from '../utils/auth';
-import { orderfields } from '../utils/tableFields';
 import paginate from '../utils/paginate';
+import { orderfields } from '../utils/tableFields';
 
 const { Order, Order_items, Truck, CustomerAddress, User } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;

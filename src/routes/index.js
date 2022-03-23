@@ -12,6 +12,6 @@ router.use('/', orderRoutes);
 router.use('/', stockRoutes);
 router.use('/adddata', AddData);
 router.use('/auth', authRoutes);
-router.use('/', reconcileRoutes)
+router.use('/', reconcileRoutes);
 
 export default router;

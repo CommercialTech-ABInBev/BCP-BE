@@ -10,43 +10,51 @@ const router = Router();
 const stockcontroller = new StockController();
 
 router.get(
-    '/fetchStocks',
-    authMiddleware,
-    verifyRoles(['cic']),
-    stockcontroller.getStocks
+  '/fetchStocks',
+  authMiddleware,
+  verifyRoles(['cic']),
+  stockcontroller.getStocks
 );
 router.get(
-    '/searchStock',
-    authMiddleware,
-    verifyRoles(['cic']),
-    stockcontroller.conditionalFindStock
-);
-
-router.get(
-    '/getStockPrice',
-    authMiddleware,
-    verifyRoles(['cic']),
-    stockcontroller.getStockPrices
+  '/searchStock',
+  authMiddleware,
+  verifyRoles(['cic']),
+  stockcontroller.conditionalFindStock
 );
 
 router.get(
-    '/queryStock',
-    authMiddleware,
-    verifyRoles(['cic', 'whm', 'admin']),
-    stockcontroller.searchStocks
+  '/getStockPrice',
+  authMiddleware,
+  verifyRoles(['cic']),
+  stockcontroller.getStockPrices
 );
 
 router.get(
-    '/getWHMstocks',
-    authMiddleware,
-    verifyRoles(['whm']),
-    stockcontroller.getWHMstocks
+  '/queryStock',
+  authMiddleware,
+  verifyRoles(['cic', 'whm', 'admin']),
+  stockcontroller.searchStocks
 );
 
-router.put('/addStock', authMiddleware,
-    verifyRoles(['whm']), stockcontroller.addStock);
+router.get(
+  '/getWHMstocks',
+  authMiddleware,
+  verifyRoles(['whm']),
+  stockcontroller.getWHMstocks
+);
 
-router.get('/downloadStocks', authMiddleware,
-    verifyRoles(['cic', 'admin']), stockcontroller.csvDownloadStock)
+router.put(
+  '/addStock',
+  authMiddleware,
+  verifyRoles(['whm']),
+  stockcontroller.addStock
+);
+
+router.get(
+  '/downloadStocks',
+  authMiddleware,
+  verifyRoles(['cic', 'admin']),
+  stockcontroller.csvDownloadStock
+);
 
 export default router;

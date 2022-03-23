@@ -7,10 +7,18 @@ import { ReconcileController } from '../controllers/reconcillation';
 const router = Router();
 const reconcileController = new ReconcileController();
 
-router.post('/postReconcile', authMiddleware,
-    verifyRoles(['whm']), reconcileController.createReconcile);
+router.post(
+  '/postReconcile',
+  authMiddleware,
+  verifyRoles(['whm']),
+  reconcileController.createReconcile
+);
 
-router.get('/getReconcillation', authMiddleware,
-    verifyRoles(['whm']), reconcileController.getWHMreconcillationn)
+router.get(
+  '/getReconcillation',
+  authMiddleware,
+  verifyRoles(['whm']),
+  reconcileController.getWHMreconcillationn
+);
 
 export default router;

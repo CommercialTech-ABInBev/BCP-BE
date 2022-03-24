@@ -34,7 +34,7 @@ router.get(
 router.get(
     '/getSpecificOrder',
     authMiddleware,
-    verifyRoles(['cic', 'admin']),
+    verifyRoles(['cic', 'admin', 'whm']),
     ordercontroller.queryOrderByCondition
 );
 

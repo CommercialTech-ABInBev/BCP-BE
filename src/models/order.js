@@ -20,6 +20,10 @@ export default (sequelize, DataTypes) => {
       picked: DataTypes.BOOLEAN,
       shipTo: DataTypes.STRING,
       truckOwner: DataTypes.STRING,
+      truckSupplierName: DataTypes.STRING,
+      truckStatus: DataTypes.STRING,
+      truckDepot: DataTypes.STRING,
+      truckShipSize: DataTypes.STRING,
     },
     {}
   );

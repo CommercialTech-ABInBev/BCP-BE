@@ -12,20 +12,20 @@ const stockcontroller = new StockController();
 router.get(
   '/fetchStocks',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'admin']),
   stockcontroller.getStocks
 );
 router.get(
   '/searchStock',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'admin']),
   stockcontroller.conditionalFindStock
 );
 
 router.get(
   '/getStockPrice',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'admin']),
   stockcontroller.getStockPrices
 );
 
@@ -39,14 +39,14 @@ router.get(
 router.get(
   '/getWHMstocks',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['whm', 'admin']),
   stockcontroller.getWHMstocks
 );
 
 router.put(
   '/addStock',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['whm', 'admin']),
   stockcontroller.addStock
 );
 

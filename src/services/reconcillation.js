@@ -6,8 +6,13 @@ const { Reconcillation, User } = db;
 const { addEntity } = DbService;
 
 export default class ReconcillationService {
-  async postReconcillation(data) {
-    const result = { amount: data.quantity * 1000, ...data };
+  async postReconcillation({ id }, data) {
+    const userData = await User.findOne({ where: { id } });
+    const result = {
+      amount: data.quantity * 1000,
+      warehouse: userData.inviteStatus,
+      ...data,
+    };
     const reconcile = await addEntity(Reconcillation, { ...result });
 
     return reconcile;

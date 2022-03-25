@@ -24,8 +24,10 @@ const {
   resetStockPriceDB,
   getSingleCustomer,
   searchForCustomer,
+  getruckByDepot,
 } = AddData;
 
+router.get('/truckByDepot', getruckByDepot); // ?query=B0
 router.delete('/cust/reset', resetCustomerDB);
 router.get('/customers', getAllEligibleCustomers);
 router.get('/customer', getSingleCustomer); // ?customerId=3

@@ -21,6 +21,7 @@ export default class ReconcillationService {
   async getWHMwarehouse({ id }, query) {
     const { limit, offset } = paginate(query);
     const userData = await User.findOne({ where: { id } });
+
     const { count, rows } = await Reconcillation.findAndCountAll({
       where: {
         warehouse: userData.inviteStatus,

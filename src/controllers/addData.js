@@ -278,6 +278,15 @@ const addDataController = {
     }
   },
 
+  async getruckByDepot(req, res) {
+    try {
+      const data = await Truck.findAll({ where: { depot: req.query.depot } });
+      return successResponse(res, data, 200);
+    } catch (error) {
+      errorResponse(res, { error });
+    }
+  },
+
   /**
    * Admin reset customers DB
    * @async

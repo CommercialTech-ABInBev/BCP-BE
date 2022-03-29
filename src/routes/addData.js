@@ -25,8 +25,10 @@ const {
   getSingleCustomer,
   searchForCustomer,
   getruckByDepot,
+  getTruckByParams,
 } = AddData;
 
+router.get('/truckByParam', getTruckByParams);
 router.get('/truckByDepot', getruckByDepot); // ?query=B0
 router.delete('/cust/reset', resetCustomerDB);
 router.get('/customers', getAllEligibleCustomers);

@@ -633,14 +633,19 @@ const addDataController = {
 
   async getTruckByParams(req, res) {
     try {
+      const { limit, offset } = paginate(req.query);
+      const { id, depot, shipSize } = req.query;
+
       let whereStatement = {};
-      if (req.query.id) whereStatement.id = req.query.id;
-      if (req.query.depot) whereStatement.depot = req.query.depot;
-      if (req.query.shipSize) whereStatement.shipSize = req.query.shipSize;
+      if (id) whereStatement.id = id;
+      if (depot) whereStatement.depot = depot;
+      if (shipSize) whereStatement.shipSize = shipSize;
 
       const data = await Truck.findAll({
         where: whereStatement,
-        limit: 10,
+        limit,
+        offset,
+        distinct: true,
       });
 
       return successResponse(res, data, 200);

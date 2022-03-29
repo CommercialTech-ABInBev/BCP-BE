@@ -12,12 +12,11 @@ export default class CustomerService {
       const entities = await Customer.findOne({
         where: key,
       });
-     
+
       const orders = await Order.findAll({
-          include: ['orderItems'],
-          where: key
-        },
-      )
+        include: ['orderItems'],
+        where: key,
+      });
       return { ...entities.dataValues, orders };
     } catch (error) {
       console.error(error);

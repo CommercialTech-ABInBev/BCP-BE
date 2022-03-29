@@ -351,6 +351,15 @@ const addDataController = {
     }
   },
 
+  async getruckByDepot(req, res) {
+    try {
+      const data = await Truck.findAll({ where: { depot: req.query.depot } });
+      return successResponse(res, data, 200);
+    } catch (error) {
+      errorResponse(res, { error });
+    }
+  },
+
   /**
    * Admin reset customers DB
    * @async
@@ -706,6 +715,24 @@ const addDataController = {
       const customer = await searchCustomer(req.query.search);
 
       return successResponse(res, customer, 200);
+    } catch (error) {
+      errorResponse(res, { error });
+    }
+  },
+
+  async getTruckByParams(req, res) {
+    try {
+      let whereStatement = {};
+      if (req.query.id) whereStatement.id = req.query.id;
+      if (req.query.depot) whereStatement.depot = req.query.depot;
+      if (req.query.shipSize) whereStatement.shipSize = req.query.shipSize;
+
+      const data = await Truck.findAll({
+        where: whereStatement,
+        limit: 10,
+      });
+
+      return successResponse(res, data, 200);
     } catch (error) {
       errorResponse(res, { error });
     }

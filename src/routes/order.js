@@ -20,41 +20,41 @@ router.post(
 router.get(
   '/getOrders',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'admin', 'whm']),
   ordercontroller.getOrders
 );
 
 router.get(
   '/getWHOrders',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['whm', 'admin']),
   ordercontroller.getWHMOrders
 );
 
 router.get(
   '/getSpecificOrder',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'admin', 'whm']),
   ordercontroller.queryOrderByCondition
 );
 
 router.get(
   '/downloadOrders',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'admin']),
   ordercontroller.csvDownloadOrders
 );
 
 router.put(
   '/pickOrder',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['whm', 'admin']),
   ordercontroller.pickOrder
 );
 router.post(
   '/loadOrder',
   authMiddleware,
-  verifyRoles(['admin']),
+  verifyRoles(['admin', 'cic']),
   ordercontroller.OrderLoad
 );
 

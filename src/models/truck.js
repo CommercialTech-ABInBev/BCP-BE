@@ -7,6 +7,7 @@ export default (sequelize, DataTypes) => {
       shipOwner: DataTypes.STRING,
       supplierName: DataTypes.STRING,
       truckStatus: DataTypes.STRING,
+      isAvailable: DataTypes.BOOLEAN,
       depot: DataTypes.STRING,
     },
     {}

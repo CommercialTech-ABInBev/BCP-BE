@@ -10,14 +10,14 @@ const reconcileController = new ReconcileController();
 router.post(
   '/postReconcile',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['whm', 'admin']),
   reconcileController.createReconcile
 );
 
 router.get(
   '/getReconcillation',
   authMiddleware,
-  verifyRoles(['whm']),
+  verifyRoles(['whm', 'admin']),
   reconcileController.getWHMreconcillationn
 );
 

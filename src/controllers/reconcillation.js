@@ -6,6 +6,7 @@ export class ReconcileController {
   async createReconcile(req, res, next) {
     try {
       const reconcile = await reconcillationService.postReconcillation(
+        req.tokenData,
         req.body
       );
       res.status(201).send(reconcile);

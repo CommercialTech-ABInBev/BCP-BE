@@ -75,6 +75,22 @@ export function up(queryInterface, Sequelize) {
     subTotalAmount: {
       type: Sequelize.STRING,
     },
+    truckSupplierName: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    truckStatus: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    truckDepot: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    truckShipSize: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

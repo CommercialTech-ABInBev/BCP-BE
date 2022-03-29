@@ -31,6 +31,11 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       allowNull: true,
     },
+    volume: {
+      type: Sequelize.DOUBLE,
+      allowNull: true,
+      defaultValue: 0,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

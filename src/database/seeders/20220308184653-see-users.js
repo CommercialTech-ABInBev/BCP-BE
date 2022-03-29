@@ -7,7 +7,7 @@ export async function up(queryInterface, Sequelize) {
   return queryInterface.bulkInsert('Users', [
     {
       name: 'Uche Mark',
-      email: 'ucheuzochukwumark@gmail.com',
+      email: 'Adeola.Bello@ng.ab-inbev.com',
       inviteStatus: 'Active',
       location: 'Lagos',
       password: await hashPassword('Hilarious1'),
@@ -18,7 +18,7 @@ export async function up(queryInterface, Sequelize) {
     },
     {
       name: 'Kingsley Anyagu',
-      email: 'Kingsley@gmail.com',
+      email: 'Samuel.Adebisi@ng.ab-inbev.com',
       inviteStatus: 'Active',
       location: 'Lagos',
       password: await hashPassword('Hilarious2'),
@@ -29,7 +29,7 @@ export async function up(queryInterface, Sequelize) {
     },
     {
       name: 'Oyinlola Evelyn',
-      email: 'Oyinlola@gmail.com',
+      email: 'Oluwasike.Ogunrinu@ng.ab-inbev.com',
       inviteStatus: 'J0M0',
       location: 'Lagos',
       password: await hashPassword('Hilarious3'),
@@ -40,10 +40,10 @@ export async function up(queryInterface, Sequelize) {
     },
     {
       name: 'warehouse manager',
-      email: 'whm@gmail.com',
+      email: 'whm@ng.ab-inbev.com',
       inviteStatus: 'F0M0',
       location: 'Lagos',
-      password: await hashPassword('Hilarious3'),
+      password: await hashPassword('Hilarious4'),
       role: 'whm',
       emailVerified: true,
       createdAt: new Date(),

@@ -54,7 +54,7 @@ router.put(
 router.post(
   '/loadOrder',
   authMiddleware,
-  verifyRoles(['admin']),
+  verifyRoles(['admin', 'cic']),
   ordercontroller.OrderLoad
 );
 

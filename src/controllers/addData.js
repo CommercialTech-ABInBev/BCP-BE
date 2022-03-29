@@ -630,6 +630,24 @@ const addDataController = {
       errorResponse(res, { error });
     }
   },
+
+  async getTruckByParams(req, res) {
+    try {
+      let whereStatement = {};
+      if (req.query.id) whereStatement.id = req.query.id;
+      if (req.query.depot) whereStatement.depot = req.query.depot;
+      if (req.query.shipSize) whereStatement.shipSize = req.query.shipSize;
+
+      const data = await Truck.findAll({
+        where: whereStatement,
+        limit: 10,
+      });
+
+      return successResponse(res, data, 200);
+    } catch (error) {
+      errorResponse(res, { error });
+    }
+  },
 };
 
 export default addDataController;

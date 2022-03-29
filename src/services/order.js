@@ -112,7 +112,12 @@ export default class OrderService {
 
   async planOrderLoad(data) {
     const { orderId, truckId } = data;
+
     const getTruck = await findByKeys(Truck, { shipRegister: truckId });
+
+    if (!getTruck.isAvailable)
+      return { status: 'Failed', data: 'Truck not available for selection' };
+
     orderId.forEach(async (id) => {
       await updateByKey(
         Order,
@@ -129,6 +134,14 @@ export default class OrderService {
         { salesOrderId: id }
       );
     });
+
+    await updateByKey(
+      Truck,
+      {
+        isAvailable: false,
+      },
+      { shipRegister: truckId }
+    );
 
     return { status: 'success', data: 'Order Successfully Planned' };
   }

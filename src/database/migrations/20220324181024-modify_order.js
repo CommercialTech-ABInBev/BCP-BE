@@ -18,11 +18,7 @@ export function up(queryInterface, Sequelize) {
             type: Sequelize.STRING,
             allowNull: true,
         }),
-        queryInterface.addColumn('Order_items', 'volume', {
-            type: Sequelize.DOUBLE,
-            allowNull: true,
-            defaultValue: 0
-        }),
+
     ]);
 }
 export function down(queryInterface) {
@@ -31,7 +27,7 @@ export function down(queryInterface) {
         queryInterface.removeColumn('Orders', 'truckStatus'),
         queryInterface.removeColumn('Orders', 'truckDepot'),
         queryInterface.removeColumn('Orders', 'truckShipSize'),
-        queryInterface.removeColumn('Order_items', 'volume'),
+
     ])
 
 }

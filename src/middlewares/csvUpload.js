@@ -7,7 +7,6 @@ if (!fs.existsSync(dir)) {
 }
 
 const csvFilter = (req, file, cb) => {
-  console.log('i am seen');
   if (file.mimetype.includes('xlsx') || file.mimetype.includes('text/csv')) {
     cb(null, true);
   } else {

@@ -24,6 +24,7 @@ const {
   resetStockPriceDB,
   getSingleCustomer,
   searchForCustomer,
+  joinBulkAddress
 } = AddData;
 
 router.delete('/cust/reset', resetCustomerDB);
@@ -38,6 +39,7 @@ router.post(
 router.delete('/address/reset', resetAddressDB);
 router.get('/address', getAllEligibleAddress);
 router.post('/address', csvUpload.single('file'), createBulkAddress);
+router.post('/address/join', csvUpload.single('file'), joinBulkAddress);
 router.delete('/truck/reset', resetTruckDB);
 router.get('/trucks', getAllEligibleTrucks);
 router.post('/trucks', csvUpload.single('file'), createBulkTruck);

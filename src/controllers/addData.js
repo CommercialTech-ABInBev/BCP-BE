@@ -135,42 +135,53 @@ const addDataController = {
         })
         .on('end', () => {
           allEntities(Customer)
-          .then((customers) => {
-            const updatedCustomers = customers.map((customer) => {
-              const addressInfo = addresses.find(
-                (address) => address.customerId === customer.dataValues.customerId
-              );
+            .then((customers) => {
+              const updatedCustomers = customers.map((customer) => {
+                const addressInfo = addresses.find(
+                  (address) =>
+                    address.customerId === customer.dataValues.customerId
+                );
 
-              let result;
-              if (addressInfo !== undefined) {
-                result = {
-                  ...customer.dataValues,
-                  ...addressInfo,
+                let result;
+                if (addressInfo !== undefined) {
+                  result = {
+                    ...customer.dataValues,
+                    ...addressInfo,
+                  };
                 }
-              }
 
-              return result;
-            });
+                return result;
+              });
 
-            Customer.bulkCreate(updatedCustomers, { updateOnDuplicate: ['contact', 'phoneNumber', 'shipToAddr1', 'shipToAddr2', 'shipToAddr3', 'shipToAddr4', 'shipToAddr5' ] })
-            .then((data) => {
-              res.status(200).json({
-                message: 'Uploaded the file successfully: ' + req.file.originalname,
-                data,
+              Customer.bulkCreate(updatedCustomers, {
+                updateOnDuplicate: [
+                  'contact',
+                  'phoneNumber',
+                  'shipToAddr1',
+                  'shipToAddr2',
+                  'shipToAddr3',
+                  'shipToAddr4',
+                  'shipToAddr5',
+                ],
+              }).then((data) => {
+                res.status(200).json({
+                  message:
+                    'Uploaded the file successfully: ' + req.file.originalname,
+                  data,
+                });
               });
             })
-          })
-          .then(
-            unlink(path, (err) => {
-              if (err) throw err;
-            })
-          )
-          .catch((error) => {
-            res.status(500).send({
-              message: 'Fail to import data into database!',
-              error: error.message,
+            .then(
+              unlink(path, (err) => {
+                if (err) throw err;
+              })
+            )
+            .catch((error) => {
+              res.status(500).send({
+                message: 'Fail to import data into database!',
+                error: error.message,
+              });
             });
-          });
         });
     } catch (error) {
       console.error(error);
@@ -179,7 +190,6 @@ const addDataController = {
       });
     }
   },
-
 
   /**
    * Admin bulk create eligible address
@@ -600,7 +610,8 @@ const addDataController = {
             .then((customers) => {
               const updatedCustomers = customers.map((customer) => {
                 const balanceInfo = balances.find(
-                  (balance) => balance.customerId === customer.dataValues.customerId
+                  (balance) =>
+                    balance.customerId === customer.dataValues.customerId
                 );
 
                 let result;
@@ -610,19 +621,32 @@ const addDataController = {
                     ...balanceInfo,
                     currentLimit: balanceInfo.currentLimit,
                     currentBalance: balanceInfo.currentBalance,
-                  }
+                  };
                 }
 
                 return result;
               });
 
-              Customer.bulkCreate(updatedCustomers, { updateOnDuplicate: ['currentBalance', 'creditLimit', 'area', 'valCurrentInv', 'val30daysInv', 'val60daysInv', 'val90daysInv', 'val120daysInv', 'termsCode', 'customerClass'] })
-                .then((data) => {
-                  res.status(200).json({
-                    message: 'Uploaded the file successfully: ' + req.file.originalname,
-                    data,
-                  });
-                })
+              Customer.bulkCreate(updatedCustomers, {
+                updateOnDuplicate: [
+                  'currentBalance',
+                  'creditLimit',
+                  'area',
+                  'valCurrentInv',
+                  'val30daysInv',
+                  'val60daysInv',
+                  'val90daysInv',
+                  'val120daysInv',
+                  'termsCode',
+                  'customerClass',
+                ],
+              }).then((data) => {
+                res.status(200).json({
+                  message:
+                    'Uploaded the file successfully: ' + req.file.originalname,
+                  data,
+                });
+              });
             })
             .catch((error) => {
               res.status(500).send({

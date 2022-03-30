@@ -26,4 +26,13 @@ export class ReconcileController {
       next(error);
     }
   }
+
+  async csvDownloadReconcillation(req, res, next) {
+    try {
+      const csvData = await reconcillationService.downloadReconcillation(res);
+      res.status(200).send(csvData);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

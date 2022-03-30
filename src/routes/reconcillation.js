@@ -21,4 +21,11 @@ router.get(
   reconcileController.getWHMreconcillationn
 );
 
+router.get(
+  '/downloadReconcillation',
+  authMiddleware,
+  verifyRoles(['admin']),
+  reconcileController.csvDownloadReconcillation
+);
+
 export default router;

@@ -55,3 +55,26 @@ export const stockField = [
     value: 'freeStockCs',
   },
 ];
+
+export const reconcillationField = [
+  {
+    label: 'Account',
+    value: 'account',
+  },
+  {
+    label: 'Stock Code',
+    value: 'stock',
+  },
+  {
+    label: 'Warehouse',
+    value: 'warehouse',
+  },
+  {
+    label: 'Amount',
+    value: 'amount',
+  },
+  {
+    label: 'Cases',
+    value: 'quantity',
+  },
+];

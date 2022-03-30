@@ -1,9 +1,11 @@
 import db from '../models';
 import DbService from './dbservice';
+import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
+import { reconcillationField } from '../utils/tableFields';
 
 const { Reconcillation, User } = db;
-const { addEntity } = DbService;
+const { addEntity, findMultipleByKey } = DbService;
 
 export default class ReconcillationService {
   async postReconcillation({ id }, data) {
@@ -35,5 +37,15 @@ export default class ReconcillationService {
       TotalCount: count,
       data: rows,
     };
+  }
+
+  async downloadReconcillation(res) {
+    const data = await findMultipleByKey(Reconcillation);
+    await AuthUtils.downloadResource(
+      res,
+      'reconcillation.csv',
+      reconcillationField,
+      data
+    );
   }
 }

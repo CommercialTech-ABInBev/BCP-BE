@@ -41,7 +41,7 @@ export class OrderController {
 
   async csvDownloadOrders(req, res, next) {
     try {
-      const csvData = await orderService.printOrders(res);
+      const csvData = await orderService.printOrders(req.tokenData, res);
       res.status(200).send(csvData);
     } catch (error) {
       next(error);

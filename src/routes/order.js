@@ -25,7 +25,7 @@ router.get(
 );
 
 router.get(
-  '/getWHOrders',
+  '/getDepotOrders',
   authMiddleware,
   verifyRoles(['whm', 'dist']),
   ordercontroller.getWHMOrders
@@ -51,10 +51,11 @@ router.put(
   verifyRoles(['whm', 'dist']),
   ordercontroller.pickOrder
 );
+
 router.post(
   '/loadOrder',
   authMiddleware,
-  verifyRoles(['dist', 'cic']),
+  verifyRoles(['dist']),
   ordercontroller.OrderLoad
 );
 

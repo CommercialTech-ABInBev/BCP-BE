@@ -43,8 +43,11 @@ export default class StockService {
     };
   }
 
-  async printStocks(res) {
-    const data = await findMultipleByKey(Inventory);
+  async printStocks({ role, status }, res) {
+    const data =
+      role === 'cic'
+        ? await findMultipleByKey(Inventory)
+        : await findMultipleByKey(Inventory, { warehouse: status });
     await AuthUtils.downloadResource(res, 'stock.csv', stockField, data);
   }
 

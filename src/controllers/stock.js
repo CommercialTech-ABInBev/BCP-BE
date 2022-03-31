@@ -61,7 +61,7 @@ export class StockController {
 
   async csvDownloadStock(req, res, next) {
     try {
-      const csvData = await stockService.printStocks(res);
+      const csvData = await stockService.printStocks(req.tokenData, res);
       res.status(200).send(csvData);
     } catch (error) {
       next(error);

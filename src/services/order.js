@@ -203,8 +203,8 @@ export default class OrderService {
     return getOrders;
   }
 
-  async searchOrder(query) {
-    let options = {
+  async searchOrder({ role, status }, query) {
+    let optionsObj = {
       where: {
         [sequelize.Op.or]: [
           {
@@ -223,7 +223,16 @@ export default class OrderService {
       distinct: true,
     };
 
-    const { count, rows } = await Order.findAndCountAll(options);
+    let queryOptions;
+
+    if (role === 'cic') {
+      queryOptions = optionsObj;
+    } else {
+      optionsObj.where.warehouseId = status;
+      queryOptions = optionsObj;
+    }
+
+    const { count, rows } = await Order.findAndCountAll(queryOptions);
     return { TotalCount: count, orders: rows };
   }
 }

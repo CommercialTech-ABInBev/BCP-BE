@@ -31,8 +31,11 @@ export class StockController {
 
   async searchStocks(req, res, next) {
     try {
-      const stockPrice = await stockService.searchStock(req.query.search);
-      res.status(200).send(stockPrice);
+      const stock = await stockService.searchStock(
+        req.tokenData,
+        req.query.search
+      );
+      res.status(200).send(stock);
     } catch (error) {
       next(error);
     }
@@ -49,7 +52,7 @@ export class StockController {
 
   async addStock(req, res, next) {
     try {
-      const stocks = await stockService.updateStock(req.body);
+      const stocks = await stockService.updateStock(req.tokenData, req.body);
       res.status(200).send(stocks);
     } catch (error) {
       next(error);

@@ -85,8 +85,8 @@ export default class StockService {
     return stockPrice;
   }
 
-  async searchStock(query) {
-    let options = {
+  async searchStock({ role, status }, query) {
+    let optionsObj = {
       where: {
         [sequelize.Op.or]: [
           {
@@ -104,20 +104,28 @@ export default class StockService {
       distinct: true,
     };
 
-    const { count, rows } = await Inventory.findAndCountAll(options);
+    let queryOptions;
+
+    if (role === 'cic') {
+      queryOptions = optionsObj;
+    } else {
+      optionsObj.where.warehouse = status;
+      queryOptions = optionsObj;
+    }
+
+    const { count, rows } = await Inventory.findAndCountAll(queryOptions);
 
     return { TotalCount: count, stocks: rows };
   }
 
-  async getWHstocks({ id }, query) {
+  async getWHstocks({ status }, query) {
     let totalFreeStock = 0;
     let totalInTransit = 0;
     const { limit, offset } = paginate(query);
-    const userData = await User.findOne({ where: { id } });
 
     const { count, rows } = await Inventory.findAndCountAll({
       where: {
-        warehouse: userData.inviteStatus,
+        warehouse: status,
       },
       limit,
       offset,
@@ -137,11 +145,13 @@ export default class StockService {
     };
   }
 
-  async updateStock(data) {
+  async updateStock({ status }, data) {
     data.forEach(async (elem) => {
       const { stockCode, quantity } = elem;
+      const options = { stockCode, warehouse: status };
+
       const stock = await Inventory.findOne({
-        where: { stockCode },
+        where: options,
       });
 
       await updateByKey(
@@ -149,7 +159,7 @@ export default class StockService {
         {
           freeStockCs: Number(stock.freeStockCs) + quantity,
         },
-        { stockCode }
+        options
       );
     });
 

@@ -8,24 +8,24 @@ const router = Router();
 const reconcileController = new ReconcileController();
 
 router.post(
-    '/postReconcile',
-    authMiddleware,
-    verifyRoles(['whm', 'dist']),
-    reconcileController.createReconcile
+  '/postReconcile',
+  authMiddleware,
+  verifyRoles(['whm', 'dist']),
+  reconcileController.createReconcile
 );
 
 router.get(
-    '/getReconcillation',
-    authMiddleware,
-    verifyRoles(['whm', 'dist']),
-    reconcileController.getWHMreconcillationn
+  '/getReconcillation',
+  authMiddleware,
+  verifyRoles(['whm', 'dist']),
+  reconcileController.getWHMreconcillationn
 );
 
 router.get(
-    '/downloadReconcillation',
-    authMiddleware,
-    verifyRoles(['dist', 'cic']),
-    reconcileController.csvDownloadReconcillation
+  '/downloadReconcillation',
+  authMiddleware,
+  verifyRoles(['dist', 'cic']),
+  reconcileController.csvDownloadReconcillation
 );
 
 export default router;

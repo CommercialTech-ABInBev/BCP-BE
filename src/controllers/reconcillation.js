@@ -29,7 +29,10 @@ export class ReconcileController {
 
   async csvDownloadReconcillation(req, res, next) {
     try {
-      const csvData = await reconcillationService.downloadReconcillation(res);
+      const csvData = await reconcillationService.downloadReconcillation(
+        req.tokenData,
+        res
+      );
       res.status(200).send(csvData);
     } catch (error) {
       next(error);

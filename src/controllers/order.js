@@ -96,4 +96,14 @@ export class OrderController {
       next(error);
     }
   }
+
+  async replanOrder(req, res, next) {
+    try {
+      const data = await orderService.distReplanLoad(req.query, req.body);
+
+      res.status(200).send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

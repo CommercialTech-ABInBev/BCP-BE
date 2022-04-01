@@ -79,4 +79,12 @@ router.put(
   verifyRoles(['cic']),
   ordercontroller.cancelOrder
 );
+
+router.put(
+  '/replanOrder',
+  authMiddleware,
+  verifyRoles(['dist']),
+  ordercontroller.replanOrder
+);
+
 export default router;

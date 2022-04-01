@@ -133,11 +133,13 @@ export default class OrderService {
 
     if (!isAvailable)
       return { status: 'Failed', data: 'Truck not available for selection' };
+    const loadId = CommonService.generateReference('G00');
 
     orderId.forEach(async (id) => {
       await updateByKey(
         Order,
         {
+          loadId,
           truckId,
           truckStatus,
           status: 'planned',
@@ -145,7 +147,6 @@ export default class OrderService {
           truckOwner: shipOwner,
           truckShipSize: shipSize,
           truckSupplierName: supplierName,
-          loadId: CommonService.generateReference('G00'),
         },
         { salesOrderId: id }
       );
@@ -275,5 +276,46 @@ export default class OrderService {
     });
 
     return { status: 'Success', message: 'Order Cancelled Successfully !!' };
+  }
+
+  async distReplanLoad({ loadId }, { truckId }) {
+    const orders = await findMultipleByKey(Order, { loadId });
+
+    const { depot, shipOwner, shipSize, truckStatus, supplierName } =
+      await findByKeys(Truck, { shipRegister: truckId });
+
+    await updateByKey(
+      Truck,
+      {
+        isAvailable: true,
+      },
+      { shipRegister: orders[0].truckId }
+    );
+
+    orders.forEach(async ({ salesOrderId }) => {
+      await updateByKey(
+        Order,
+        {
+          truckId,
+          truckStatus,
+          status: 'planned',
+          truckDepot: depot,
+          truckOwner: shipOwner,
+          truckShipSize: shipSize,
+          truckSupplierName: supplierName,
+        },
+        { salesOrderId }
+      );
+    });
+
+    await updateByKey(
+      Truck,
+      {
+        isAvailable: false,
+      },
+      { shipRegister: truckId }
+    );
+
+    return { status: 'success', data: 'Order Successfully Re-planned' };
   }
 }

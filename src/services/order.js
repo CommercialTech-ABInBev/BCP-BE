@@ -47,10 +47,7 @@ export default class OrderService {
 
     items.map(async ({ total, productCode }) => {
       const options = { stockCode: productCode, warehouse: warehouseId };
-
-      const stock = await Inventory.findOne({
-        where: options,
-      });
+      const stock = await findByKeys(Inventory, options);
 
       await updateByKey(
         Inventory,
@@ -164,7 +161,7 @@ export default class OrderService {
   }
 
   async generateOrderInvoice({ id }) {
-    const { customerId } = await Order.findOne({ where: { id } });
+    const { customerId } = await findByKeys(Order, { id });
     const { shipToAddr1 } = await findByKeys(CustomerAddress, {
       customerId,
     });
@@ -260,10 +257,7 @@ export default class OrderService {
 
     order.orderItems.forEach(async ({ total, productCode }) => {
       const options = { stockCode: productCode, warehouse: order.warehouseId };
-
-      const stock = await Inventory.findOne({
-        where: options,
-      });
+      const stock = await findByKeys(Inventory, options);
 
       await updateByKey(
         Inventory,

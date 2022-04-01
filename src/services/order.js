@@ -101,8 +101,8 @@ export default class OrderService {
   async queryOrders({ id, warehouseId, status }) {
     let whereStatement = {};
     if (id) whereStatement.id = id;
-    if (warehouseId) whereStatement.warehouseId = warehouseId;
     if (status) whereStatement.status = status;
+    if (warehouseId) whereStatement.warehouseId = warehouseId;
 
     const data = await Order.findAll({
       where: whereStatement,
@@ -234,5 +234,46 @@ export default class OrderService {
 
     const { count, rows } = await Order.findAndCountAll(queryOptions);
     return { TotalCount: count, orders: rows };
+  }
+
+  async cicCancelOrder({ id }) {
+    const date = new Date();
+    const dateString = date.toString();
+
+    const order = await Order.findOne({
+      where: { id },
+      include: ['orderItems'],
+    });
+
+    if (!order) return { status: 'Failed', message: 'Order not found!!!' };
+    if (order.status === 'planned' || order.status === 'cancelled')
+      return { status: 'failed', message: 'Ooops! Order planned already' };
+
+    await updateByKey(
+      Order,
+      {
+        status: 'cancelled',
+      },
+      { id }
+    );
+
+    order.orderItems.forEach(async ({ total, productCode }) => {
+      const options = { stockCode: productCode, warehouse: order.warehouseId };
+
+      const stock = await Inventory.findOne({
+        where: options,
+      });
+
+      await updateByKey(
+        Inventory,
+        {
+          freeStockCs: Number(stock.freeStockCs) + Number(total),
+          dateLastStockMove: dateString,
+        },
+        options
+      );
+    });
+
+    return { status: 'Success', message: 'Order Cancelled Successfully !!' };
   }
 }

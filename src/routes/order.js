@@ -73,4 +73,10 @@ router.get(
   ordercontroller.searchOrder
 );
 
+router.put(
+  '/cancelOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.cancelOrder
+);
 export default router;

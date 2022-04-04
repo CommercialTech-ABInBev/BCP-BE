@@ -10,81 +10,81 @@ const router = Router();
 const ordercontroller = new OrderController();
 
 router.post(
-    '/createOrder',
-    authMiddleware,
-    verifyRoles(['cic']),
-    validationMiddleware(createOrderchema),
-    ordercontroller.createOrder
+  '/createOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  validationMiddleware(createOrderchema),
+  ordercontroller.createOrder
 );
 
 router.get(
-    '/getOrders',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm', 'admin']),
-    ordercontroller.getOrders
+  '/getOrders',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'whm', 'admin']),
+  ordercontroller.getOrders
 );
 
 router.get(
-    '/getDepotOrders',
-    authMiddleware,
-    verifyRoles(['whm', 'dist', 'admin']),
-    ordercontroller.getWHMOrders
+  '/getDepotOrders',
+  authMiddleware,
+  verifyRoles(['whm', 'dist', 'admin']),
+  ordercontroller.getWHMOrders
 );
 
 router.get(
-    '/getSpecificOrder',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm', 'admin']),
-    ordercontroller.queryOrderByCondition
+  '/getSpecificOrder',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'whm', 'admin']),
+  ordercontroller.queryOrderByCondition
 );
 
 router.get(
-    '/downloadOrders',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'admin']),
-    ordercontroller.csvDownloadOrders
+  '/downloadOrders',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'admin']),
+  ordercontroller.csvDownloadOrders
 );
 
 router.put(
-    '/pickOrder',
-    authMiddleware,
-    verifyRoles(['whm', 'dist', 'admin']),
-    ordercontroller.pickOrder
+  '/pickOrder',
+  authMiddleware,
+  verifyRoles(['whm', 'dist', 'admin']),
+  ordercontroller.pickOrder
 );
 
 router.post(
-    '/loadOrder',
-    authMiddleware,
-    verifyRoles(['dist', 'admin']),
-    ordercontroller.OrderLoad
+  '/loadOrder',
+  authMiddleware,
+  verifyRoles(['dist', 'admin']),
+  ordercontroller.OrderLoad
 );
 
 router.put(
-    '/generateInvoice',
-    authMiddleware,
-    verifyRoles(['dist', 'admin']),
-    ordercontroller.generateOrderInvoice
+  '/generateInvoice',
+  authMiddleware,
+  verifyRoles(['dist', 'admin']),
+  ordercontroller.generateOrderInvoice
 );
 
 router.get(
-    '/searchOrder',
-    authMiddleware,
-    verifyRoles(['cic', 'whm', 'dist', 'admin']),
-    ordercontroller.searchOrder
+  '/searchOrder',
+  authMiddleware,
+  verifyRoles(['cic', 'whm', 'dist', 'admin']),
+  ordercontroller.searchOrder
 );
 
 router.put(
-    '/cancelOrder',
-    authMiddleware,
-    verifyRoles(['cic']),
-    ordercontroller.cancelOrder
+  '/cancelOrder',
+  authMiddleware,
+  verifyRoles(['cic']),
+  ordercontroller.cancelOrder
 );
 
 router.put(
-    '/replanOrder',
-    authMiddleware,
-    verifyRoles(['dist', 'admin']),
-    ordercontroller.replanOrder
+  '/replanOrder',
+  authMiddleware,
+  verifyRoles(['dist', 'admin']),
+  ordercontroller.replanOrder
 );
 
 export default router;

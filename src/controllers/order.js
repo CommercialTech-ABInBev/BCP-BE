@@ -32,7 +32,7 @@ export class OrderController {
 
   async queryOrderByCondition(req, res, next) {
     try {
-      const orders = await orderService.queryOrders(req.query);
+      const orders = await orderService.queryOrders(req.tokenData, req.query);
       res.status(200).send(orders);
     } catch (error) {
       next(error);

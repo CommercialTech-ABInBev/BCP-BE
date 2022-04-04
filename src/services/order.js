@@ -95,11 +95,11 @@ export default class OrderService {
       data: rows,
     };
   }
-  async queryOrders({ id, warehouseId, status }) {
+  async queryOrders(tokenData, { id, status }) {
     let whereStatement = {};
     if (id) whereStatement.id = id;
     if (status) whereStatement.status = status;
-    if (warehouseId) whereStatement.warehouseId = warehouseId;
+    if (tokenData.role !== 'cic') whereStatement.warehouseId = tokenData.status;
 
     const data = await Order.findAll({
       where: whereStatement,

@@ -16,5 +16,6 @@ router.post(
   validationMiddleware(resetPassword),
   usercontroller.resetPassword
 );
+router.get('/users', usercontroller.getUsers);
 
 export default router;

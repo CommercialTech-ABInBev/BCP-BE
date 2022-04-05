@@ -70,7 +70,69 @@ export function up(queryInterface, Sequelize) {
     buyerSegment: {
       type: Sequelize.STRING,
     },
-
+    creditLimit: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    area: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    valCurrentInv: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    val30daysInv: {
+      type: Sequelize.STRING,
+    },
+    val60daysInv: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    val90daysInv: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    val120daysInv: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    termsCode: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    customerClass: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    contact: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    phoneNumber: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    shipToAddr1: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    shipToAddr2: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    shipToAddr3: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    shipToAddr4: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    shipToAddr5: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,

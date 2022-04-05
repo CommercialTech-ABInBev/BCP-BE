@@ -45,13 +45,13 @@ export default class OrderService {
         const orderitems = await Order_items.bulkCreate(orderObject);
         order.item = orderitems;
 
-        items.map(async({ total, productCode }) => {
+        items.map(async({ cases, productCode }) => {
             const options = { stockCode: productCode, warehouse: warehouseId };
             const stock = await findByKeys(Inventory, options);
 
             await updateByKey(
                 Inventory, {
-                    freeStockCs: Number(stock.freeStockCs) - Number(total),
+                    freeStockCs: Number(stock.freeStockCs) - Number(cases),
                     dateLastStockMove: dateString,
                 },
                 options

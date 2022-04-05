@@ -24,10 +24,38 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         defaultValue: false
+      },
+      drinkStockCode:
+      {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      drinkDesc: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      type: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      emptyStockCode:
+      {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      emptyDesc:
+      {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      emptyPrices:
+      {
+        type: DataTypes.STRING,
+        allowNull: true,
       }
     },
     {}
   );
-  Inventory.associate = function (models) {};
+  Inventory.associate = function (models) { };
   return Inventory;
 };

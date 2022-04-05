@@ -443,6 +443,90 @@ const addDataController = {
     }
   },
 
+
+  /**
+   * Admin bulk create eligible address
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with address details
+   * @memberof const AddDataController
+   */
+  async createBulkEmpties(req, res) {
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send('Please upload a CSV file!');
+      }
+
+      let empties = [];
+
+      let path = req.file.path;
+      createReadStream(path)
+        .pipe(parse({ headers: true }))
+        .on('error', (error) => {
+          throw error.message;
+        })
+        .on('data', (row) => {
+          empties.push(row);
+        })
+        .on('end', () => {
+          allEntities(Inventory)
+            .then((inventories) => {
+              const updatedInventory = inventories.map((inventory) => {
+                const inventoryInfo = empties.find(
+                  (empty) =>
+                    empty.drinkStockCode === inventory.dataValues.stockCode
+                );
+
+                let result;
+                if (inventoryInfo !== undefined) {
+                  result = {
+                    ...inventory.dataValues,
+                    ...inventoryInfo,
+                  };
+                }
+
+                return result;
+              });
+
+              Inventory.bulkCreate(updatedInventory, {
+                updateOnDuplicate: [
+                  'drinkStockCode',
+                  'drinkDesc',
+                  'type',
+                  'emptyStockCode',
+                  'emptyDesc',
+                  'emptyPrices',
+                ],
+              }).then((data) => {
+                res.status(200).json({
+                  message:
+                    'Uploaded the file successfully: ' + req.file.originalname,
+                  data,
+                });
+              });
+            })
+            .then(
+              unlink(path, (err) => {
+                if (err) throw err;
+              })
+            )
+            .catch((error) => {
+              res.status(500).send({
+                message: 'Fail to import data into database!',
+                error: error.message,
+              });
+            });
+        });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        message: 'Could not upload the file: ' + req.file.originalname,
+      });
+    }
+  },
+
+
   /**
    * Admin get all customers
    * @async

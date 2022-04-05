@@ -242,7 +242,7 @@ export default class OrderService {
             Order, {
                 status: 'cancelled',
             }, { id }
-        );
+        )
 
         order.orderItems.forEach(async({ total, productCode }) => {
             const options = { stockCode: productCode, warehouse: order.warehouseId };

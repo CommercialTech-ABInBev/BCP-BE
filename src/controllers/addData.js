@@ -755,14 +755,18 @@ const addDataController = {
       if (shipSize) whereStatement.shipSize = shipSize;
       if (isAvailable) whereStatement.isAvailable = isAvailable === 'true';
 
-      const data = await Truck.findAll({
+      const { count, rows } = await Truck.findAndCountAll({
         where: whereStatement,
         limit,
         offset,
         distinct: true,
       });
 
-      return successResponse(res, data, 200);
+      return successResponse(
+        res,
+        { TotalCount: count, Inventories: rows },
+        200
+      );
     } catch (error) {
       errorResponse(res, { error });
     }

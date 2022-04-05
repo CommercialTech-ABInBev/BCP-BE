@@ -32,7 +32,7 @@ export class OrderController {
 
   async queryOrderByCondition(req, res, next) {
     try {
-      const orders = await orderService.queryOrders(req.query);
+      const orders = await orderService.queryOrders(req.tokenData, req.query);
       res.status(200).send(orders);
     } catch (error) {
       next(error);
@@ -81,6 +81,26 @@ export class OrderController {
         req.tokenData,
         req.query.search
       );
+      res.status(200).send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async cancelOrder(req, res, next) {
+    try {
+      const data = await orderService.cicCancelOrder(req.query);
+
+      res.status(200).send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async replanOrder(req, res, next) {
+    try {
+      const data = await orderService.distReplanLoad(req.query, req.body);
+
       res.status(200).send(data);
     } catch (error) {
       next(error);

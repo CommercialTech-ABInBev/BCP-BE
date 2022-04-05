@@ -8,6 +8,10 @@ const { User } = db;
 const { findByKeys, updateByKey, deleteByKey, findMultipleByKey } = DbService;
 
 export default class AuthService {
+  async getUsers() {
+    const Users = await findMultipleByKey(User);
+    return Users;
+  }
   async login({ email, password }) {
     const user = await findByKeys(User, { email });
     if (!user || !user.emailVerified) {

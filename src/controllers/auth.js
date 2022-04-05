@@ -10,6 +10,14 @@ export class UserController {
       next(error);
     }
   }
+  async getUsers(req, res, next) {
+    try {
+      const Users = await userService.getUsers();
+      res.status(200).send(Users);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async resetPassword(req, res, next) {
     try {

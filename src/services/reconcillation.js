@@ -8,11 +8,9 @@ const { Reconcillation, User } = db;
 const { addEntity, findMultipleByKey } = DbService;
 
 export default class ReconcillationService {
-  async postReconcillation({ id }, data) {
-    const userData = await User.findOne({ where: { id } });
+  async postReconcillation({ status }, data) {
     const result = {
-      amount: data.quantity * 1000,
-      warehouse: userData.inviteStatus,
+      warehouse: status,
       ...data,
     };
     const reconcile = await addEntity(Reconcillation, { ...result });
@@ -20,13 +18,11 @@ export default class ReconcillationService {
     return reconcile;
   }
 
-  async getWHMwarehouse({ id }, query) {
+  async getWHMwarehouse({ status }, query) {
     const { limit, offset } = paginate(query);
-    const userData = await User.findOne({ where: { id } });
-
     const { count, rows } = await Reconcillation.findAndCountAll({
       where: {
-        warehouse: userData.inviteStatus,
+        warehouse: status,
       },
       limit,
       offset,
@@ -39,8 +35,10 @@ export default class ReconcillationService {
     };
   }
 
-  async downloadReconcillation(res) {
-    const data = await findMultipleByKey(Reconcillation);
+  async downloadReconcillation({ status }, res) {
+    const data = await findMultipleByKey(Reconcillation, {
+      warehouse: status,
+    });
     await AuthUtils.downloadResource(
       res,
       'reconcillation.csv',

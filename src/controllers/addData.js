@@ -747,12 +747,13 @@ const addDataController = {
   async getTruckByParams(req, res) {
     try {
       const { limit, offset } = paginate(req.query);
-      const { id, depot, shipSize } = req.query;
+      const { id, depot, shipSize, isAvailable } = req.query;
 
       let whereStatement = {};
       if (id) whereStatement.id = id;
       if (depot) whereStatement.depot = depot;
       if (shipSize) whereStatement.shipSize = shipSize;
+      if (isAvailable) whereStatement.isAvailable = isAvailable === 'true';
 
       const data = await Truck.findAll({
         where: whereStatement,

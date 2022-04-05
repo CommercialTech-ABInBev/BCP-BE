@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       freeStockCs: DataTypes.STRING,
       freeStockHls: DataTypes.STRING,
       dateLastStockMove: DataTypes.STRING,
+      isEmpty: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+      }
     },
     {}
   );

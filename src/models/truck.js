@@ -9,6 +9,7 @@ export default (sequelize, DataTypes) => {
       truckStatus: DataTypes.STRING,
       isAvailable: DataTypes.BOOLEAN,
       depot: DataTypes.STRING,
+      site: DataTypes.STRING,
     },
     {}
   );

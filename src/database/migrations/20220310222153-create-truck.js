@@ -25,6 +25,9 @@ export function up(queryInterface, Sequelize) {
     depot: {
       type: Sequelize.STRING,
     },
+    site: {
+      type: Sequelize.STRING,
+    },
     isAvailable: {
       type: Sequelize.BOOLEAN,
       allowNull: false,

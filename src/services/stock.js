@@ -5,6 +5,7 @@ import DbService from './dbservice';
 import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { stockField } from '../utils/tableFields';
+import HttpError from '../middlewares/api-error-validator'
 
 const { Inventory, StockPrice, User } = db;
 const { updateByKey, findMultipleByKey } = DbService;
@@ -147,9 +148,9 @@ export default class StockService {
             const { stockCode, quantity } = elem;
             const options = { stockCode, warehouse: status };
 
-            const stock = await Inventory.findOne({
-                where: options,
-            });
+            const stock = await findMultipleByKey(Inventory, options);
+            console.log(stock, '=======>>>><<<');
+            if (!stock) throw new HttpError(404, 'blurbs Not Found!')
 
             await updateByKey(
                 Inventory, {

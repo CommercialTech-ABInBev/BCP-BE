@@ -27,7 +27,7 @@ const {
   joinBulkAddress,
   getruckByDepot,
   getTruckByParams,
-  createBulkEmpties
+  createBulkEmpties,
 } = AddData;
 
 router.get('/truckByParam', getTruckByParams);

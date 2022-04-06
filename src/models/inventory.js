@@ -23,10 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       isEmpty: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
-        defaultValue: false
+        defaultValue: false,
       },
-      drinkStockCode:
-      {
+      drinkStockCode: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -38,24 +37,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      emptyStockCode:
-      {
+      emptyStockCode: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      emptyDesc:
-      {
+      emptyDesc: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      emptyPrices:
-      {
+      emptyPrices: {
         type: DataTypes.STRING,
         allowNull: true,
-      }
+      },
     },
     {}
   );
-  Inventory.associate = function (models) { };
+  Inventory.associate = function (models) {};
   return Inventory;
 };

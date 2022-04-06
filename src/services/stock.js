@@ -27,6 +27,9 @@ export default class StockService {
                 container: stock.packageType,
                 inTransit: stock.inTransitCs,
                 freeStock: stock.freeStockCs,
+                emptyStockCode: stock.emptyStockCode,
+                emptyDesc: stock.emptyDesc,
+                emptyPrices: stock.emptyPrices,
             });
         });
 
@@ -70,6 +73,9 @@ export default class StockService {
                 container: stock.packageType,
                 inTransit: stock.inTransitCs,
                 freeStock: stock.freeStockCs,
+                emptyStockCode: stock.emptyStockCode,
+                emptyDesc: stock.emptyDesc,
+                emptyPrices: stock.emptyPrices,
             });
         });
 

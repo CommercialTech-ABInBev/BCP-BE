@@ -151,7 +151,7 @@ export default class StockService {
 
             await updateByKey(
                 Inventory, {
-                    freeStockCs: String(Number(stock.freeStockCs) + quantity, )
+                    freeStockCs: toString(Number(stock.freeStockCs) + quantity)
                 },
                 options
             );

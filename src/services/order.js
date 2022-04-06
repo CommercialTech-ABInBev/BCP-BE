@@ -8,7 +8,7 @@ import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
 import logger from '../logger';
 
-const { Order, Order_items, Truck, CustomerAddress, User, Inventory } = db;
+const { Order, Order_items, Truck, CustomerAddress, User, Inventory, Customer } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class OrderService {
@@ -49,17 +49,43 @@ export default class OrderService {
         items.map(async({ cases, productCode }) => {
             const options = { stockCode: productCode, warehouse: warehouseId };
             const stock = await findByKeys(Inventory, options);
-
+            const data = Number(stock.freeStockCs) - Number(cases);
             await updateByKey(
                 Inventory, {
-                    freeStockCs: Number(stock.freeStockCs) - Number(cases),
+                    freeStockCs: data.toFixed(),
                     dateLastStockMove: dateString,
                 },
                 options
             );
         });
 
+        const customer = await findByKeys(Customer, { customerId });
+        if (customer.currentBalance !== null) {
+            let option = (Number(customer.currentBalance) - Number(totalAmount)).toFixed();
+
+            await updateByKey(
+                Customer, {
+                    currentBalance: option
+                }, { customerId }
+            );
+        } else {
+            await updateByKey(
+                Order, {
+                    status: 'cancelled',
+                }, { id: order.id }
+            );
+
+        }
+
         return order;
+    }
+
+    async editCustomer(data, id) {
+
+        await updateByKey(Customer, {...data }, { id })
+        const datas = await findByKeys(Customer, { id })
+
+        return datas;
     }
 
     async getAllOrders(query) {

@@ -49,10 +49,10 @@ export default class OrderService {
         items.map(async({ cases, productCode }) => {
             const options = { stockCode: productCode, warehouse: warehouseId };
             const stock = await findByKeys(Inventory, options);
-            const data = Number(stock.freeStockCs) - Number(cases);
+            const data = Number(stock.freeStockCs) - Number(cases).toFixed();
             await updateByKey(
                 Inventory, {
-                    freeStockCs: data.toFixed(),
+                    freeStockCs: data,
                     dateLastStockMove: dateString,
                 },
                 options
@@ -61,7 +61,7 @@ export default class OrderService {
 
         const customer = await findByKeys(Customer, { customerId });
         if (customer.currentBalance !== null) {
-            let option = (Number(customer.currentBalance) - Number(totalAmount)).toFixed();
+            let option = (Number(customer.currentBalance) + Number(totalAmount)).toFixed();
 
             await updateByKey(
                 Customer, {

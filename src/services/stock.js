@@ -148,7 +148,7 @@ export default class StockService {
             const { stockCode, quantity } = elem;
             const options = { stockCode, warehouse: status };
             const stock = await findMultipleByKey(Inventory, options)
-            let res = Number(stock.freeStockCs) + quantity
+            let res = Number(stock.freeStockCs) + Number(quantity)
             await updateByKey(
                 Inventory, {
                     freeStockCs: res.toFixed()

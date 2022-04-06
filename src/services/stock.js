@@ -5,7 +5,7 @@ import DbService from './dbservice';
 import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { stockField } from '../utils/tableFields';
-import HttpError from '../middlewares/api-error-validator'
+import HttpError from '../middlewares/api-error-validator';
 
 const { Inventory, StockPrice, User } = db;
 const { updateByKey, findMultipleByKey } = DbService;

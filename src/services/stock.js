@@ -143,23 +143,20 @@ export default class StockService {
         };
     }
 
-    // async updateStock({ status }, data) {
-    //     data.forEach(async(elem) => {
-    //         const { stockCode, quantity } = elem;
-    //         const options = { stockCode, warehouse: status };
+    async updateStock({ status }, data) {
+        data.forEach(async elem => {
+            const { stockCode, quantity } = elem;
+            const options = { stockCode, warehouse: status };
+            const stock = await findMultipleByKey(Inventory, options)
 
-    //         const stock = await findMultipleByKey(Inventory, options);
-    //         console.log(stock.freeStockCs, '=======>>>><<<');
-    //         if (stock.freeStockC === undefined) return { erro: 'Something went wrong' }
+            await updateByKey(
+                Inventory, {
+                    freeStockCs: String(Number(stock.freeStockCs) + quantity, )
+                },
+                options
+            );
+        });
 
-    //         await updateByKey(
-    //             Inventory, {
-    //                 freeStockCs: Number(stock.freeStockCs) + quantity,
-    //             },
-    //             options
-    //         );
-    //     });
-
-    //     return { message: `Stocks Successfully Updated!!` };
-    // }
+        return { message: 'Stocks Successfully updated' }
+    }
 }

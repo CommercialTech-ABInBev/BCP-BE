@@ -364,6 +364,7 @@ const addDataController = {
   async getruckByDepot(req, res) {
     try {
       const data = await Truck.findAll({ where: { depot: req.query.depot } });
+
       return successResponse(res, data, 200);
     } catch (error) {
       errorResponse(res, { error });
@@ -443,7 +444,6 @@ const addDataController = {
     }
   },
 
-
   /**
    * Admin bulk create eligible address
    * @async
@@ -481,36 +481,37 @@ const addDataController = {
                 let result;
                 if (inventoryInfo !== undefined) {
                   result = {
-                    "id": inventory.dataValues.id,
-                    "warehouse": inventory.dataValues.warehouse,
-                    "site": inventory.dataValues.site,
-                    "brand": inventory.dataValues.brand,
-                    "class": inventory.dataValues.class,
-                    "packageType": inventory.dataValues.packageType,
-                    "size": inventory.dataValues.size,
-                    "stockCode": inventory.dataValues.stockCode,
-                    "description": inventory.dataValues.description,
-                    "onHandCs": inventory.dataValues.onHandCs,
-                    "onHandHls": inventory.dataValues.onHandHls,
-                    "inventoryCostLC": inventory.dataValues.inventoryCostLC,
-                    "allocatedCs": inventory.dataValues.allocatedCs,
-                    "allocatedHls": inventory.dataValues.allocatedHls,
-                    "inTransitCs": inventory.dataValues.inTransitCs,
-                    "inTransitHls": inventory.dataValues.inTransitHls,
-                    "freeStockCs": inventory.dataValues.freeStockCs,
-                    "freeStockHls": inventory.dataValues.freeStockHls,
-                    "dateLastStockMove": inventory.dataValues.dateLastStockMove,
-                    "isEmpty": true,
-                    "drinkStockCode": inventoryInfo.drinkStockCode,
-                    "drinkDesc": inventoryInfo.drinkDesc,
-                    "type": inventoryInfo.type,
-                    "emptyStockCode": inventoryInfo.emptyStockCode,
-                    "emptyDesc": inventoryInfo.emptyDesc,
-                    "emptyPrices": inventoryInfo.emptyPrices,
+                    id: inventory.dataValues.id,
+                    warehouse: inventory.dataValues.warehouse,
+                    site: inventory.dataValues.site,
+                    brand: inventory.dataValues.brand,
+                    class: inventory.dataValues.class,
+                    packageType: inventory.dataValues.packageType,
+                    size: inventory.dataValues.size,
+                    stockCode: inventory.dataValues.stockCode,
+                    description: inventory.dataValues.description,
+                    onHandCs: inventory.dataValues.onHandCs,
+                    onHandHls: inventory.dataValues.onHandHls,
+                    inventoryCostLC: inventory.dataValues.inventoryCostLC,
+                    allocatedCs: inventory.dataValues.allocatedCs,
+                    allocatedHls: inventory.dataValues.allocatedHls,
+                    inTransitCs: inventory.dataValues.inTransitCs,
+                    inTransitHls: inventory.dataValues.inTransitHls,
+                    freeStockCs: inventory.dataValues.freeStockCs,
+                    freeStockHls: inventory.dataValues.freeStockHls,
+                    dateLastStockMove: inventory.dataValues.dateLastStockMove,
+                    isEmpty: true,
+                    drinkStockCode: inventoryInfo.drinkStockCode,
+                    drinkDesc: inventoryInfo.drinkDesc,
+                    type: inventoryInfo.type,
+                    emptyStockCode: inventoryInfo.emptyStockCode,
+                    emptyDesc: inventoryInfo.emptyDesc,
+                    emptyPrices: inventoryInfo.emptyPrices,
                   };
-                } else result = {
-                  ...inventory.dataValues,
-                }
+                } else
+                  result = {
+                    ...inventory.dataValues,
+                  };
 
                 return result;
               });
@@ -551,7 +552,6 @@ const addDataController = {
       });
     }
   },
-
 
   /**
    * Admin get all customers

@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
       stages: DataTypes.STRING,
       priceCode: DataTypes.STRING,
       creditBucket: DataTypes.STRING,
-      currentBalance: DataTypes.STRING,
+      currentBalance: DataTypes.DOUBLE,
       currentValueInvoice: DataTypes.STRING,
       noPurchaseReason: DataTypes.STRING,
       buyerSegment: DataTypes.STRING,

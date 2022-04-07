@@ -20,12 +20,38 @@ export const orderfields = [
     value: 'totalAmount',
   },
   {
-    label: 'Status',
-    value: 'status',
+    label: 'Vat Amount',
+    value: 'vatAmount',
   },
   {
-    label: 'Date Created',
-    value: 'createdAt',
+    label: 'Truck ID',
+    value: 'truckId',
+  },
+  {
+    label: 'Load ID',
+    value: 'loadId',
+  },
+  {
+    label: 'Product Name',
+    value: 'productName',
+  },
+  {
+    label: 'Cases',
+    value: 'cases',
+  },
+  ,
+  {
+    label: 'Total',
+    value: 'total',
+  },
+  ,
+  {
+    label: 'Volume',
+    value: 'volume',
+  },
+  {
+    label: 'Status',
+    value: 'status',
   },
 ];
 

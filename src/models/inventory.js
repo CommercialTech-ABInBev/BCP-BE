@@ -10,23 +10,22 @@ module.exports = (sequelize, DataTypes) => {
       size: DataTypes.STRING,
       stockCode: DataTypes.STRING,
       description: DataTypes.STRING,
-      onHandCs: DataTypes.STRING,
-      onHandHls: DataTypes.STRING,
-      inventoryCostLC: DataTypes.STRING,
-      allocatedCs: DataTypes.STRING,
-      allocatedHls: DataTypes.STRING,
-      inTransitCs: DataTypes.STRING,
-      inTransitHls: DataTypes.STRING,
-      freeStockCs: DataTypes.STRING,
-      freeStockHls: DataTypes.STRING,
+      onHandCs: DataTypes.DOUBLE,
+      onHandHls: DataTypes.DOUBLE,
+      inventoryCostLC: DataTypes.DOUBLE,
+      allocatedCs: DataTypes.DOUBLE,
+      allocatedHls: DataTypes.DOUBLE,
+      inTransitCs: DataTypes.DOUBLE,
+      inTransitHls: DataTypes.DOUBLE,
+      freeStockCs: DataTypes.DOUBLE,
+      freeStockHls: DataTypes.DOUBLE,
       dateLastStockMove: DataTypes.STRING,
       isEmpty: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
-        defaultValue: false
+        defaultValue: false,
       },
-      drinkStockCode:
-      {
+      drinkStockCode: {
         type: DataTypes.STRING,
         allowNull: true,
       },
@@ -38,24 +37,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      emptyStockCode:
-      {
+      emptyStockCode: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      emptyDesc:
-      {
+      emptyDesc: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      emptyPrices:
-      {
+      emptyPrices: {
         type: DataTypes.STRING,
         allowNull: true,
-      }
+      },
     },
     {}
   );
-  Inventory.associate = function (models) { };
+  Inventory.associate = function (models) {};
   return Inventory;
 };

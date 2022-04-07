@@ -1,6 +1,7 @@
 import { SetupServer } from './server';
 import logger from './logger';
 import env from './config/env';
+
 const { PORT } = env;
 
 const ExitStatus = {

@@ -87,4 +87,11 @@ router.put(
   ordercontroller.replanOrder
 );
 
+router.put(
+  '/updateCustomer',
+  authMiddleware,
+  verifyRoles(['dist', 'cic']),
+  ordercontroller.updateCustomer
+);
+
 export default router;

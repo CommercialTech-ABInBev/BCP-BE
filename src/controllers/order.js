@@ -90,7 +90,6 @@ export class OrderController {
   async cancelOrder(req, res, next) {
     try {
       const data = await orderService.cicCancelOrder(req.query);
-
       res.status(200).send(data);
     } catch (error) {
       next(error);
@@ -100,7 +99,14 @@ export class OrderController {
   async replanOrder(req, res, next) {
     try {
       const data = await orderService.distReplanLoad(req.query, req.body);
-
+      res.status(200).send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateCustomer(req, res, next) {
+    try {
+      const data = await orderService.editCustomer(req.body, req.query.id);
       res.status(200).send(data);
     } catch (error) {
       next(error);

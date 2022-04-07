@@ -145,14 +145,51 @@ const addDataController = {
                 let result;
                 if (addressInfo !== undefined) {
                   result = {
-                    ...customer.dataValues,
-                    ...addressInfo,
+                    id: customer.dataValues.id,
+                    customerId: customer.dataValues.customerId,
+                    masterCodeId: customer.dataValues.masterCodeId,
+                    accountType: customer.dataValues.accountType,
+                    customerName: customer.dataValues.customerName,
+                    lat: customer.dataValues.lat,
+                    long: customer.dataValues.long,
+                    lga: customer.dataValues.lga,
+                    state: customer.dataValues.state,
+                    district: customer.dataValues.district,
+                    region: customer.dataValues.region,
+                    hos: customer.dataValues.hos,
+                    dm: customer.dataValues.dm,
+                    dd: customer.dataValues.dd,
+                    cicAgent: customer.dataValues.cicAgent,
+                    stages: customer.dataValues.stages,
+                    priceCode: customer.dataValues.priceCode,
+                    creditBucket: customer.dataValues.creditBucket,
+                    currentValueInvoice: customer.dataValues.currentValueInvoice,
+                    noPurchaseReason: customer.dataValues.noPurchaseReason,
+                    buyerSegment: customer.dataValues.buyerSegment,
+                    contact: addressInfo.contact,
+                    phoneNumber: addressInfo.phoneNumber,
+                    shipToAddr1: addressInfo.shipToAddr1,
+                    shipToAddr2: addressInfo.shipToAddr2,
+                    shipToAddr3: addressInfo.shipToAddr3,
+                    shipToAddr4: addressInfo.shipToAddr4,
+                    shipToAddr5: addressInfo.shipToAddr5,
+                    currentLimit: customer.dataValues.currentLimit,
+                    currentBalance: customer.dataValues.currentBalance,
+                    area: customer.dataValues.area,
+                    valCurrentInv: customer.dataValues.valCurrentInv,
+                    val30daysInv: customer.dataValues.val30daysInv,
+                    val60daysInv: customer.dataValues.val60daysInv,
+                    val90daysInv: customer.dataValues.val90daysInv,
+                    val120daysInv: customer.dataValues.val120daysInv,
+                    termsCode: customer.dataValues.termsCode,
+                    customerClass: customer.dataValues.customerClass,
                   };
                 }
 
                 return result;
               });
-
+        
+          
               Customer.bulkCreate(updatedCustomers, {
                 updateOnDuplicate: [
                   'contact',
@@ -728,16 +765,51 @@ const addDataController = {
                 let result;
                 if (balanceInfo !== undefined) {
                   result = {
-                    ...customer.dataValues,
-                    ...balanceInfo,
+                    id: customer.dataValues.id,
+                    customerId: customer.dataValues.customerId,
+                    masterCodeId: customer.dataValues.masterCodeId,
+                    accountType: customer.dataValues.accountType,
+                    customerName: customer.dataValues.customerName,
+                    lat: customer.dataValues.lat,
+                    long: customer.dataValues.long,
+                    lga: customer.dataValues.lga,
+                    state: customer.dataValues.state,
+                    district: customer.dataValues.district,
+                    region: customer.dataValues.region,
+                    hos: customer.dataValues.hos,
+                    dm: customer.dataValues.dm,
+                    dd: customer.dataValues.dd,
+                    cicAgent: customer.dataValues.cicAgent,
+                    stages: customer.dataValues.stages,
+                    priceCode: customer.dataValues.priceCode,
+                    creditBucket: customer.dataValues.creditBucket,
+                    currentValueInvoice: customer.dataValues.currentValueInvoice,
+                    noPurchaseReason: customer.dataValues.noPurchaseReason,
+                    buyerSegment: customer.dataValues.buyerSegment,
                     currentLimit: balanceInfo.currentLimit,
                     currentBalance: balanceInfo.currentBalance,
+                    area: balanceInfo.area,
+                    valCurrentInv: balanceInfo.valCurrentInv,
+                    val30daysInv: balanceInfo.val30daysInv,
+                    val60daysInv: balanceInfo.val60daysInv,
+                    val90daysInv: balanceInfo.val90daysInv,
+                    val120daysInv: balanceInfo.val120daysInv,
+                    termsCode: balanceInfo.termsCode,
+                    customerClass: balanceInfo.customerClass,
+                    contact: customer.dataValues.contact,
+                    phoneNumber: customer.dataValues.phoneNumber,
+                    shipToAddr1: customer.dataValues.shipToAddr1,
+                    shipToAddr2: customer.dataValues.shipToAddr2,
+                    shipToAddr3: customer.dataValues.shipToAddr3,
+                    shipToAddr4: customer.dataValues.shipToAddr4,
+                    shipToAddr5: customer.dataValues.shipToAddr5,
                   };
                 }
 
                 return result;
               });
-
+              const trimmedData = updatedCustomers.slice(0, customers.length);
+              console.log(trimmedData.length);
               Customer.bulkCreate(updatedCustomers, {
                 updateOnDuplicate: [
                   'currentBalance',

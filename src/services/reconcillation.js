@@ -31,7 +31,9 @@ export default class ReconcillationService {
         const customer = await findByKeys(Customer, {
             customerId,
         });
-        let option = Number(customer.currentBalance) + Number(total);
+
+        console.log(total, customer.currentBalance, '======-==-=-=');
+        let option = Number(customer.currentBalance) - Number(total);
 
         await updateByKey(
             Customer, {

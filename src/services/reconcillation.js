@@ -20,7 +20,7 @@ export default class ReconcillationService {
         const stock = await findByKeys(Inventory, options);
 
         const updateData = Number(stock.freeStockCs) + Number(quantity);
-
+        console.log(updateData, '========', stock.freeStockCs, '========', quantity);
         await updateByKey(
             Inventory, {
                 freeStockCs: updateData,

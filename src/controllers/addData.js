@@ -163,7 +163,8 @@ const addDataController = {
                     stages: customer.dataValues.stages,
                     priceCode: customer.dataValues.priceCode,
                     creditBucket: customer.dataValues.creditBucket,
-                    currentValueInvoice: customer.dataValues.currentValueInvoice,
+                    currentValueInvoice:
+                      customer.dataValues.currentValueInvoice,
                     noPurchaseReason: customer.dataValues.noPurchaseReason,
                     buyerSegment: customer.dataValues.buyerSegment,
                     contact: addressInfo.contact,
@@ -188,8 +189,7 @@ const addDataController = {
 
                 return result;
               });
-        
-          
+
               Customer.bulkCreate(updatedCustomers, {
                 updateOnDuplicate: [
                   'contact',
@@ -783,7 +783,8 @@ const addDataController = {
                     stages: customer.dataValues.stages,
                     priceCode: customer.dataValues.priceCode,
                     creditBucket: customer.dataValues.creditBucket,
-                    currentValueInvoice: customer.dataValues.currentValueInvoice,
+                    currentValueInvoice:
+                      customer.dataValues.currentValueInvoice,
                     noPurchaseReason: customer.dataValues.noPurchaseReason,
                     buyerSegment: customer.dataValues.buyerSegment,
                     currentLimit: balanceInfo.currentLimit,

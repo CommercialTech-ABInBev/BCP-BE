@@ -4,17 +4,50 @@ import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { reconcillationField } from '../utils/tableFields';
 
-const { Reconcillation, User } = db;
-const { addEntity, findMultipleByKey } = DbService;
+const { Reconcillation, Customer, Inventory } = db;
+const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class ReconcillationService {
-  async postReconcillation({ status }, data) {
+  async postReconcillation(
+    { status },
+    { productCode, quantity, customerId, total }
+  ) {
     const result = {
+      quantity,
+      amount: total,
       warehouse: status,
-      ...data,
+      account: customerId,
+      stock: productCode,
     };
-    const reconcile = await addEntity(Reconcillation, { ...result });
 
+    const options = { stockCode: productCode, warehouse: status };
+    const stock = await findByKeys(Inventory, options);
+
+    const updateData = Number(stock.freeStockCs) + Number(quantity);
+
+    await updateByKey(
+      Inventory,
+      {
+        freeStockCs: updateData,
+      },
+      options
+    );
+
+    const customer = await findByKeys(Customer, {
+      customerId,
+    });
+
+    let option = Number(customer.currentBalance) + Number(total);
+
+    await updateByKey(
+      Customer,
+      {
+        currentBalance: option,
+      },
+      { customerId }
+    );
+
+    const reconcile = await addEntity(Reconcillation, { ...result });
     return reconcile;
   }
 

@@ -10,7 +10,7 @@ const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 export default class ReconcillationService {
     async postReconcillation({ status }, { productCode, quantity, customerId, total }) {
         const result = {
-            total,
+            amount: total,
             quantity,
             warehouse: status,
             account: customerId,
@@ -32,7 +32,6 @@ export default class ReconcillationService {
             customerId,
         });
 
-        console.log(total, customer.currentBalance, '======-==-=-=');
         let option = Number(customer.currentBalance) - Number(total);
 
         await updateByKey(

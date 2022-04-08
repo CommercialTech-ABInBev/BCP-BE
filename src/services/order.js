@@ -160,30 +160,30 @@ export default class OrderService {
           });
 
     let printData = Object.values(data)
-      .map((i) =>
-        i.orderItems.map((j) => {
+      .map((order) =>
+        order.orderItems.map((item) => {
           return {
-            account: i.account,
-            productName: j.productName,
-            createdBy: i.createdBy,
-            customerId: i.customerId,
-            productCode: j.productCode,
-            cases: j.cases,
-            total: j.total,
-            volume: j.volume,
-            pallets: j.pallets,
-            totalAmount: i.totalAmount,
-            salesOrderId: i.salesOrderId,
-            warehouseId: i.warehouseId,
-            deliveryDate: i.deliveryDate,
-            status: i.status,
-            vatAmount: i.vatAmount,
-            subTotalAmount: i.subTotalAmount,
-            truckId: i.truckId,
-            loadId: i.loadId,
-            invoiceId: i.invoiceId,
-            shipTo: i.shipTo,
-            truckOwner: i.truckOwner,
+            total: item.total,
+            cases: item.cases,
+            status: order.status,
+            loadId: order.loadId,
+            volume: item.volume,
+            shipTo: order.shipTo,
+            pallets: item.pallets,
+            truckId: order.truckId,
+            account: order.account,
+            vatAmount: order.vatAmount,
+            invoiceId: order.invoiceId,
+            createdBy: order.createdBy,
+            truckOwner: order.truckOwner,
+            customerId: order.customerId,
+            warehouseId: order.warehouseId,
+            productName: item.productName,
+            productCode: item.productCode,
+            totalAmount: order.totalAmount,
+            deliveryDate: order.deliveryDate,
+            salesOrderId: order.salesOrderId,
+            subTotalAmount: order.subTotalAmount,
           };
         })
       )
@@ -196,18 +196,18 @@ export default class OrderService {
     const { orderId, truckId } = data;
 
     const {
-      isAvailable,
       depot,
-      shipOwner,
       shipSize,
+      shipOwner,
+      isAvailable,
       truckStatus,
       supplierName,
     } = await findByKeys(Truck, { shipRegister: truckId });
 
     if (!isAvailable)
       return { status: 'Failed', data: 'Truck not available for selection' };
-    const loadId = CommonService.generateReference('G00');
 
+    const loadId = CommonService.generateReference('G00');
     orderId.forEach(async (id) => {
       await updateByKey(
         Order,
@@ -251,6 +251,7 @@ export default class OrderService {
       },
       { id }
     );
+
     const getOrders = await Order.findOne({
       where: { id },
       include: ['orderItems'],

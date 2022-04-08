@@ -15,7 +15,7 @@ export default class StockService {
     let totalInTransit = 0;
 
     const { count, rows } = await Inventory.findAndCountAll({ where: {} });
-    console.log(rows);
+
     const stockData = rows.map((stock) => {
       totalFreeStock += Number(stock.freeStockCs);
       totalInTransit += Number(stock.inTransitCs);

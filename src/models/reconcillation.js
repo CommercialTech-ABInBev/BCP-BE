@@ -6,6 +6,8 @@ export default (sequelize, DataTypes) => {
       account: DataTypes.STRING,
       stock: DataTypes.STRING,
       warehouse: DataTypes.STRING,
+      customerId: DataTypes.STRING,
+      productCode: DataTypes.STRING,
       amount: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,
     },

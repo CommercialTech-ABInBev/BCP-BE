@@ -8,75 +8,67 @@ const { Reconcillation, Customer, Inventory } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class ReconcillationService {
-  async postReconcillation(
-    { status },
-    { productCode, quantity, customerId, total }
-  ) {
-    const result = {
-      quantity,
-      amount: total,
-      warehouse: status,
-      account: customerId,
-      stock: productCode,
-    };
+    async postReconcillation({ status }, { productCode, quantity, customerId, total }) {
+        const result = {
+            total,
+            quantity,
+            warehouse: status,
+            account: customerId,
+            stock: productCode,
+        };
+        const options = { stockCode: productCode, warehouse: status };
+        const stock = await findByKeys(Inventory, options);
 
-    const options = { stockCode: productCode, warehouse: status };
-    const stock = await findByKeys(Inventory, options);
+        const updateData = Number(stock.freeStockCs) + Number(quantity);
 
-    const updateData = Number(stock.freeStockCs) + Number(quantity);
+        await updateByKey(
+            Inventory, {
+                freeStockCs: updateData,
+            },
+            options
+        );
 
-    await updateByKey(
-      Inventory,
-      {
-        freeStockCs: updateData,
-      },
-      options
-    );
+        const customer = await findByKeys(Customer, {
+            customerId,
+        });
+        let option = Number(customer.currentBalance) + Number(total);
 
-    const customer = await findByKeys(Customer, {
-      customerId,
-    });
+        await updateByKey(
+            Customer, {
+                currentBalance: option,
+            }, { customerId }
+        );
 
-    let option = Number(customer.currentBalance) + Number(total);
+        const reconcile = await addEntity(Reconcillation, {...result });
+        return reconcile;
+    }
 
-    await updateByKey(
-      Customer,
-      {
-        currentBalance: option,
-      },
-      { customerId }
-    );
+    async getWHMwarehouse({ status }, query) {
+        const { limit, offset } = paginate(query);
+        const { count, rows } = await Reconcillation.findAndCountAll({
+            where: {
+                warehouse: status,
+            },
+            limit,
+            offset,
+            distinct: true,
+        });
 
-    const reconcile = await addEntity(Reconcillation, { ...result });
-    return reconcile;
-  }
+        return {
+            TotalCount: count,
+            data: rows,
+        };
+    }
 
-  async getWHMwarehouse({ status }, query) {
-    const { limit, offset } = paginate(query);
-    const { count, rows } = await Reconcillation.findAndCountAll({
-      where: {
-        warehouse: status,
-      },
-      limit,
-      offset,
-      distinct: true,
-    });
-
-    return {
-      TotalCount: count,
-      data: rows,
-    };
-  }
-
-  async downloadReconcillation({ status }, res) {
-    const data = await findMultipleByKey(Reconcillation, {
-      warehouse: status,
-    });
-    await AuthUtils.downloadResource(
-      res,
-      'reconcillation.csv',
-      reconcillationField,
-      data
-    );
-  }
+    async downloadReconcillation({ status }, res) {
+        const data = await findMultipleByKey(Reconcillation, {
+            warehouse: status,
+        });
+        await AuthUtils.downloadResource(
+            res,
+            'reconcillation.csv',
+            reconcillationField,
+            data
+        );
+    }
 }

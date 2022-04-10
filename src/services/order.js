@@ -273,18 +273,18 @@ export default class OrderService {
     return getOrders;
   }
 
-  async searchOrder({ role, status }, query) {
+  async searchOrder({ role, status }, { search, orderStatus }) {
     let optionsObj = {
       where: {
         [sequelize.Op.or]: [
           {
             salesOrderId: {
-              [sequelize.Op.like]: '%' + query + '%',
+              [sequelize.Op.like]: '%' + search + '%',
             },
           },
           {
             account: {
-              [sequelize.Op.like]: '%' + query + '%',
+              [sequelize.Op.like]: '%' + search + '%',
             },
           },
         ],
@@ -292,7 +292,7 @@ export default class OrderService {
       include: ['orderItems'],
       distinct: true,
     };
-
+    if (orderStatus) optionsObj.where.status = orderStatus;
     let queryOptions;
 
     if (role === 'cic') {

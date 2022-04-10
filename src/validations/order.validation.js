@@ -45,6 +45,7 @@ export const planLoadSchema = {
 
 export const searchOrder = {
   search: Joi.string().required(),
+  orderStatus: Joi.string(),
 };
 
 export const rePlanOrderSchema = {

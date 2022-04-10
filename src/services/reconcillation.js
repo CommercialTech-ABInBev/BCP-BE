@@ -1,3 +1,5 @@
+import sequelize from 'sequelize';
+
 import db from '../models';
 import DbService from './dbservice';
 import AuthUtils from '../utils/auth';
@@ -64,6 +66,7 @@ export default class ReconcillationService {
       limit,
       offset,
       distinct: true,
+      order: sequelize.literal('createdAt DESC'),
     });
 
     return {

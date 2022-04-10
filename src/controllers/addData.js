@@ -946,11 +946,7 @@ const addDataController = {
         distinct: true,
       });
 
-      return successResponse(
-        res,
-        { TotalCount: count, Inventories: rows },
-        200
-      );
+      return successResponse(res, { TotalCount: count, Trucks: rows }, 200);
     } catch (error) {
       errorResponse(res, { error });
     }

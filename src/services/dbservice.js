@@ -11,7 +11,6 @@ const BaseRepository = {
   },
   async findByKeys(model, keys = {}) {
     const results = await model.findOne({ where: keys });
-
     if (!results)
       throw new HttpError(404, ` Not Found in ${this.model} schema!!`);
     return results;

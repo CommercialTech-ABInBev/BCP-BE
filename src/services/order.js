@@ -8,15 +8,7 @@ import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
 import logger from '../logger';
 
-const {
-  Order,
-  Order_items,
-  Truck,
-  CustomerAddress,
-  User,
-  Inventory,
-  Customer,
-} = db;
+const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class OrderService {

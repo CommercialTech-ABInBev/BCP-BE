@@ -6,7 +6,6 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
-import logger from '../logger';
 
 const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
@@ -100,6 +99,7 @@ export default class OrderService {
       limit,
       offset,
       distinct: true,
+      order: sequelize.literal('createdAt DESC'),
     });
 
     return {
@@ -119,6 +119,7 @@ export default class OrderService {
       limit,
       offset,
       distinct: true,
+      order: sequelize.literal('createdAt DESC'),
     });
 
     return {
@@ -136,6 +137,7 @@ export default class OrderService {
     const data = await Order.findAll({
       where: whereStatement,
       include: ['orderItems'],
+      order: sequelize.literal('createdAt DESC'),
     });
     return data;
   }
@@ -149,6 +151,7 @@ export default class OrderService {
         : await Order.findAll({
             where: { warehouseId: status },
             include: ['orderItems'],
+            order: sequelize.literal('createdAt DESC'),
           });
 
     let printData = Object.values(data)

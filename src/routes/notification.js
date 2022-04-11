@@ -7,10 +7,25 @@ import { verifyRoles } from '../middlewares/rolemgt';
 const router = Router();
 const notificationcontroller = new NotificationController();
 
-router.get('/admin-get-notifications', authMiddleware, verifyRoles(['AM']), notificationcontroller.getAllNotifications);
+router.get(
+  '/admin-get-notifications',
+  authMiddleware,
+  verifyRoles(['AM']),
+  notificationcontroller.getAllNotifications
+);
 
-router.get('/get-user-notifications', authMiddleware, verifyRoles(['AM', 'BM', 'WM']), notificationcontroller.getAuthUserNotifications);
+router.get(
+  '/get-user-notifications',
+  authMiddleware,
+  verifyRoles(['AM', 'BM', 'WM']),
+  notificationcontroller.getAuthUserNotifications
+);
 
-router.get('/get-stock-notification', authMiddleware, verifyRoles(['AM', 'BM', 'WM']), notificationcontroller.getStockUserNotifications);
+router.get(
+  '/get-stock-notification',
+  authMiddleware,
+  verifyRoles(['AM', 'BM', 'WM']),
+  notificationcontroller.getStockUserNotifications
+);
 
 export default router;

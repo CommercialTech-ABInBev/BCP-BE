@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './auth';
 import stockRoutes from './stock';
-import notificationRoutes from './notification'
+import notificationRoutes from './notification';
 
 const router = Router();
 

@@ -341,7 +341,7 @@ export default class StockService {
 
         const option = {
             where: {
-                status: 'approved',
+                status: 'Approved',
             },
             order: [
                 ['createdAt', 'DESC']

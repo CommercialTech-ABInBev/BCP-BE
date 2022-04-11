@@ -135,4 +135,13 @@ export class StockController {
             next(error);
         }
     }
+
+    async dashBoard(req, res, next) {
+        try {
+            const dashboardData = await stockService.adminDashboard();
+            res.status(200).send(dashboardData);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

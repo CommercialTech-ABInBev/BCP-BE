@@ -43,7 +43,7 @@ router.post(
     authMiddleware,
     verifyRoles(['BM', 'WM', 'AM']),
     stockcontroller.checkOut
-);
+)
 
 router.get(
     '/get-check-outs',
@@ -94,6 +94,7 @@ router.patch(
 
 router.patch('/approve-check-out', authMiddleware, verifyRoles(['AM', 'WM']), stockcontroller.approveCheckOut)
 
+router.get('/adminDashboard', stockcontroller.dashBoard)
 
 
 export default router;

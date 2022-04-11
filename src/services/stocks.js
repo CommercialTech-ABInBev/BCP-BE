@@ -308,4 +308,29 @@ export default class StockService {
 
         return data;
     }
+
+    async adminDashboard() {
+        const { count, rows } = await Stocks.findAndCountAll({ where: { status: 'approved' } });
+
+        const option = {
+            where: {
+                status: 'approved'
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        }
+
+        const getLatestCheckIn = await Stocks.findOne(option);
+        const getLatestCheckOut = await CheckOuts.findOne(option);
+
+        const output = {
+            totalStocks: count,
+            lastApprovedCheckin: getLatestCheckIn.title,
+            lastApprovedCheckout: getLatestCheckOut.title,
+            stockData: rows,
+        };
+
+        return output;
+    }
 }

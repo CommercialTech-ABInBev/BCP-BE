@@ -21,7 +21,7 @@ router.post(
     authMiddleware,
     upload.single('file'),
     validationMiddleware(checkInSchema),
-    verifyRoles(['AM', 'WM']),
+    verifyRoles(['WM', 'BM']),
     stockcontroller.stockCheckIn
 );
 

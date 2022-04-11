@@ -266,7 +266,10 @@ export default class StockService {
             })) :
             (data = await findMultipleByKey(CheckOuts));
 
-        return data;
+        return {
+            status: 'success',
+            data
+        };
     }
 
     async printCheckOuts(res) {
@@ -348,8 +351,10 @@ export default class StockService {
             ],
         };
 
-        const getLatestCheckIn = await findByKeys(Stocks, option);
-        const getLatestCheckOut = await findByKeys(CheckOuts, option);
+        const getLatestCheckIn = await Stocks.findOne(option);
+        const getLatestCheckOut = await CheckOuts.findOne(option);
+        console.log(getLatestCheckOut, getLatestCheckIn, '=======>>>>>>><<<<<<<>>>>><<<>>');
+
         if (!getLatestCheckIn & !getLatestCheckOut)
             throw new HttpError(404, 'Stocks Not Available!');
 

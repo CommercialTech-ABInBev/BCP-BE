@@ -355,7 +355,7 @@ export default class StockService {
         const getLatestCheckOut = await CheckOuts.findOne(option);
         console.log(getLatestCheckOut, getLatestCheckIn, '=======>>>>>>><<<<<<<>>>>><<<>>');
 
-        if (!getLatestCheckIn & !getLatestCheckOut)
+        if (getLatestCheckIn === null || getLatestCheckOut === null)
             throw new HttpError(404, 'Stocks Not Available!');
 
         const output = {

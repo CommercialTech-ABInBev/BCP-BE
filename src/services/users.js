@@ -137,4 +137,12 @@ export default class AuthService {
         const deleteProfile = await deleteByKey(Users, { id });
         return deleteProfile;
     }
+
+
+    async editCustomer(data, id) {
+        await updateByKey(Users, {...data }, { id });
+        const datas = await findByKeys(Users, { id });
+
+        return datas;
+    }
 }

@@ -20,5 +20,13 @@ export default (sequelize, DataTypes) => {
   User.associate = function (models) {
     // associations can be defined here
   };
+
+  User.prototype.toJSON = function () {
+    var values = Object.assign({}, this.get());
+
+    delete values.password;
+    return values;
+  };
+
   return User;
 };

@@ -5,8 +5,10 @@ const notificationService = new NoticationService();
 export class NotificationController {
   async getAllNotifications(req, res, next) {
     try {
-      const notificationData = await notificationService.getAllNotifications();
-      res.status(201).send(notificationData);
+      const notificationData = await notificationService.getAllNotifications(
+        req.query
+      );
+      res.status(200).send(notificationData);
     } catch (error) {
       next(error);
     }
@@ -15,9 +17,12 @@ export class NotificationController {
   async getAuthUserNotifications(req, res, next) {
     try {
       const { id } = req.tokenData;
-      const notificationData = await notificationService.getNotifications(id);
+      const notificationData = await notificationService.getNotifications(
+        req.query,
+        id
+      );
 
-      res.status(201).send(notificationData);
+      res.status(200).send(notificationData);
     } catch (error) {
       next(error);
     }
@@ -27,9 +32,9 @@ export class NotificationController {
     try {
       const { id } = req.query;
       const notificationData =
-        await notificationService.getNotificationsByStockId(id);
+        await notificationService.getNotificationsByStockId(req.query, id);
 
-      res.status(201).send(notificationData);
+      res.status(200).send(notificationData);
     } catch (error) {
       next(error);
     }

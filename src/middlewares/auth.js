@@ -9,9 +9,10 @@ export function authMiddleware(req, res, next) {
 
     if (authorization === undefined) throw new HttpError('404, no auth');
     const token = authorization.split(' ')[1];
-    const { id, email, role } = CommonService.decodeToken(token);
+    const { id, email, role, location, brand } =
+      CommonService.decodeToken(token);
 
-    req.tokenData = { id, email, role };
+    req.tokenData = { id, email, role, location, brand };
     next();
   } catch (err) {
     res.status(401).send({ code: 401, error: err });

@@ -9,6 +9,14 @@ import { checkInSchema } from '../validations/stock.validation';
 const router = Router();
 const stockcontroller = new StockController();
 
+
+router.get(
+    '/adminDashboard',
+    authMiddleware,
+    verifyRoles(['AM']),
+    stockcontroller.dashBoard
+);
+
 router.post(
     '/check-in',
     authMiddleware,
@@ -102,11 +110,6 @@ router.patch(
     stockcontroller.approveCheckOut
 );
 
-router.get(
-    '/adminDashboard',
-    authMiddleware,
-    verifyRoles(['AM']),
-    stockcontroller.dashBoard
-);
+
 
 export default router;

@@ -370,24 +370,19 @@ export default class StockService {
 
     async adminDashboard(query) {
         const { limit, offset } = paginate(query);
-        const { count, rows } = await Stocks.findAndCountAll({
+        const option = {
             where: { status: 'Approved' },
             limit,
             offset,
             distinct: true,
             order: literal('createdAt DESC'),
-        });
-
-        const option = {
-            where: {
-                status: 'Approved',
-            },
-            order: literal('createdAt DESC'),
         };
 
-        // const getLatestCheckIn = await Stocks.findOne(option);
-        const getLatestCheckOut = await CheckOuts.findAndCountAll(option);
+        const { count, rows } = await Stocks.findAndCountAll(option);
 
+        // cost getLatestCheckIn = await Stocks.findOne(option);
+        const getLatestCheckOut = await CheckOuts.findAndCountAll(option);
+        console.log(getLatestCheckOut, '==========');
         if (getLatestCheckOut === null)
             throw new HttpError(404, 'Stocks Not Available!');
 

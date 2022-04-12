@@ -59,7 +59,7 @@ export function up(queryInterface, Sequelize) {
       type: Sequelize.STRING,
     },
     currentBalance: {
-      type: Sequelize.DOUBLE,
+      type: Sequelize.BIGINT,
     },
     currentValueInvoice: {
       type: Sequelize.STRING,

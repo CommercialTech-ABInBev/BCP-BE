@@ -174,7 +174,7 @@ const addDataController = {
                     shipToAddr3: addressInfo.shipToAddr3,
                     shipToAddr4: addressInfo.shipToAddr4,
                     shipToAddr5: addressInfo.shipToAddr5,
-                    currentLimit: customer.dataValues.currentLimit,
+                    creditLimit: customer.dataValues.creditLimit,
                     currentBalance: customer.dataValues.currentBalance,
                     area: customer.dataValues.area,
                     valCurrentInv: customer.dataValues.valCurrentInv,
@@ -756,15 +756,16 @@ const addDataController = {
         .on('end', () => {
           allEntities(Customer)
             .then((customers) => {
-              const updatedCustomers = customers.map((customer) => {
+              balances = balances.filter(x => x != null);
+              let result = [];
+              customers.forEach((customer) => {
                 const balanceInfo = balances.find(
                   (balance) =>
-                    balance.customerId === customer.dataValues.customerId
+                    balance.customer === customer.dataValues.customerId
                 );
 
-                let result;
-                if (balanceInfo !== undefined) {
-                  result = {
+                if (balanceInfo !== undefined && balanceInfo !== null) {
+                  result.push({
                     id: customer.dataValues.id,
                     customerId: customer.dataValues.customerId,
                     masterCodeId: customer.dataValues.masterCodeId,
@@ -787,7 +788,7 @@ const addDataController = {
                       customer.dataValues.currentValueInvoice,
                     noPurchaseReason: customer.dataValues.noPurchaseReason,
                     buyerSegment: customer.dataValues.buyerSegment,
-                    currentLimit: balanceInfo.currentLimit,
+                    creditLimit: balanceInfo.creditLimit,
                     currentBalance: balanceInfo.currentBalance,
                     area: balanceInfo.area,
                     valCurrentInv: balanceInfo.valCurrentInv,
@@ -804,14 +805,12 @@ const addDataController = {
                     shipToAddr3: customer.dataValues.shipToAddr3,
                     shipToAddr4: customer.dataValues.shipToAddr4,
                     shipToAddr5: customer.dataValues.shipToAddr5,
-                  };
-                }
-
+                  });
+                } 
                 return result;
               });
-              const trimmedData = updatedCustomers.slice(0, customers.length);
-              console.log(trimmedData.length);
-              Customer.bulkCreate(updatedCustomers, {
+
+              Customer.bulkCreate(result, {
                 updateOnDuplicate: [
                   'currentBalance',
                   'creditLimit',
@@ -828,7 +827,10 @@ const addDataController = {
                 res.status(200).json({
                   message:
                     'Uploaded the file successfully: ' + req.file.originalname,
-                  data,
+                    data: { 
+                      data,
+                      count: data.length,
+                    },
                 });
               });
             })

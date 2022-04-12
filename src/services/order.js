@@ -6,17 +6,8 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
-import logger from '../logger';
 
-const {
-  Order,
-  Order_items,
-  Truck,
-  CustomerAddress,
-  User,
-  Inventory,
-  Customer,
-} = db;
+const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
 
 export default class OrderService {
@@ -108,6 +99,7 @@ export default class OrderService {
       limit,
       offset,
       distinct: true,
+      order: sequelize.literal('createdAt DESC'),
     });
 
     return {
@@ -127,6 +119,7 @@ export default class OrderService {
       limit,
       offset,
       distinct: true,
+      order: sequelize.literal('createdAt DESC'),
     });
 
     return {
@@ -144,6 +137,7 @@ export default class OrderService {
     const data = await Order.findAll({
       where: whereStatement,
       include: ['orderItems'],
+      order: sequelize.literal('createdAt DESC'),
     });
     return data;
   }
@@ -157,33 +151,34 @@ export default class OrderService {
         : await Order.findAll({
             where: { warehouseId: status },
             include: ['orderItems'],
+            order: sequelize.literal('createdAt DESC'),
           });
 
     let printData = Object.values(data)
-      .map((i) =>
-        i.orderItems.map((j) => {
+      .map((order) =>
+        order.orderItems.map((item) => {
           return {
-            account: i.account,
-            productName: j.productName,
-            createdBy: i.createdBy,
-            customerId: i.customerId,
-            productCode: j.productCode,
-            cases: j.cases,
-            total: j.total,
-            volume: j.volume,
-            pallets: j.pallets,
-            totalAmount: i.totalAmount,
-            salesOrderId: i.salesOrderId,
-            warehouseId: i.warehouseId,
-            deliveryDate: i.deliveryDate,
-            status: i.status,
-            vatAmount: i.vatAmount,
-            subTotalAmount: i.subTotalAmount,
-            truckId: i.truckId,
-            loadId: i.loadId,
-            invoiceId: i.invoiceId,
-            shipTo: i.shipTo,
-            truckOwner: i.truckOwner,
+            total: item.total,
+            cases: item.cases,
+            status: order.status,
+            loadId: order.loadId,
+            volume: item.volume,
+            shipTo: order.shipTo,
+            pallets: item.pallets,
+            truckId: order.truckId,
+            account: order.account,
+            vatAmount: order.vatAmount,
+            invoiceId: order.invoiceId,
+            createdBy: order.createdBy,
+            truckOwner: order.truckOwner,
+            customerId: order.customerId,
+            warehouseId: order.warehouseId,
+            productName: item.productName,
+            productCode: item.productCode,
+            totalAmount: order.totalAmount,
+            deliveryDate: order.deliveryDate,
+            salesOrderId: order.salesOrderId,
+            subTotalAmount: order.subTotalAmount,
           };
         })
       )
@@ -196,18 +191,18 @@ export default class OrderService {
     const { orderId, truckId } = data;
 
     const {
-      isAvailable,
       depot,
-      shipOwner,
       shipSize,
+      shipOwner,
+      isAvailable,
       truckStatus,
       supplierName,
     } = await findByKeys(Truck, { shipRegister: truckId });
 
     if (!isAvailable)
       return { status: 'Failed', data: 'Truck not available for selection' };
-    const loadId = CommonService.generateReference('G00');
 
+    const loadId = CommonService.generateReference('G00');
     orderId.forEach(async (id) => {
       await updateByKey(
         Order,
@@ -251,6 +246,7 @@ export default class OrderService {
       },
       { id }
     );
+
     const getOrders = await Order.findOne({
       where: { id },
       include: ['orderItems'],
@@ -277,18 +273,18 @@ export default class OrderService {
     return getOrders;
   }
 
-  async searchOrder({ role, status }, query) {
+  async searchOrder({ role, status }, { search, orderStatus }) {
     let optionsObj = {
       where: {
         [sequelize.Op.or]: [
           {
             salesOrderId: {
-              [sequelize.Op.like]: '%' + query + '%',
+              [sequelize.Op.like]: '%' + search + '%',
             },
           },
           {
             account: {
-              [sequelize.Op.like]: '%' + query + '%',
+              [sequelize.Op.like]: '%' + search + '%',
             },
           },
         ],
@@ -296,7 +292,7 @@ export default class OrderService {
       include: ['orderItems'],
       distinct: true,
     };
-
+    if (orderStatus) optionsObj.where.status = orderStatus;
     let queryOptions;
 
     if (role === 'cic') {

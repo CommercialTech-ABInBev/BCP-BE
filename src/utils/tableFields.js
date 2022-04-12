@@ -12,6 +12,10 @@ export const orderfields = [
     value: 'account',
   },
   {
+    label: 'Customer ID',
+    value: 'customerId',
+  },
+  {
     label: 'Created By',
     value: 'createdBy',
   },

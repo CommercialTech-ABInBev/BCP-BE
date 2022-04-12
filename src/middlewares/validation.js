@@ -10,7 +10,6 @@ export function validationMiddleware(schema) {
         ...req.params,
         ...req.query,
       });
-
     const valid = error == null;
 
     if (valid) {

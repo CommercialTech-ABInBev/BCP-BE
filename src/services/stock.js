@@ -7,39 +7,45 @@ import paginate from '../utils/paginate';
 import { stockField } from '../utils/tableFields';
 import HttpError from '../middlewares/api-error-validator';
 
-const { Inventory, StockPrice, User } = db;
-const { updateByKey, findMultipleByKey } = DbService;
+const { Inventory, StockPrice } = db;
+const { updateByKey, findMultipleByKey, findByKeys } = DbService;
 export default class StockService {
   async getStocks() {
     let totalFreeStock = 0;
     let totalInTransit = 0;
 
     const { count, rows } = await Inventory.findAndCountAll({ where: {} });
-    const stockData = rows.map((stock) => {
-      totalFreeStock += Number(stock.freeStockCs);
-      totalInTransit += Number(stock.inTransitCs);
+    const stockData = rows.map(
+      ({
+        id,
+        size,
+        stockCode,
+        freeStockCs,
+        inTransitCs,
+        description,
+        packageType,
+      }) => {
+        totalFreeStock += Number(freeStockCs);
+        totalInTransit += Number(inTransitCs);
 
-      return Object.assign(
-        {},
-        {
-          id: stock.id,
-          volume: stock.size,
-          stockCode: stock.stockCode,
-          stockName: stock.description,
-          container: stock.packageType,
-          inTransit: stock.inTransitCs,
-          freeStock: stock.freeStockCs,
-        }
-      );
-    });
-
-    // const getUnique = [
-    //     ...new Map(stockData.map((item) => [item.stockCode, item])).values(),
-    // ];
+        return Object.assign(
+          {},
+          {
+            id,
+            stockCode,
+            volume: size,
+            stockName: description,
+            container: packageType,
+            inTransit: inTransitCs,
+            freeStock: freeStockCs,
+          }
+        );
+      }
+    );
 
     return {
-      totalFreeStock,
       totalInTransit,
+      totalFreeStock,
       totalCount: count,
       data: stockData,
     };
@@ -50,6 +56,7 @@ export default class StockService {
       role === 'cic'
         ? await findMultipleByKey(Inventory)
         : await findMultipleByKey(Inventory, { warehouse: status });
+
     await AuthUtils.downloadResource(res, 'stock.csv', stockField, data);
   }
 
@@ -110,7 +117,6 @@ export default class StockService {
     };
 
     let queryOptions;
-
     if (role === 'cic') {
       queryOptions = optionsObj;
     } else {
@@ -154,10 +160,10 @@ export default class StockService {
     data.forEach(async (elem) => {
       const { stockCode, quantity } = elem;
       const options = { stockCode, warehouse: status };
-      const stock = await findMultipleByKey(Inventory, options);
+      const { freeStockCs } = await findByKeys(Inventory, options);
 
-      if (stock.freeStockCs !== undefined) {
-        let res = Number(stock.freeStockCs) + Number(quantity);
+      if (freeStockCs !== undefined) {
+        let res = Number(freeStockCs) + Number(quantity);
         await updateByKey(
           Inventory,
           {

@@ -77,10 +77,7 @@ export class OrderController {
 
   async searchOrder(req, res, next) {
     try {
-      const data = await orderService.searchOrder(
-        req.tokenData,
-        req.query.search
-      );
+      const data = await orderService.searchOrder(req.tokenData, req.query);
       res.status(200).send(data);
     } catch (error) {
       next(error);

@@ -22,3 +22,35 @@ export const createOrderchema = {
     )
     .required(),
 };
+
+export const paginationSchema = {
+  page: Joi.number().required(),
+  pageSize: Joi.number(),
+};
+
+export const paginateQueryOrder = {
+  id: Joi.string(),
+  status: Joi.string(),
+  loadId: Joi.string(),
+};
+
+export const queryId = {
+  id: Joi.string().required(),
+};
+
+export const planLoadSchema = {
+  orderId: Joi.array().items(Joi.string()).required(),
+  truckId: Joi.string().required(),
+};
+
+export const searchOrder = {
+  search: Joi.string().required(),
+  orderStatus: Joi.string(),
+};
+
+export const rePlanOrderSchema = {
+  loadId: Joi.string().required(),
+  truckId: Joi.string().required(),
+};
+
+export const addStockSchema = Joi.array().items();

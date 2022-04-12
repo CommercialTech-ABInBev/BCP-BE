@@ -11,8 +11,7 @@ const stockcontroller = new StockController();
 
 router.get(
     '/adminDashboard',
-    authMiddleware,
-    verifyRoles(['AM']),
+
     stockcontroller.dashBoard
 );
 

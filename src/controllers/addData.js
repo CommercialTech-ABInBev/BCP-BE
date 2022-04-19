@@ -756,7 +756,7 @@ const addDataController = {
         .on('end', () => {
           allEntities(Customer)
             .then((customers) => {
-              balances = balances.filter(x => x != null);
+              balances = balances.filter((x) => x != null);
               let result = [];
               customers.forEach((customer) => {
                 const balanceInfo = balances.find(
@@ -806,7 +806,7 @@ const addDataController = {
                     shipToAddr4: customer.dataValues.shipToAddr4,
                     shipToAddr5: customer.dataValues.shipToAddr5,
                   });
-                } 
+                }
                 return result;
               });
 
@@ -827,10 +827,10 @@ const addDataController = {
                 res.status(200).json({
                   message:
                     'Uploaded the file successfully: ' + req.file.originalname,
-                    data: { 
-                      data,
-                      count: data.length,
-                    },
+                  data: {
+                    data,
+                    count: data.length,
+                  },
                 });
               });
             })

@@ -1,6 +1,5 @@
 export class HttpError extends Error {
   constructor(status, message, data = {}) {
-    console.log(data);
     super(message);
     this.name = 'HttpError';
     this.status = status;

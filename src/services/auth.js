@@ -6,7 +6,8 @@ import { HttpError } from '@src/middlewares/api-error-validator';
 
 const { hashPassword } = AuthUtils;
 const { User } = db;
-const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } = DbService;
+const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } =
+  DbService;
 
 export default class AuthService {
   async getUsers() {

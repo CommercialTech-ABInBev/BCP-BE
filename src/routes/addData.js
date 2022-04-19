@@ -43,28 +43,13 @@ router.post(
   csvUpload.single('file'),
   createBulkCustomers
 );
-router.delete(
-  '/address/reset',
- resetAddressDB
- );
+router.delete('/address/reset', resetAddressDB);
 router.get('/address', getAllEligibleAddress);
-router.post(
-  '/address',
-  csvUpload.single('file'),
-  createBulkAddress
-);
-router.post(
-  '/address/join',
-  csvUpload.single('file'), 
-  joinBulkAddress
-);
+router.post('/address', csvUpload.single('file'), createBulkAddress);
+router.post('/address/join', csvUpload.single('file'), joinBulkAddress);
 router.delete('/truck/reset', resetTruckDB);
 router.get('/trucks', getAllEligibleTrucks);
-router.post(
-  '/trucks',
-  csvUpload.single('file'),
-  createBulkTruck
-);
+router.post('/trucks', csvUpload.single('file'), createBulkTruck);
 router.delete('/inventories/reset', resetInventoriesDB);
 router.get('/inventories', getAllEligibleInventories);
 router.post(
@@ -77,8 +62,13 @@ router.post(
 router.post('/inventories/empty', csvUpload.single('file'), createBulkEmpties);
 router.delete('/balance/reset', resetBalanceDB);
 router.get('/balance', getAllEligibleBalance);
-router.post('/balance',  authMiddleware,
-verifyRoles(['superadmin']), csvUpload.single('file'), createBulkBalance);
+router.post(
+  '/balance',
+  authMiddleware,
+  verifyRoles(['superadmin']),
+  csvUpload.single('file'),
+  createBulkBalance
+);
 router.delete('/stockprice/reset', resetStockPriceDB);
 router.get('/stockprice', getAllEligibleStockPrice);
 router.post('/stockprice', csvUpload.single('file'), createBulkStockPrice);

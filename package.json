@@ -23,7 +23,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/CommercialTech-ABInBev/inventoryMgt-BE"
+        "url": "git+https://github.com/CommercialTech-ABInBev/BCP-BE"
     },
     "keywords": [
         "stock",

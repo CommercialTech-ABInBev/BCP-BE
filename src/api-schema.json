@@ -1,0 +1,514 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.3.0",
+        "title": "Blurbkit",
+        "description": "BlurbkitAPI",
+        "termsOfService": "http://api_url/terms/",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "servers": [{
+            "url": "https://inv-mgt-staging.herokuapp.com",
+            "description": "Production Server"
+        },
+        {
+            "url": "https://localhost:4800",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/v1.0/api/auth/send-invite": {
+            "post": {
+                "description": "Admin invite a new User",
+                "operationId": "createUser",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "The user has been created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Invalid parameters",
+                                    "code": "400",
+                                    "error": "Bad Request"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1.0/api/auth/login": {
+            "post": {
+                "description": "Authenticate the user on the API generating a JWT token",
+                "operationId": "authenticateUser",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserAuth"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The user has been authenticate and the JWT returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthenticatedUserResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "User unauthorized",
+                                    "code": "401",
+                                    "error": "Unauthorized"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1.0/api/auth/accept-invite": {
+            "put": {
+                "description": "Brand Manager/Warehouse Manager Accept Admin innvite to the platform",
+                "operationId": "useracceptinvite",
+                "parameters": [{
+                        "name": "token",
+                        "allowReserved": true,
+                        "in": "query",
+                        "description": "Token from the mail url query",
+                        "schema": { "type": "string" },
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email from the mail url query",
+                        "schema": { "type": "string" },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "password": {
+                                        "$ref": "#/components/schemas/password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The user information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthenticatedUserResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "User not found",
+                                    "code": "404",
+                                    "error": "Not Found"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1.0/api/auth/reset-password": {
+            "post": {
+                "security": [{ "bearerAuth": [] }],
+                "description": "User reset password ",
+                "operationId": "userResetPassword",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "oldPassword": {
+                                        "$ref": "#/components/schemas/password"
+                                    },
+                                    "newPassword": {
+                                        "$ref": "#/components/schemas/password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The user information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthenticatedUserResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "User not found",
+                                    "code": "404",
+                                    "error": "Not Found"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1.0/api/auth/delete-user": {
+            "delete": {
+                "description": "Admin soft-delete user from the platform",
+                "operationId": "deleteUser",
+                "parameters": [{
+                    "name": "id",
+                    "in": "query",
+                    "description": "ID of the user to be deleted",
+                    "schema": { "type": "string" },
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Deleted!!."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "User not found",
+                                    "code": "404",
+                                    "error": "Token Not Found"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v1.0/api/check-in": {
+            "post": {
+                "description": "Ware-House Manager create a new stock",
+                "operationId": "createStock",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Stocks"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Stocks created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Stocks"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "example": {
+                                    "message": "Invalid parameters",
+                                    "code": "400",
+                                    "error": "Bad Request"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "jwtToken": {
+                "type": "string",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+            },
+            "brand": {
+                "type": "string",
+                "example": "Trophy Stout"
+            },
+            "role": {
+                "type": "string",
+                "example": "Brand Manager"
+            },
+            "emailVerified": {
+                "type": "boolean",
+                "example": "false"
+            },
+            "fullName": {
+                "type": "string",
+                "example": "John Doe"
+            },
+            "email": {
+                "type": "string",
+                "example": "john@mail.com"
+            },
+            "password": {
+                "type": "string",
+                "example": "12345#@$$%"
+            },
+            "title": {
+                "type": "string",
+                "example": "Bags"
+            },
+            "location": {
+                "type": "string",
+                "example": "Ilesha"
+            },
+            "prevQty": {
+                "type": "integer",
+                "example": 40
+            },
+            "id": {
+                "type": "string",
+                "example": "5e8131eba7768d9e4f06c884"
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "fullName": {
+                        "$ref": "#/components/schemas/fullName"
+                    },
+                    "email": {
+                        "$ref": "#/components/schemas/email"
+                    },
+                    "role": {
+                        "$ref": "#/components/schemas/role"
+                    },
+                    "brand": {
+                        "$ref": "#/components/schemas/brand"
+                    }
+                }
+            },
+            "UserAuth": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "$ref": "#/components/schemas/email"
+                    },
+                    "password": {
+                        "$ref": "#/components/schemas/password"
+                    }
+                }
+            },
+            "UserCreatedResponse": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "fullName": {
+                                "$ref": "#/components/schemas/fullName"
+                            },
+                            "email": {
+                                "$ref": "#/components/schemas/email"
+                            },
+                            "password": {
+                                "$ref": "#/components/schemas/password"
+                            },
+                            "id": {
+                                "$ref": "#/components/schemas/id"
+                            },
+                            "role": {
+                                "type": "string",
+                                "example": "Brand Manager"
+                            },
+                            "inviteStatus": {
+                                "type": "string",
+                                "example": "non-verified"
+                            },
+                            "emailVerified": {
+                                "type": "boolean",
+                                "example": "false"
+                            }
+                        }
+                    }
+                }
+            },
+            "AuthenticatedUserResponse": {
+                "type": "object",
+                "properties": {
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "fullName": {
+                                "$ref": "#/components/schemas/fullName"
+                            },
+                            "email": {
+                                "$ref": "#/components/schemas/email"
+                            },
+                            "password": {
+                                "$ref": "#/components/schemas/password"
+                            },
+                            "id": {
+                                "$ref": "#/components/schemas/id"
+                            },
+                            "role": {
+                                "type": "string",
+                                "example": "Brand Manager"
+                            },
+                            "inviteStatus": {
+                                "type": "string",
+                                "example": "non-verified"
+                            },
+                            "emailVerified": {
+                                "type": "boolean",
+                                "example": "false"
+                            },
+                            "token": {
+                                "$ref": "#/components/schemas/jwtToken"
+                            }
+                        }
+                    }
+                }
+            },
+            "Stocks": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "$ref": "#/components/schemas/title"
+                    },
+                    "brand": {
+                        "$ref": "#/components/schemas/brand"
+                    },
+                    "location": {
+                        "$ref": "#/components/schemas/location"
+                    },
+                    "prevQty": {
+                        "$ref": "#/components/schemas/prevQty"
+                    },
+                    "file": {
+                        "type": "string",
+                        "format": "binary"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "number"
+                    },
+                    "error": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "documentation": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

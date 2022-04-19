@@ -14,6 +14,7 @@ export default class OrderService {
     async createOrder(data, { name }) {
         const {
             items,
+            comment,
             account,
             vatAmount,
             customerId,
@@ -25,6 +26,7 @@ export default class OrderService {
 
         const orderBodyData = {
             account,
+            comment,
             vatAmount,
             customerId,
             totalAmount,

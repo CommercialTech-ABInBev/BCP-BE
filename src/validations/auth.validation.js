@@ -3,11 +3,13 @@ import Joi from 'joi';
 export const email = Joi.string().trim().email({ minDomainSegments: 2 });
 
 export const signupSchema = {
-  fullName: Joi.string().required(),
+  name: Joi.string().required(),
   email: Joi.string().trim().email({ minDomainSegments: 2 }).required(),
   role: Joi.string().required(),
-  brand: Joi.string().trim(),
+  inviteStatus: Joi.string().trim(),
   location: Joi.string().trim(),
+  password: Joi.string().trim().min(6).required(),
+  emailVerified: Joi.boolean().required(),
 };
 
 export const loginSchema = {

@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { AddData } from '../controllers';
 import { csvUpload } from '../middlewares';
+import { authMiddleware } from '../middlewares/auth';
+import { verifyRoles } from '../middlewares/rolemgt';
 const router = Router();
 
 const {
@@ -41,20 +43,42 @@ router.post(
   csvUpload.single('file'),
   createBulkCustomers
 );
-router.delete('/address/reset', resetAddressDB);
+router.delete(
+  '/address/reset',
+ resetAddressDB
+ );
 router.get('/address', getAllEligibleAddress);
-router.post('/address', csvUpload.single('file'), createBulkAddress);
-router.post('/address/join', csvUpload.single('file'), joinBulkAddress);
+router.post(
+  '/address',
+  csvUpload.single('file'),
+  createBulkAddress
+);
+router.post(
+  '/address/join',
+  csvUpload.single('file'), 
+  joinBulkAddress
+);
 router.delete('/truck/reset', resetTruckDB);
 router.get('/trucks', getAllEligibleTrucks);
-router.post('/trucks', csvUpload.single('file'), createBulkTruck);
+router.post(
+  '/trucks',
+  csvUpload.single('file'),
+  createBulkTruck
+);
 router.delete('/inventories/reset', resetInventoriesDB);
 router.get('/inventories', getAllEligibleInventories);
-router.post('/inventories', csvUpload.single('file'), createBulkInventories);
+router.post(
+  '/inventories',
+  authMiddleware,
+  verifyRoles(['superadmin']),
+  csvUpload.single('file'),
+  createBulkInventories
+);
 router.post('/inventories/empty', csvUpload.single('file'), createBulkEmpties);
 router.delete('/balance/reset', resetBalanceDB);
 router.get('/balance', getAllEligibleBalance);
-router.post('/balance', csvUpload.single('file'), createBulkBalance);
+router.post('/balance',  authMiddleware,
+verifyRoles(['superadmin']), csvUpload.single('file'), createBulkBalance);
 router.delete('/stockprice/reset', resetStockPriceDB);
 router.get('/stockprice', getAllEligibleStockPrice);
 router.post('/stockprice', csvUpload.single('file'), createBulkStockPrice);

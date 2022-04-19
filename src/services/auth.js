@@ -4,8 +4,9 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import { HttpError } from '@src/middlewares/api-error-validator';
 
+const { hashPassword } = AuthUtils;
 const { User } = db;
-const { findByKeys, updateByKey, deleteByKey, findMultipleByKey } = DbService;
+const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } = DbService;
 
 export default class AuthService {
   async getUsers() {
@@ -38,6 +39,24 @@ export default class AuthService {
 
     return user;
   }
+
+  async signup(input) {
+    const { email, password } = input;
+    const previousUser = await User.findOne({ where: { email } });
+    if (previousUser || previousUser?.emailVerified) {
+      throw new HttpError(
+        401,
+        `User already exist,Try verifying your email address!!!`
+      );
+    }
+
+    const signUpdata = { ...input, password: await hashPassword(password) };
+
+    const user = await addEntity(User, signUpdata);
+
+    return user;
+  }
+
   async resetPassword({ oldPassword, newPassword }, id) {
     const user = await findByKeys(User, { id });
 

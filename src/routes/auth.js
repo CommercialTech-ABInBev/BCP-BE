@@ -21,7 +21,7 @@ router.delete(
     usercontroller.adminDeleteUserProfile
 );
 router.post('/login', validationMiddleware(loginSchema), usercontroller.login);
-
+router.post('/signup', validationMiddleware(signupSchema), usercontroller.createuser);
 router.post(
     '/reset-password',
     authMiddleware,

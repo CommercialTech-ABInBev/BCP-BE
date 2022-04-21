@@ -1,7 +1,7 @@
 'use strict';
 export default (sequelize, DataTypes) => {
     const User = sequelize.define(
-        'Users', {
+        'User', {
             name: DataTypes.STRING,
             email: DataTypes.STRING,
             role: DataTypes.STRING,
@@ -9,10 +9,8 @@ export default (sequelize, DataTypes) => {
             location: DataTypes.STRING,
             inviteStatus: DataTypes.STRING,
             emailVerified: DataTypes.BOOLEAN,
-        }, {
-            timestamps: true,
-            paranoid: true,
-        }
+        },
+        {}
     );
     User.associate = function(models) {
         // associations can be defined here
@@ -24,6 +22,6 @@ export default (sequelize, DataTypes) => {
         delete values.password;
         return values;
     };
-
+    
     return User;
 };

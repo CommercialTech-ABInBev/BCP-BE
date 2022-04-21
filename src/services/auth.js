@@ -15,6 +15,7 @@ export default class AuthService {
     return Users;
   }
   async login({ email, password }) {
+    console.log(User);
     const user = await findByKeys(User, { email });
     if (!user || !user.emailVerified) {
       throw new HttpError(
@@ -43,7 +44,7 @@ export default class AuthService {
 
   async signup(input) {
     const { email, password } = input;
-    const previousUser = await User.findOne({ where: { email } });
+    const previousUser = await findByKeys(User, { email });
     if (previousUser || previousUser?.emailVerified) {
       throw new HttpError(
         401,

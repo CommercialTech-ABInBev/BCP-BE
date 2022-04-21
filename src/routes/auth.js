@@ -10,6 +10,7 @@ const usercontroller = new UserController();
 
 router.delete('/delete-user', usercontroller.adminDeleteUserProfile);
 router.post('/login', validationMiddleware(loginSchema), usercontroller.login);
+router.post('/signup', validationMiddleware(signupSchema), usercontroller.createuser);
 router.post(
     '/reset-password',
     authMiddleware,

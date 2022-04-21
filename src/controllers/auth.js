@@ -16,6 +16,7 @@ export class UserController {
       const newUser = await userService.login(req.body);
       res.status(200).send(newUser);
     } catch (error) {
+      console.error(error);
       next(error);
     }
   }

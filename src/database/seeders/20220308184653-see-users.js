@@ -60,6 +60,17 @@ export async function up(queryInterface, Sequelize) {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
+    {
+      email: "super.admin@ng.ab-inbev.com",
+      name: "Super Admin",
+      inviteStatus: "Active",
+      location: "Lagos",
+      password: await hashPassword("Hilarious9"),
+      role: "superadmin",
+      emailVerified: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+  }
   ]);
 }
 export function down(queryInterface, Sequelize) {

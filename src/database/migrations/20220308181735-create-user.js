@@ -37,7 +37,7 @@ export function up(queryInterface, Sequelize) {
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
-    },
+    }
   });
 }
 export function down(queryInterface, Sequelize) {

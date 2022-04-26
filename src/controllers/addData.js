@@ -3,16 +3,32 @@ import { createReadStream, unlink } from 'fs';
 
 import database from '../models';
 import { ToolBox } from '../utils';
+import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
+import { customerField } from '../utils/tableFields';
 import { GeneralService, CustomerService } from '../services';
+
 const customerService = new CustomerService();
 const { getOrdersByCustomerId, searchCustomer } = customerService;
-const { allEntities } = GeneralService;
+const { allEntities, findMultipleByKey } = GeneralService;
 const { successResponse, errorResponse } = ToolBox;
 const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } =
   database;
 
 const addDataController = {
+  async download(req, res, next) {
+    try {
+      const data = await findMultipleByKey(Customer);
+      await AuthUtils.downloadResource(
+        res,
+        'customer.csv',
+        customerField,
+        data
+      );
+    } catch (error) {
+      next(error);
+    }
+  },
   /**
    * Admin bulk create eligible customers
    * @async

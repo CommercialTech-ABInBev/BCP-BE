@@ -52,7 +52,7 @@ router.get(
 router.get(
   '/downloadOrders',
   authMiddleware,
-  verifyRoles(['cic', 'dist']),
+  verifyRoles(['cic', 'dist', 'whm']),
   ordercontroller.csvDownloadOrders
 );
 

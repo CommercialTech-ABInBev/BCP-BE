@@ -10,21 +10,21 @@ const reconcileController = new ReconcileController();
 router.post(
   '/postReconcile',
   authMiddleware,
-  verifyRoles(['whm', 'dist', 'admin']),
+  verifyRoles(['whm', 'dist', 'cic']),
   reconcileController.createReconcile
 );
 
 router.get(
   '/getReconcillation',
   authMiddleware,
-  verifyRoles(['whm', 'dist', 'admin']),
+  verifyRoles(['whm', 'dist', 'cic']),
   reconcileController.getWHMreconcillationn
 );
 
 router.get(
   '/downloadReconcillation',
   authMiddleware,
-  verifyRoles(['dist', 'cic', 'admin']),
+  verifyRoles(['dist', 'cic', 'whm']),
   reconcileController.csvDownloadReconcillation
 );
 

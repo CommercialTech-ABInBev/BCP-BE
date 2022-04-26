@@ -6,6 +6,7 @@ import { verifyRoles } from '../middlewares/rolemgt';
 const router = Router();
 
 const {
+  download,
   resetCustomerDB,
   createBulkCustomers,
   getAllEligibleCustomers,
@@ -72,5 +73,6 @@ router.post(
 router.delete('/stockprice/reset', resetStockPriceDB);
 router.get('/stockprice', getAllEligibleStockPrice);
 router.post('/stockprice', csvUpload.single('file'), createBulkStockPrice);
+router.get('/csvDownloadCustomer', download);
 
 export default router;

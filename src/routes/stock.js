@@ -19,14 +19,14 @@ const stockcontroller = new StockController();
 router.get(
     '/fetchStocks',
     authMiddleware,
-    verifyRoles(['cic']),
+    verifyRoles(['cic', 'superadmin']),
     stockcontroller.getStocks
 );
 
 router.get(
     '/searchStock',
     authMiddleware,
-    verifyRoles(['cic', 'dist']),
+    verifyRoles(['cic', 'dist', 'superadmin']),
     validationMiddleware(stockSearchParamSchema),
     stockcontroller.conditionalFindStock
 );
@@ -34,7 +34,7 @@ router.get(
 router.get(
     '/getStockPrice',
     authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm']),
+    verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
     validationMiddleware(stockPriceSchema),
     stockcontroller.getStockPrices
 );
@@ -42,7 +42,7 @@ router.get(
 router.get(
     '/queryStock',
     authMiddleware,
-    verifyRoles(['cic', 'whm', 'dist']),
+    verifyRoles(['cic', 'whm', 'dist', 'superadmin']),
     validationMiddleware(searchStock),
     stockcontroller.searchStocks
 );
@@ -50,7 +50,7 @@ router.get(
 router.get(
     '/getDepotstocks',
     authMiddleware,
-    verifyRoles(['whm', 'dist']),
+    verifyRoles(['whm', 'dist', 'superadmin']),
     validationMiddleware(paginationStockSchema),
     stockcontroller.getWHMstocks
 );
@@ -65,7 +65,7 @@ router.put(
 router.get(
     '/downloadStocks',
     authMiddleware,
-    verifyRoles(['cic', 'dist']),
+    verifyRoles(['cic', 'dist', 'superadmin']),
     stockcontroller.csvDownloadStock
 );
 

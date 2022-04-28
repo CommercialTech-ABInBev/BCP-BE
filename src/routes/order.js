@@ -20,7 +20,7 @@ const ordercontroller = new OrderController();
 router.post(
   '/createOrder',
   authMiddleware,
-  verifyRoles(['cic']),
+  verifyRoles(['cic', 'superadmin']),
   validationMiddleware(createOrderchema),
   ordercontroller.createOrder
 );
@@ -28,7 +28,7 @@ router.post(
 router.get(
   '/getOrders',
   authMiddleware,
-  verifyRoles(['cic', 'dist', 'whm']),
+  verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
   validationMiddleware(paginationSchema),
   ordercontroller.getOrders
 );
@@ -36,7 +36,7 @@ router.get(
 router.get(
   '/getDepotOrders',
   authMiddleware,
-  verifyRoles(['whm', 'dist']),
+  verifyRoles(['whm', 'dist', 'superadmin']),
   validationMiddleware(paginationSchema),
   ordercontroller.getWHMOrders
 );
@@ -44,7 +44,7 @@ router.get(
 router.get(
   '/getSpecificOrder',
   authMiddleware,
-  verifyRoles(['cic', 'dist', 'whm']),
+  verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
   validationMiddleware(paginateQueryOrder),
   ordercontroller.queryOrderByCondition
 );
@@ -52,7 +52,7 @@ router.get(
 router.get(
   '/downloadOrders',
   authMiddleware,
-  verifyRoles(['cic', 'dist']),
+  verifyRoles(['cic', 'dist', 'superadmin']),
   ordercontroller.csvDownloadOrders
 );
 
@@ -83,7 +83,7 @@ router.put(
 router.get(
   '/searchOrder',
   authMiddleware,
-  verifyRoles(['cic', 'whm', 'dist']),
+  verifyRoles(['cic', 'whm', 'dist', 'superadmin']),
   validationMiddleware(searchOrder),
   ordercontroller.searchOrder
 );
@@ -107,7 +107,7 @@ router.put(
 router.put(
   '/updateCustomer',
   authMiddleware,
-  verifyRoles(['dist', 'cic']),
+  verifyRoles(['dist', 'cic', 'superadmin']),
   ordercontroller.updateCustomer
 );
 

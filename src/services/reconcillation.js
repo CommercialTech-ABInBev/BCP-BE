@@ -75,10 +75,14 @@ export default class ReconcillationService {
     };
   }
 
-  async downloadReconcillation({ status }, res) {
-    const data = await findMultipleByKey(Reconcillation, {
-      warehouse: status,
-    });
+  async downloadReconcillation({ role, status }, res) {
+    const data =
+      role === 'cic'
+        ? await findMultipleByKey(Reconcillation)
+        : await findMultipleByKey(Reconcillation, {
+            warehouse: status,
+          });
+
     await AuthUtils.downloadResource(
       res,
       'reconcillation.csv',

@@ -113,3 +113,142 @@ export const reconcillationField = [
     value: 'quantity',
   },
 ];
+
+export const customerField = [
+  {
+    label: 'Customer Id',
+    value: 'customerId',
+  },
+  {
+    label: 'MasterCode Id',
+    value: 'masterCodeId',
+  },
+  {
+    label: 'Account Type',
+    value: 'accountType',
+  },
+  {
+    label: 'Customer Name',
+    value: 'customerName',
+  },
+  {
+    label: 'lga',
+    value: 'lga',
+  },
+  {
+    label: 'state',
+    value: 'state',
+  },
+  {
+    label: 'District',
+    value: 'district',
+  },
+  {
+    label: 'region',
+    value: 'region',
+  },
+  {
+    label: 'hos',
+    value: 'hos',
+  },
+  {
+    label: 'dm',
+    value: 'dm',
+  },
+  {
+    label: 'dd',
+    value: 'dd',
+  },
+  {
+    label: 'cicAgent',
+    value: 'cicAgent',
+  },
+  {
+    label: 'stages',
+    value: 'stages',
+  },
+  {
+    label: 'priceCode',
+    value: 'priceCode',
+  },
+  {
+    label: 'creditBucket',
+    value: 'creditBucket',
+  },
+  {
+    label: 'currentBalance',
+    value: 'currentBalance',
+  },
+  {
+    label: 'currentValueInvoice',
+    value: 'currentValueInvoice',
+  },
+  {
+    label: 'noPurchaseReason',
+    value: 'noPurchaseReason',
+  },
+  {
+    label: 'buyerSegment',
+    value: 'buyerSegment',
+  },
+  {
+    label: 'contact',
+    value: 'contact',
+  },
+  {
+    label: 'phoneNumber',
+    value: 'phoneNumber',
+  },
+  {
+    label: 'shipToAddr1',
+    value: 'shipToAddr1',
+  },
+  {
+    label: 'shipToAddr2',
+    value: 'shipToAddr2',
+  },
+  {
+    label: 'shipToAddr3',
+    value: 'shipToAddr3',
+  },
+  {
+    label: 'shipToAddr4',
+    value: 'shipToAddr4',
+  },
+  {
+    label: 'shipToAddr5',
+    value: 'shipToAddr5',
+  },
+  {
+    label: 'area',
+    value: 'area',
+  },
+  {
+    label: 'valCurrentInv',
+    value: 'valCurrentInv',
+  },
+  {
+    label: 'val30daysInv',
+    value: 'val30daysInv',
+  },
+  {
+    label: 'val60daysInv',
+    value: 'val60daysInv',
+  },
+  {
+    label: 'val90daysInv',
+    value: 'val90daysInv',
+  },
+  {
+    label: 'val120daysInv',
+    value: 'val120daysInv',
+  },
+  {
+    label: 'termsCode',
+    value: 'termsCode',
+  },
+  {
+    label: 'customerClass',
+    value: 'customerClass',
+  },
+];

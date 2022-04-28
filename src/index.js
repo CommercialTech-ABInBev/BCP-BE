@@ -21,7 +21,6 @@ process.on('uncaughtException', (error) => {
   process.exit(ExitStatus.Failure);
 });
 
-
 (async () => {
   try {
     const server = new SetupServer(PORT);

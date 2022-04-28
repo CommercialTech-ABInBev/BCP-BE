@@ -12,10 +12,10 @@ const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } =
 export default class AuthService {
   async getUsers() {
     const Users = await findMultipleByKey(User);
+
     return Users;
   }
   async login({ email, password }) {
-    console.log(User);
     const user = await findByKeys(User, { email });
     if (!user || !user.emailVerified) {
       throw new HttpError(
@@ -45,7 +45,7 @@ export default class AuthService {
   async signup(input) {
     const { email, password } = input;
     const previousUser = await findByKeys(User, { email });
-    if (previousUser || previousUser?.emailVerified) {
+    if (previousUser || previousUser.emailVerified) {
       throw new HttpError(
         401,
         `User already exist,Try verifying your email address!!!`

@@ -88,6 +88,16 @@ export default class OrderService {
   }
 
   async editCustomer(data, id) {
+
+    if (data.currentBalance) {
+      const customer = await findByKeys(Customer, { customerId: id });
+
+      console.log(customer);
+      if (customer.currentBalance !== null) {
+        data.currentBalance = Number(customer.currentBalance) + Number(data.currentBalance)
+      }
+    }
+
     await updateByKey(Customer, { ...data }, { id });
     const datas = await findByKeys(Customer, { id });
 

@@ -6,11 +6,11 @@ import { StockController } from '../controllers/stock';
 import { validationMiddleware } from '../middlewares/validation';
 
 import {
-  searchStock,
-  addStockSchema,
-  stockPriceSchema,
-  paginationStockSchema,
-  stockSearchParamSchema,
+    searchStock,
+    addStockSchema,
+    stockPriceSchema,
+    paginationStockSchema,
+    stockSearchParamSchema,
 } from '../validations/stock.validation';
 
 const router = Router();
@@ -56,10 +56,10 @@ router.get(
 );
 
 router.put(
-  '/addStock',
-  authMiddleware,
-  verifyRoles(['whm', 'dist']),
-  stockcontroller.addStock
+    '/addStock',
+    authMiddleware,
+    verifyRoles(['whm', 'dist']),
+    stockcontroller.addStock
 );
 
 router.get(

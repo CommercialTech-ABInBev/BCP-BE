@@ -58,14 +58,14 @@ router.get(
 router.put(
     '/addStock',
     authMiddleware,
-    verifyRoles(['whm', 'dist']),
+    verifyRoles(['whm', 'dist', 'superadmin']),
     stockcontroller.addStock
 );
 
 router.get(
     '/downloadStocks',
     authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm']),
+    verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
     stockcontroller.csvDownloadStock
 );
 

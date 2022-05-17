@@ -107,7 +107,7 @@ router.put(
 router.put(
     '/updateCustomer',
     authMiddleware,
-    verifyRoles(['dist', 'cic']),
+    verifyRoles(['dist', 'cic', 'superadmin']),
     ordercontroller.updateCustomer
 );
 

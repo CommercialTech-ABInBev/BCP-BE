@@ -12,7 +12,6 @@ const { addEntity, findByKeys, updateByKey, deleteByKey, findMultipleByKey } =
 export default class AuthService {
   async getUsers() {
     const Users = await findMultipleByKey(User);
-
     return Users;
   }
   async login({ email, password }) {

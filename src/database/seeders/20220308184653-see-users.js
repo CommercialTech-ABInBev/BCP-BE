@@ -4,9 +4,7 @@ import AuthUtils from '../../utils/auth';
 const { hashPassword } = AuthUtils;
 
 export async function up(queryInterface, Sequelize) {
-  return queryInterface.bulkInsert('Users', [
-    
-    {
+  return queryInterface.bulkInsert('Users', [{
       name: "Ifeoluwa Subair",
       email: "Ifeoluwa.Subair@ng.ab-inbev.com",
       inviteStatus: 'Active',

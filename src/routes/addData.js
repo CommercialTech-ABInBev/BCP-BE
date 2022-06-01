@@ -55,8 +55,8 @@ router.delete('/inventories/reset', resetInventoriesDB);
 router.get('/inventories', getAllEligibleInventories);
 router.post(
   '/inventories',
-  authMiddleware,
-  verifyRoles(['superadmin']),
+  // authMiddleware,
+  // verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkInventories
 );

@@ -7,8 +7,8 @@ import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
 
-const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
+const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 
 export default class OrderService {
     async createOrder(data, { name }) {
@@ -61,6 +61,7 @@ export default class OrderService {
         });
 
         const customer = await findByKeys(Customer, { customerId });
+    
         if (customer.currentBalance !== null) {
             let option = (
                 Number(customer.currentBalance) + Number(totalAmount)
@@ -313,7 +314,7 @@ export default class OrderService {
 
         if (!order) return { status: 'Failed', message: 'Order not found!!!' };
         if (order.status === 'planned' || order.status === 'cancelled')
-            return { status: 'failed', message: 'Ooops! Order planned already' };
+            return { status: 'failed', message: 'Ooops! Order planned/cancelled already' };
 
         await updateByKey(
             Order, {
@@ -333,6 +334,18 @@ export default class OrderService {
                 options
             );
         });
+
+        const customer = await findByKeys(Customer, { customerId: order.customerId });
+
+            let option = (
+                Number(customer.currentBalance) - Number(order.totalAmount)
+            ).toFixed();
+
+            await updateByKey(
+                Customer, {
+                    currentBalance: option,
+                }, { customerId: order.customerId  }
+            );
 
         return { status: 'Success', message: 'Order Cancelled Successfully !!' };
     }

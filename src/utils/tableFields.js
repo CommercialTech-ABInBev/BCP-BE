@@ -78,6 +78,10 @@ export const stockField = [{
         value: 'stockCode',
     },
     {
+        label: 'Warehouse code',
+        value: 'warehouse',
+    },
+    {
         label: 'Stock Name',
         value: 'description',
     },
@@ -100,12 +104,20 @@ export const reconcillationField = [{
         value: 'account',
     },
     {
-        label: 'Stock Code',
+        label: 'Customer ID',
+        value: 'customerId',
+    },
+    {
+        label: 'Stock Item',
         value: 'stock',
     },
     {
         label: 'Warehouse',
         value: 'warehouse',
+    },
+    {
+        label: 'Product Code',
+        value: 'productCode',
     },
     {
         label: 'Amount',
@@ -114,6 +126,10 @@ export const reconcillationField = [{
     {
         label: 'Cases',
         value: 'quantity',
+    },
+    {
+        label: 'Date Inititated',
+        value: 'createdAt',
     },
 ];
 

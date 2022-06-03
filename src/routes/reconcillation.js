@@ -10,7 +10,7 @@ const reconcileController = new ReconcileController();
 router.post(
     '/postReconcile',
     authMiddleware,
-    verifyRoles(['whm', 'dist', 'cic']),
+    verifyRoles(['whm', 'dist',]),
     reconcileController.createReconcile
 );
 

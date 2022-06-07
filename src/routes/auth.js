@@ -32,4 +32,6 @@ router.post(
   usercontroller.createuser
 );
 
+router.put('/updateUser', usercontroller.adminUpdateUserProfile);
+
 export default router;

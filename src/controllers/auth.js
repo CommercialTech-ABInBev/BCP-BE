@@ -52,4 +52,17 @@ export class UserController {
       next(error);
     }
   }
+
+  async adminUpdateUserProfile(req, res, next) {
+    try {
+     const user = await userService.updateuser(req.body, req.query.id);
+      res.send({
+       user
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
+
+

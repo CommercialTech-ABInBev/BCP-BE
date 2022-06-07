@@ -15,6 +15,7 @@ const { successResponse, errorResponse } = ToolBox;
 const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } =
   database;
 
+  
 const addDataController = {
   async download(req, res, next) {
     try {

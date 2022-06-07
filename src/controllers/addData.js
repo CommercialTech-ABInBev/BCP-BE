@@ -8,6 +8,7 @@ import paginate from '../utils/paginate';
 import { customerField } from '../utils/tableFields';
 import { GeneralService, CustomerService } from '../services';
 
+
 const customerService = new CustomerService();
 const { getOrdersByCustomerId, searchCustomer } = customerService;
 const { allEntities, findMultipleByKey } = GeneralService;

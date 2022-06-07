@@ -52,8 +52,9 @@ export default class StockService {
   }
 
   async printStocks({ role, status }, res) {
+
     const data =
-      role === 'cic'
+      (role === 'cic' || role === 'superadmin')
         ? await findMultipleByKey(Inventory)
         : await findMultipleByKey(Inventory, { warehouse: status });
 
@@ -117,7 +118,7 @@ export default class StockService {
     };
 
     let queryOptions;
-    if (role === 'cic') {
+    if (role === 'cic' || role === 'superadmin'){
       queryOptions = optionsObj;
     } else {
       optionsObj.where.warehouse = status;

@@ -5,13 +5,13 @@ import { authMiddleware } from '../middlewares/auth';
 import { OrderController } from '../controllers/order';
 import { validationMiddleware } from '../middlewares/validation';
 import {
-  queryId,
-  searchOrder,
-  planLoadSchema,
-  createOrderchema,
-  paginationSchema,
-  rePlanOrderSchema,
-  paginateQueryOrder,
+    queryId,
+    searchOrder,
+    planLoadSchema,
+    createOrderchema,
+    paginationSchema,
+    rePlanOrderSchema,
+    paginateQueryOrder,
 } from '../validations/order.validation';
 
 const router = Router();
@@ -57,27 +57,27 @@ router.get(
 );
 
 router.put(
-  '/pickOrder',
-  authMiddleware,
-  verifyRoles(['whm', 'dist']),
-  validationMiddleware(queryId),
-  ordercontroller.pickOrder
+    '/pickOrder',
+    authMiddleware,
+    verifyRoles(['whm', 'dist']),
+    validationMiddleware(queryId),
+    ordercontroller.pickOrder
 );
 
 router.post(
-  '/loadOrder',
-  authMiddleware,
-  verifyRoles(['dist']),
-  validationMiddleware(planLoadSchema),
-  ordercontroller.OrderLoad
+    '/loadOrder',
+    authMiddleware,
+    verifyRoles(['dist']),
+    validationMiddleware(planLoadSchema),
+    ordercontroller.OrderLoad
 );
 
 router.put(
-  '/generateInvoice',
-  authMiddleware,
-  verifyRoles(['dist']),
-  validationMiddleware(queryId),
-  ordercontroller.generateOrderInvoice
+    '/generateInvoice',
+    authMiddleware,
+    verifyRoles(['dist']),
+    validationMiddleware(queryId),
+    ordercontroller.generateOrderInvoice
 );
 
 router.get(
@@ -89,26 +89,24 @@ router.get(
 );
 
 router.put(
-  '/cancelOrder',
-  authMiddleware,
-  verifyRoles(['cic']),
-  validationMiddleware(queryId),
-  ordercontroller.cancelOrder
+    '/cancelOrder',
+    authMiddleware,
+    verifyRoles(['cic']),
+    validationMiddleware(queryId),
+    ordercontroller.cancelOrder
 );
 
 router.put(
-  '/replanOrder',
-  authMiddleware,
-  verifyRoles(['dist']),
-  validationMiddleware(rePlanOrderSchema),
-  ordercontroller.replanOrder
+    '/replanOrder',
+    authMiddleware,
+    verifyRoles(['dist']),
+    validationMiddleware(rePlanOrderSchema),
+    ordercontroller.replanOrder
 );
 
 router.put(
-  '/updateCustomer',
-  authMiddleware,
-  verifyRoles(['dist', 'cic', 'superadmin']),
-  ordercontroller.updateCustomer
+    '/updateCustomer',
+    ordercontroller.updateCustomer
 );
 
 export default router;

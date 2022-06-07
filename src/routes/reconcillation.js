@@ -8,10 +8,10 @@ const router = Router();
 const reconcileController = new ReconcileController();
 
 router.post(
-  '/postReconcile',
-  authMiddleware,
-  verifyRoles(['whm', 'dist', 'cic']),
-  reconcileController.createReconcile
+    '/postReconcile',
+    authMiddleware,
+    verifyRoles(['whm', 'dist',]),
+    reconcileController.createReconcile
 );
 
 router.get(

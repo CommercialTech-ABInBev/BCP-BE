@@ -31,6 +31,7 @@ const {
   getruckByDepot,
   getTruckByParams,
   createBulkEmpties,
+  createBulkOnlyBalance,
 } = AddData;
 
 router.get('/truckByParam', getTruckByParams);
@@ -69,6 +70,13 @@ router.post(
   verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkBalance
+);
+router.post(
+  '/only/balance',
+  authMiddleware,
+  verifyRoles(['superadmin']),
+  csvUpload.single('file'),
+  createBulkOnlyBalance
 );
 router.delete('/stockprice/reset', resetStockPriceDB);
 router.get('/stockprice', getAllEligibleStockPrice);

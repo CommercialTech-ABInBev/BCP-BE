@@ -109,4 +109,12 @@ export class OrderController {
       next(error);
     }
   }
+
+  async orderLiveUpdate(req, res, next){
+    try {
+      await orderService.captureLiveOrderUpload(res, req.file)
+    } catch (error) {
+      next(error);
+    }
+  }
 }

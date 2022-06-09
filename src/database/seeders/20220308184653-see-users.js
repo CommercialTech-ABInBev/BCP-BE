@@ -479,7 +479,7 @@ export async function up(queryInterface, Sequelize) {
     },
     {
       name: 'Samuel Oshamokun',
-      email: 'Samuel.Oshamokun@.ab-inbev.com',
+      email: 'Samuel.Oshamokun@ng.ab-inbev.com',
       inviteStatus: 'M0M0',
       location: 'Makurdi',
       password: await hashPassword('Hilarious44'),

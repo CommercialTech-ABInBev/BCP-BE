@@ -76,7 +76,7 @@ router.post(
 router.put(
     '/generateInvoice',
     authMiddleware,
-    verifyRoles(['dist']),
+    verifyRoles(['dist', 'cic']),
     validationMiddleware(queryId),
     ordercontroller.generateOrderInvoice
 );

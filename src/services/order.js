@@ -133,11 +133,12 @@ export default class OrderService {
             data: rows,
         };
     }
-    async queryOrders(tokenData, { id, status, loadId }) {
+    async queryOrders(tokenData, { id, status, loadId, truckId}) {
         let whereStatement = {};
         if (id) whereStatement.id = id;
         if (status) whereStatement.status = status;
         if (loadId) whereStatement.loadId = loadId;
+        if (truckId) whereStatement.truckId = truckId;
         if (tokenData.role !== 'cic') whereStatement.warehouseId = tokenData.status;
 
         const data = await Order.findAll({

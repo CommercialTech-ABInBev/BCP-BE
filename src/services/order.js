@@ -105,7 +105,7 @@ export default class OrderService {
             limit,
             offset,
             distinct: true,
-            order: sequelize.literal('createdAt DESC'),
+            order: sequelize.literal('updatedAt DESC'),
         });
 
         return {
@@ -125,7 +125,7 @@ export default class OrderService {
             limit,
             offset,
             distinct: true,
-            order: sequelize.literal('createdAt DESC'),
+            order: sequelize.literal('updatedAt DESC'),
         });
 
         return {
@@ -133,6 +133,7 @@ export default class OrderService {
             data: rows,
         };
     }
+
     async queryOrders(tokenData, { id, status, loadId, truckId}) {
         let whereStatement = {};
         if (id) whereStatement.id = id;
@@ -144,7 +145,7 @@ export default class OrderService {
         const data = await Order.findAll({
             where: whereStatement,
             include: ['orderItems'],
-            order: sequelize.literal('createdAt DESC'),
+            order: sequelize.literal('updatedAt DESC'),
         });
         return data;
     }
@@ -158,7 +159,7 @@ export default class OrderService {
             await Order.findAll({
                 where: { warehouseId: status },
                 include: ['orderItems'],
-                order: sequelize.literal('createdAt DESC'),
+                order: sequelize.literal('updatedAt DESC'),
             });
 
         let printData = Object.values(data)

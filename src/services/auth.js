@@ -78,6 +78,20 @@ export default class AuthService {
     return updatedUser;
   }
 
+  async updateuser(data, id) {
+    const user = await findByKeys(User, { id });
+    if (!user) throw new HttpError(404, 'User Not Found!');
+
+    await updateByKey(
+      User,
+     data,
+      { id }
+    );
+    const updatedUser = await findByKeys(User, { id });
+
+    return updatedUser;
+  }
+
   async deleteUser({ id }) {
     const user = await findByKeys(User, { id });
 

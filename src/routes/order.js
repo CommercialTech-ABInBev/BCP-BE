@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { csvUpload } from '../middlewares';
 import { verifyRoles } from '../middlewares/rolemgt';
 import { authMiddleware } from '../middlewares/auth';
 import { OrderController } from '../controllers/order';
@@ -59,7 +60,7 @@ router.get(
 router.put(
     '/pickOrder',
     authMiddleware,
-    verifyRoles(['whm', 'dist']),
+    verifyRoles(['whm', 'dist', 'cic']),
     validationMiddleware(queryId),
     ordercontroller.pickOrder
 );
@@ -75,7 +76,7 @@ router.post(
 router.put(
     '/generateInvoice',
     authMiddleware,
-    verifyRoles(['dist']),
+    verifyRoles(['dist', 'cic']),
     validationMiddleware(queryId),
     ordercontroller.generateOrderInvoice
 );
@@ -108,5 +109,11 @@ router.put(
     '/updateCustomer',
     ordercontroller.updateCustomer
 );
+
+router.post(
+    '/captureLiveOrders',
+    csvUpload.single('file'),
+    ordercontroller.orderLiveUpdate
+  );
 
 export default router;

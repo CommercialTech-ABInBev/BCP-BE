@@ -19,42 +19,42 @@ const router = Router();
 const ordercontroller = new OrderController();
 
 router.post(
-    '/createOrder',
-    authMiddleware,
-    verifyRoles(['cic']),
-    validationMiddleware(createOrderchema),
-    ordercontroller.createOrder
+  '/createOrder',
+  authMiddleware,
+  verifyRoles(['cic', 'superadmin']),
+  validationMiddleware(createOrderchema),
+  ordercontroller.createOrder
 );
 
 router.get(
-    '/getOrders',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm']),
-    validationMiddleware(paginationSchema),
-    ordercontroller.getOrders
+  '/getOrders',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
+  validationMiddleware(paginationSchema),
+  ordercontroller.getOrders
 );
 
 router.get(
-    '/getDepotOrders',
-    authMiddleware,
-    verifyRoles(['whm', 'dist']),
-    validationMiddleware(paginationSchema),
-    ordercontroller.getWHMOrders
+  '/getDepotOrders',
+  authMiddleware,
+  verifyRoles(['whm', 'dist', 'superadmin']),
+  validationMiddleware(paginationSchema),
+  ordercontroller.getWHMOrders
 );
 
 router.get(
-    '/getSpecificOrder',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm']),
-    validationMiddleware(paginateQueryOrder),
-    ordercontroller.queryOrderByCondition
+  '/getSpecificOrder',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
+  validationMiddleware(paginateQueryOrder),
+  ordercontroller.queryOrderByCondition
 );
 
 router.get(
-    '/downloadOrders',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
-    ordercontroller.csvDownloadOrders
+  '/downloadOrders',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
+  ordercontroller.csvDownloadOrders
 );
 
 router.put(
@@ -82,11 +82,11 @@ router.put(
 );
 
 router.get(
-    '/searchOrder',
-    authMiddleware,
-    verifyRoles(['cic', 'whm', 'dist']),
-    validationMiddleware(searchOrder),
-    ordercontroller.searchOrder
+  '/searchOrder',
+  authMiddleware,
+  verifyRoles(['cic', 'whm', 'dist', 'superadmin']),
+  validationMiddleware(searchOrder),
+  ordercontroller.searchOrder
 );
 
 router.put(

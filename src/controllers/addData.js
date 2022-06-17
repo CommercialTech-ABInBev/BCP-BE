@@ -8,6 +8,7 @@ import paginate from '../utils/paginate';
 import { customerField } from '../utils/tableFields';
 import { GeneralService, CustomerService } from '../services';
 
+
 const customerService = new CustomerService();
 const { getOrdersByCustomerId, searchCustomer } = customerService;
 const { allEntities, findMultipleByKey } = GeneralService;
@@ -15,6 +16,7 @@ const { successResponse, errorResponse } = ToolBox;
 const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } =
   database;
 
+  
 const addDataController = {
   async download(req, res, next) {
     try {
@@ -39,9 +41,13 @@ const addDataController = {
    */
   async createBulkCustomers(req, res) {
     try {
+
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
+
+      // reset database before adding customers
+      await Customer.destroy({ truncate: true });
 
       let customers = [];
 
@@ -969,6 +975,60 @@ const addDataController = {
       errorResponse(res, { error });
     }
   },
+
+
+  /**
+   * Admin bulk create eligible balance
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with StockPrice details
+   * @memberof const AddDataController
+   */
+   async createBulkOnlyBalance(req, res) {
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send('Please upload a CSV file!');
+      }
+
+      let balances = [];
+
+      let path = req.file.path;
+      createReadStream(path)
+        .pipe(parse({ headers: true }))
+        .on('error', (error) => {
+          throw error.message;
+        })
+        .on('data', (row) => {
+          balances.push(row);
+        })
+        .on('end', () => {
+          Balance.bulkCreate(balances)
+            .then(() => {
+              res.status(200).send({
+                message:
+                  'Uploaded the file successfully: ' + req.file.originalname,
+              });
+            })
+            .then(
+              unlink(path, (err) => {
+                if (err) throw err;
+              })
+            )
+            .catch((error) => {
+              res.status(500).send({
+                message: 'Fail to import data into database!',
+                error: error.message,
+              });
+            });
+        });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Could not upload the file: ' + req.file.originalname,
+      });
+    }
+  },
+
 };
 
 export default addDataController;

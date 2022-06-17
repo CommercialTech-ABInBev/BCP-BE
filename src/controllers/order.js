@@ -101,6 +101,7 @@ export class OrderController {
       next(error);
     }
   }
+
   async updateCustomer(req, res, next) {
     try {
       const data = await orderService.editCustomer(req.body, req.query.id);

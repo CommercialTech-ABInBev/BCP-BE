@@ -15,17 +15,17 @@ router.post(
 );
 
 router.get(
-    '/getReconcillation',
-    authMiddleware,
-    verifyRoles(['whm', 'dist', 'cic']),
-    reconcileController.getWHMreconcillationn
+  '/getReconcillation',
+  authMiddleware,
+  verifyRoles(['whm', 'dist', 'cic', 'superadmin']),
+  reconcileController.getWHMreconcillationn
 );
 
 router.get(
-    '/downloadReconcillation',
-    authMiddleware,
-    verifyRoles(['dist', 'cic', 'whm', 'superadmin']),
-    reconcileController.csvDownloadReconcillation
+  '/downloadReconcillation',
+  authMiddleware,
+  verifyRoles(['dist', 'cic', 'whm', 'superadmin']),
+  reconcileController.csvDownloadReconcillation
 );
 
 export default router;

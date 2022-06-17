@@ -41,9 +41,13 @@ const addDataController = {
    */
   async createBulkCustomers(req, res) {
     try {
+
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
+
+      // reset database before adding customers
+      await Customer.destroy({ truncate: true });
 
       let customers = [];
 

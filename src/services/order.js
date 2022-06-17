@@ -400,46 +400,40 @@ export default class OrderService {
     }
 
     async captureLiveOrderUpload(res, file){
+        
         try {
             if (file == undefined) {
                 return res.status(400).send('Please upload a CSV file!');
               }
+
               let orders = [];
               let path = file.path;
     
               createReadStream(path)
               .pipe(parse({headers: true}))
-              .on('data', (row) => orders .push(row))
+              .on('data', (row) => orders.push(row))
               .on('end',  () => {
-                  orders.forEach((elem , index)=> {
-                    const orderBodyData = {
-                        account: elem.account,
-                        vatAmount,
-                        customerId,
-                        totalAmount,
-                        warehouseId,
-                        deliveryDate,
-                        subTotalAmount,
-                        createdBy: name,
-                        status: 'captured',
-                        salesOrderId: CommonService.generateReference('CTO_'),
-                    };
-                  })
-                  Order.bulkCreate(orders)
-                  .then(() => {
-                    res.status(200).send({
-                        message: 'Uploaded the file successfully: ' + file.originalname,
-                      })
-                  })
-                  .then(unlink(path, err => {
-                    if (err) throw err;
-                  }))
-                  .catch(error => {
-                    res.status(500).send({
-                        message: 'Fail to import data into database!',
-                        error: error.message,
-                      });
-                  })
+                const key = 'SalesOrder';
+                const arrayUniqueByKey = 
+                [...new Map(orders.map(item => [item[key], item])).values()]
+                .map( item => {
+                    return {
+                    account : item.Name,
+                    comment: 'Live Order Capatured',
+                    vatAmount: 0,
+                    customerId: item.Customer,
+                    totalAmount: 0,
+                    warehouseId: item.Warehouse,
+                    deliveryDate: item.TrnDate,
+                    subTotalAmount: 0,
+                    createdBy: 'Ifeoluwa Subair',
+                    status: 'captured',
+                    salesOrderId: item.SalesOrder
+                    }
+                });
+
+            
+                console.log(arrayUniqueByKey);
               })
         } catch (error) {
             res.status(500).send({

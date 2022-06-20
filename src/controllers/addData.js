@@ -45,9 +45,10 @@ const addDataController = {
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
-
       // reset database before adding customers
-      await Customer.destroy({ truncate: true });
+      await Customer.destroy({ truncate: true }).then(() => {
+        console.log("Customer table cleared");
+      });
 
       let customers = [];
 
@@ -976,7 +977,6 @@ const addDataController = {
     }
   },
 
-
   /**
    * Admin bulk create eligible balance
    * @async
@@ -1015,6 +1015,84 @@ const addDataController = {
                 if (err) throw err;
               })
             )
+            .catch((error) => {
+              res.status(500).send({
+                message: 'Fail to import data into database!',
+                error: error.message,
+              });
+            });
+        });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Could not upload the file: ' + req.file.originalname,
+      });
+    }
+  },
+
+
+  /**
+   * Admin bulk update eligible balance
+   * @async
+   * @param {object} req
+   * @param {object} res
+   * @returns {JSON} a JSON response with StockPrice details
+   * @memberof const AddDataController
+   */
+   async updateCustomerBalance(req, res) {
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send('Please upload a CSV file!');
+      }
+
+      let balances = [];
+
+      let path = req.file.path;
+      createReadStream(path)
+        .pipe(parse({ headers: true }))
+        .on('error', (error) => {
+          throw error.message;
+        })
+        .on('data', (row) => {
+          balances.push(row);
+        })
+        .on('end', () => {
+          allEntities(Customer)
+            .then((customers) => {
+              balances = balances.filter((x) => x != null);
+              let result = [];
+              customers.forEach((customer) => {
+                const balanceInfo = balances.find(
+                  (balance) =>
+                    balance.customer === customer.dataValues.customerId
+                );
+
+                if (balanceInfo !== undefined && balanceInfo !== null) {
+                  result.push({
+                    id: customer.dataValues.id,
+                    customerId: customer.dataValues.customerId,
+                    currentBalance: Number(balanceInfo.currentBalance) + Number(customer.dataValues.currentBalance),
+                  });
+                }
+                return result;
+              });
+
+              // return console.log(result)
+
+              Customer.bulkCreate(result, {
+                updateOnDuplicate: [
+                  'currentBalance',
+                ],
+              }).then((data) => {
+                res.status(200).json({
+                  message:
+                    'Uploaded the file successfully: ' + req.file.originalname,
+                  data: {
+                    data,
+                    count: data.length,
+                  },
+                });
+              });
+            })
             .catch((error) => {
               res.status(500).send({
                 message: 'Fail to import data into database!',

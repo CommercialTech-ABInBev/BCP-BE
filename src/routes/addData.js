@@ -32,6 +32,7 @@ const {
   getTruckByParams,
   createBulkEmpties,
   createBulkOnlyBalance,
+  updateCustomerBalance,
 } = AddData;
 
 router.get('/truckByParam', getTruckByParams);
@@ -77,6 +78,13 @@ router.post(
   verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkOnlyBalance
+);
+router.patch(
+  '/balance',
+  authMiddleware,
+  verifyRoles(['superadmin']),
+  csvUpload.single('file'),
+  updateCustomerBalance
 );
 router.delete('/stockprice/reset', resetStockPriceDB);
 router.get('/stockprice', getAllEligibleStockPrice);

@@ -1,6 +1,7 @@
 import sequelize from 'sequelize';
 import { parse } from 'fast-csv';
-import { createReadStream, unlink } from 'fs';
+import { createReadStream, unlink} from 'fs';
+import { groupBy, sumBy, find } from 'lodash';
 
 import db from '../models';
 import DbService from './dbservice';
@@ -8,9 +9,10 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
+import { getCasesToPallet, getHectoliters } from '../utils/random'
 
+const { Truck, Order, Customer, Inventory, Order_items } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
-const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 
 export default class OrderService {
     async createOrder(data, { name }) {
@@ -400,7 +402,6 @@ export default class OrderService {
     }
 
     async captureLiveOrderUpload(res, file){
-        
         try {
             if (file == undefined) {
                 return res.status(400).send('Please upload a CSV file!');
@@ -412,33 +413,66 @@ export default class OrderService {
               createReadStream(path)
               .pipe(parse({headers: true}))
               .on('data', (row) => orders.push(row))
-              .on('end',  () => {
-                const key = 'SalesOrder';
-                const arrayUniqueByKey = 
-                [...new Map(orders.map(item => [item[key], item])).values()]
-                .map( item => {
+              .on('end',  async() => {
+                const key = 'salesOrder';
+                const unique = groupBy(orders, index => index[key]);
+                const orderData = Object.keys(unique).map(key => {
+                    const dataMatch = unique[key][0];
                     return {
-                    account : item.Name,
-                    comment: 'Live Order Capatured',
-                    vatAmount: 0,
-                    customerId: item.Customer,
-                    totalAmount: 0,
-                    warehouseId: item.Warehouse,
-                    deliveryDate: item.TrnDate,
-                    subTotalAmount: 0,
-                    createdBy: 'Ifeoluwa Subair',
-                    status: 'captured',
-                    salesOrderId: item.SalesOrder
-                    }
-                });
+                        status: 'captured', 
+                        account : dataMatch.name,
+                        createdBy: 'Ifeoluwa Subair',
+                        comment: 'Live Order Captured',
+                        customerId: dataMatch.customer,
+                        warehouseId: dataMatch.mWarehouse,
+                        salesOrderId: dataMatch.salesOrder,
+                        deliveryDate: dataMatch.reqShipDate,
+                        vatAmount: sumBy(unique[key], index => +index[' vatAmount ']).toFixed(2),
+                        totalAmount: sumBy(unique[key], index => +index[' totalAmt ']).toFixed(2),
+                        subTotalAmount: sumBy(unique[key], index => +index[' totalOrderValue ']).toFixed(2),
+                    };
+                  });
 
-            
-                console.log(arrayUniqueByKey);
-              })
+                const order = await Order.bulkCreate(orderData);
+              
+                const orderItemBulkCreate = orders.reduce((acc, item) => {
+  
+                   const condition = find(order, (elem) => elem.salesOrderId === item.salesOrder);
+                   const brand =  item.brand.toLowerCase() == "betamalt" || item.brand.toLowerCase() == "grand malt" ? item.brand : 'all';
+                   if ( !!condition ){
+                    const data = Object.assign({}, {   
+                        cases: item.noCases,
+                        orderId: condition.id,
+                        total: item[' totalAmt '],
+                        productName: item.mStockDes,
+                        productCode: item.mStockCode,
+                        pallets: getCasesToPallet(item.size, item.packageType, brand, item.noCases),
+                        volume: /\d/.test(item.mStockDes) ? getHectoliters(item.size, item.mStockCode, item.noCases ) : 0,
+                    });
+                
+                    acc.push(data);
+                   }
+
+                   return acc
+                }, []);
+
+                    await Order_items.bulkCreate(orderItemBulkCreate);
+
+                    Order
+                    .findAll({ include: ['orderItems'] })
+                    .then( output  => { res.status(200).send({ output }) })
+                    .then( unlink(path, (err) => { if (err) throw err }))
+                    .catch( error => {
+                        res.status(500).send({
+                            error: error.message,
+                            message: 'Fail to import data into database!',
+                        });
+                  });          
+              });
         } catch (error) {
             res.status(500).send({
                 message: 'Could not upload the file: ' + req.file.originalname,
               });
-        }   
-    }
-}
+        };  
+    };
+};

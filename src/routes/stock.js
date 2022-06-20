@@ -17,42 +17,42 @@ const router = Router();
 const stockcontroller = new StockController();
 
 router.get(
-    '/fetchStocks',
-    authMiddleware,
-    verifyRoles(['cic', 'superadmin']),
-    stockcontroller.getStocks
+  '/fetchStocks',
+  authMiddleware,
+  verifyRoles(['cic', 'superadmin']),
+  stockcontroller.getStocks
 );
 
 router.get(
-    '/searchStock',
-    authMiddleware,
-    verifyRoles(['cic', 'dist']),
-    validationMiddleware(stockSearchParamSchema),
-    stockcontroller.conditionalFindStock
+  '/searchStock',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'superadmin']),
+  validationMiddleware(stockSearchParamSchema),
+  stockcontroller.conditionalFindStock
 );
 
 router.get(
-    '/getStockPrice',
-    authMiddleware,
-    verifyRoles(['cic', 'dist', 'whm']),
-    validationMiddleware(stockPriceSchema),
-    stockcontroller.getStockPrices
+  '/getStockPrice',
+  authMiddleware,
+  verifyRoles(['cic', 'dist', 'whm', 'superadmin']),
+  validationMiddleware(stockPriceSchema),
+  stockcontroller.getStockPrices
 );
 
 router.get(
-    '/queryStock',
-    authMiddleware,
-    verifyRoles(['cic', 'whm', 'dist']),
-    validationMiddleware(searchStock),
-    stockcontroller.searchStocks
+  '/queryStock',
+  authMiddleware,
+  verifyRoles(['cic', 'whm', 'dist', 'superadmin']),
+  validationMiddleware(searchStock),
+  stockcontroller.searchStocks
 );
 
 router.get(
-    '/getDepotstocks',
-    authMiddleware,
-    verifyRoles(['whm', 'dist']),
-    validationMiddleware(paginationStockSchema),
-    stockcontroller.getWHMstocks
+  '/getDepotstocks',
+  authMiddleware,
+  verifyRoles(['whm', 'dist', 'superadmin']),
+  validationMiddleware(paginationStockSchema),
+  stockcontroller.getWHMstocks
 );
 
 router.put(

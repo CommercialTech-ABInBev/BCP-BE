@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "coverage": "nyc report --reporter=text-lcov | coveralls",
-        "test": "yarn style:fix && yarn style:check && yarn test:unit && yarn test:functional",
+        "test": "yarn style:fix && yarn style:check",
         "lint": "eslint ./src ./test --ext .js",
         "lint:fix": "eslint ./src ./test --ext .js --fix",
         "test:functional": "dotenv -e .env -- jest --projects ./test --runInBand ---detectOpenHandles --forceExit",

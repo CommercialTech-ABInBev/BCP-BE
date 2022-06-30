@@ -12,7 +12,7 @@
         "test:unit": "dotenv -e .env -- jest",
         "start": "babel-node src/index.js ",
         "start:dev": "yarn migrate && nodemon --exec babel-node src/index.js | pino-pretty -c",
-        "build": "arn migrate && babel src -d dist",
+        "build": "yarn migrate && babel src -d dist",
         "migrate": "sequelize db:migrate ",
         "migrate:reset": "sequelize db:migrate:undo:all",
         "seed": "sequelize db:seed:all",

@@ -1192,20 +1192,7 @@ export async function up(queryInterface, Sequelize) {
     emailVerified: true,
     createdAt: new Date(),
     updatedAt: new Date(),
-  },
-  {
-    name: "Oluwatosin Popoola",
-    email: "Oluwatosin.Popoola@ng.ab-inbev.com",
-    inviteStatus: 'C0M0',
-    location: 'Ilesha',
-    password: await hashPassword('Hilarious107'),
-    role: 'whm',
-    emailVerified: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  
-}
-  ]);
+  }]);
 }
 export function down(queryInterface, Sequelize) {
   return queryInterface.bulkDelete('Users', null, {});

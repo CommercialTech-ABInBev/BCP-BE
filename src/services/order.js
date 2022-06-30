@@ -64,7 +64,7 @@ export default class OrderService {
             );
         });
 
-        const { currentBalance, phoneNumber, masterCodeId } = await findByKeys(Customer, { customerId });
+        const { currentBalance, phoneNumber, masterCodeId, region } = await findByKeys(Customer, { customerId });
     
         if (currentBalance !== null) {
             let option = (
@@ -79,6 +79,7 @@ export default class OrderService {
 
             await updateByKey(
                 Order, {
+                    customerRegion: region,
                     customerPhoneNumber: phoneNumber,
                     customerMasterCodeId: masterCodeId,
                 }, { customerId }

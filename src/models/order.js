@@ -22,6 +22,7 @@ export default (sequelize, DataTypes) => {
       deliveryDate: DataTypes.STRING,
       salesOrderId: DataTypes.STRING,
       truckShipSize: DataTypes.STRING,
+      customerRegion: DataTypes.STRING,
       subTotalAmount: DataTypes.INTEGER,
       truckSupplierName: DataTypes.STRING,
       customerPhoneNumber: DataTypes.STRING,

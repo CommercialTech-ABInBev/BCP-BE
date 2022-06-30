@@ -64,16 +64,23 @@ export default class OrderService {
             );
         });
 
-        const customer = await findByKeys(Customer, { customerId });
+        const { currentBalance, phoneNumber, masterCodeId } = await findByKeys(Customer, { customerId });
     
-        if (customer.currentBalance !== null) {
+        if (currentBalance !== null) {
             let option = (
-                Number(customer.currentBalance) + Number(totalAmount)
+                Number(currentBalance) + Number(totalAmount)
             ).toFixed();
 
             await updateByKey(
                 Customer, {
                     currentBalance: option,
+                }, { customerId }
+            );
+
+            await updateByKey(
+                Order, {
+                    customerPhoneNumber: phoneNumber,
+                    customerMasterCodeId: masterCodeId,
                 }, { customerId }
             );
         } else {
@@ -163,10 +170,10 @@ export default class OrderService {
                 include: ['orderItems'],
                 order: sequelize.literal('updatedAt DESC'),
             });
-
+        
         let printData = Object.values(data)
             .map((order) =>
-                order.orderItems.map((item) => {
+                order.orderItems.map((item, index) => {
                     return {
                         total: item.total,
                         cases: item.cases,
@@ -191,6 +198,7 @@ export default class OrderService {
                         deliveryDate: order.deliveryDate,
                         salesOrderId: order.salesOrderId,
                         subTotalAmount: order.subTotalAmount,
+                        sameOrderIdtag: (index + 1) * 10,
                     };
                 })
             )
@@ -436,9 +444,9 @@ export default class OrderService {
                 const order = await Order.bulkCreate(orderData);
               
                 const orderItemBulkCreate = orders.reduce((acc, item) => {
-  
                    const condition = find(order, (elem) => elem.salesOrderId === item.salesOrder);
                    const brand =  item.brand.toLowerCase() == "betamalt" || item.brand.toLowerCase() == "grand malt" ? item.brand : 'all';
+                   
                    if ( !!condition ){
                     const data = Object.assign({}, {   
                         cases: item.noCases,
@@ -454,21 +462,21 @@ export default class OrderService {
                    }
 
                    return acc
-                }, []);
+            }, []);
 
-                    await Order_items.bulkCreate(orderItemBulkCreate);
+            await Order_items.bulkCreate(orderItemBulkCreate);
 
-                    Order
-                    .findAll({ include: ['orderItems'] })
-                    .then( output  => { res.status(200).send({ output }) })
-                    .then( unlink(path, (err) => { if (err) throw err }))
-                    .catch( error => {
-                        res.status(500).send({
-                            error: error.message,
-                            message: 'Fail to import data into database!',
-                        });
-                  });          
-              });
+            Order
+            .findAll({ include: ['orderItems'] })
+            .then( output  => { res.status(200).send({ output }) })
+            .then( unlink(path, (err) => { if (err) throw err }))
+            .catch( error => {
+                    res.status(500).send({
+                        error: error.message,
+                        message: 'Fail to import data into database!',
+                    });
+                });          
+            });
         } catch (error) {
             res.status(500).send({
                 message: 'Could not upload the file: ' + req.file.originalname,

@@ -67,6 +67,10 @@ export const orderfields = [{
         label: 'Comment',
         value: 'comment',
     },
+    {
+        label: 'Same Order Tag',
+        value: 'sameOrderIdtag',
+    }
 ];
 
 export const stockField = [{

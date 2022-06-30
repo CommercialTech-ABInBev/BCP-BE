@@ -76,10 +76,6 @@ export const orderfields = [{
         value: 'customerPhoneNumber',
     }, 
     {
-        label: 'Master Code',
-        value: 'customerMasterCodeId',
-    }, 
-    {
         label: 'Same Order Tag',
         value: 'sameOrderIdtag',
     },

@@ -197,9 +197,11 @@ export default class OrderService {
                         totalAmount: order.totalAmount,
                         deliveryDate: order.deliveryDate,
                         deliveryDate: order.deliveryDate,
+                        sameOrderIdtag: (index + 1) * 10,
                         salesOrderId: order.salesOrderId,
                         subTotalAmount: order.subTotalAmount,
-                        sameOrderIdtag: (index + 1) * 10,
+                        customerRegion: order.customerRegion,
+                        customerPhoneNumber: order.customerPhoneNumber,
                     };
                 })
             )

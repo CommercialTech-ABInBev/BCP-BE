@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'abi-pheonix-backend'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9C4D0046F3074BD9A7867FA7FD3397CC }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_773375E52F1740B185CC79417410EC66 }}
           package: .

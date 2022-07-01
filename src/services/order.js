@@ -158,9 +158,11 @@ export default class OrderService {
             include: ['orderItems'],
             limit, 
             offset,
+            distinct: true,
             order: sequelize.literal('updatedAt DESC'),
-        });
         
+        });
+
         return data;
     }
 

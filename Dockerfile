@@ -5,9 +5,9 @@ COPY package*.json ./
 
 FROM base as production
 ENV NODE_ENV=production
-RUN yarn install --frozen-lockfile --production
+RUN npm install --frozen-lockfile --production
 COPY . .
-CMD ["yarn",  "start"]
+CMD ["npm",  "start"]
 
 FROM base as dev
 RUN apk add --no-cache bash
@@ -15,7 +15,7 @@ RUN wget -O /bin/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait
 RUN chmod +x /bin/wait-for-it.sh
 
 ENV NODE_ENV=development
-RUN yarn
+RUN npm
 COPY . .
 
-CMD ["yarn", "start:dev"]
+CMD ["npm", "start:dev"]

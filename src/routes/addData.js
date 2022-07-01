@@ -67,8 +67,6 @@ router.delete('/balance/reset', resetBalanceDB);
 router.get('/balance', getAllEligibleBalance);
 router.post(
   '/balance',
-  // authMiddleware,
-  // verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkBalance
 );

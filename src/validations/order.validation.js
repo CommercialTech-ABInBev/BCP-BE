@@ -32,6 +32,9 @@ export const paginateQueryOrder = {
   id: Joi.string(),
   status: Joi.string(),
   loadId: Joi.string(),
+  truckId: Joi.string(),
+  page: Joi.number().required(),
+  pageSize: Joi.number(),
 };
 
 export const queryId = {

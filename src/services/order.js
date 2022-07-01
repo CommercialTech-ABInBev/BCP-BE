@@ -144,8 +144,9 @@ export default class OrderService {
         };
     }
 
-    async queryOrders(tokenData, { id, status, loadId, truckId}) {
+    async queryOrders(tokenData, { id, status, loadId, truckId, page, pageSize }) {
         let whereStatement = {};
+        const { limit, offset } = paginate({ page, pageSize });
         if (id) whereStatement.id = id;
         if (status) whereStatement.status = status;
         if (loadId) whereStatement.loadId = loadId;
@@ -155,6 +156,8 @@ export default class OrderService {
         const data = await Order.findAll({
             where: whereStatement,
             include: ['orderItems'],
+            limit, 
+            offset,
             order: sequelize.literal('updatedAt DESC'),
         });
         return data;

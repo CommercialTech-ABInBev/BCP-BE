@@ -298,7 +298,8 @@ export default class OrderService {
         return getOrders;
     }
 
-    async searchOrder({ role, status }, { search, orderStatus }) {
+    async searchOrder({ role, status }, { search, orderStatus, page, pageSize  }) {
+        const { limit, offset } = paginate({ page, pageSize });
         let optionsObj = {
             where: {
                 [sequelize.Op.or]: [{
@@ -314,8 +315,11 @@ export default class OrderService {
                 ],
             },
             include: ['orderItems'],
+            limit, 
+            offset,
             distinct: true,
         };
+        
         if (orderStatus) optionsObj.where.status = orderStatus;
         let queryOptions;
 

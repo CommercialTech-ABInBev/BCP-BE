@@ -72,6 +72,10 @@ export const orderfields = [{
         value: 'customerRegion',
     },
     {
+        label: 'Date Created',
+        value: 'dateCreated',
+    },
+    {
         label: 'Customer Phone Number',
         value: 'customerPhoneNumber',
     }, 

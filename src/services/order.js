@@ -192,7 +192,6 @@ export default class OrderService {
                         truckId: order.truckId,
                         account: order.account,
                         comment: order.comment,
-                        vatAmount: order.vatAmount,
                         invoiceId: order.invoiceId,
                         createdBy: order.createdBy,
                         truckOwner: order.truckOwner,
@@ -200,19 +199,19 @@ export default class OrderService {
                         warehouseId: order.warehouseId,
                         productName: item.productName,
                         productCode: item.productCode,
-                        totalAmount: order.totalAmount,
                         deliveryDate: order.deliveryDate,
-                        deliveryDate: order.deliveryDate,
+                        dateOrderCreated: order.createdAt,
                         sameOrderIdtag: (index + 1) * 10,
                         salesOrderId: order.salesOrderId,
-                        subTotalAmount: order.subTotalAmount,
                         customerRegion: order.customerRegion,
                         customerPhoneNumber: order.customerPhoneNumber,
+                        vatAmount: item.productName.includes('Empty') || item.productName.includes('Crate') ? 0 : item.total * 0.075 ,
+                        totalAmount: item.productName.includes('Empty') || item.productName.includes('Crate') ? item.total : item.total * 1.075,
                     };
                 })
             )
             .flat();
-
+console.log(printData, '=======');
         await AuthUtils.downloadResource(res, 'orders.csv', orderfields, printData);
     }
 

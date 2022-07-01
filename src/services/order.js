@@ -153,13 +153,14 @@ export default class OrderService {
         if (truckId) whereStatement.truckId = truckId;
         if (tokenData.role !== 'cic') whereStatement.warehouseId = tokenData.status;
 
-        const data = await Order.findAll({
+        const data = await Order.findAndCountAll({
             where: whereStatement,
             include: ['orderItems'],
             limit, 
             offset,
             order: sequelize.literal('updatedAt DESC'),
         });
+        
         return data;
     }
 

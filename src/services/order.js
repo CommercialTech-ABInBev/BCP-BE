@@ -256,12 +256,14 @@ export default class OrderService {
     }
 
     async generateOrderInvoice({ id }) {
-        const { truckId } = await findByKeys(Order, { id });
-        const relatedPlannedOrders = await findMultipleByKey(Order, { truckId });
+        const { loadId } = await findByKeys(Order, { id });
+        const relatedPlannedOrders = await Order.findAll({
+            where: { loadId }
+        })
        
-        relatedPlannedOrders.map(async ({customerId}) => {
+        relatedPlannedOrders.map(async ({id}) => {
             const { shipToAddr1 } = await findByKeys(Customer, {
-                customerId
+                id
             });
   
             await updateByKey(
@@ -269,7 +271,7 @@ export default class OrderService {
                     status: 'invoiced',
                     shipTo: shipToAddr1,
                     invoiceId: CommonService.generateReference('RTY'),
-                }, { customerId }
+                }, { id }
             );
         });
    
@@ -283,15 +285,17 @@ export default class OrderService {
     }
 
     async pickOrder({ id }) {
-        const { truckId } = await findByKeys(Order, { id });
-        const relatedPlannedOrders = await findMultipleByKey(Order, { truckId });
+        const { loadId } = await findByKeys(Order, { id });
+        const relatedPlannedOrders = await Order.findAll({
+            where: { loadId }
+        })
 
-        relatedPlannedOrders.map(async({ customerId }) => {
+        relatedPlannedOrders.map(async({ id }) => {
             await updateByKey(
                 Order, {
                     picked: true,
                     status: 'picked',
-                }, { customerId }
+                }, { id}
             );
         });
         

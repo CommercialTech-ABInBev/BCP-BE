@@ -68,7 +68,7 @@ router.put(
 router.post(
     '/loadOrder',
     authMiddleware,
-    verifyRoles(['dist']),
+    verifyRoles(['dist', 'cic']),
     validationMiddleware(planLoadSchema),
     ordercontroller.OrderLoad
 );

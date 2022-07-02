@@ -211,7 +211,7 @@ export default class OrderService {
                 })
             )
             .flat();
-console.log(printData, '=======');
+
         await AuthUtils.downloadResource(res, 'orders.csv', orderfields, printData);
     }
 
@@ -256,12 +256,14 @@ console.log(printData, '=======');
     }
 
     async generateOrderInvoice({ id }) {
-        const { truckId } = await findByKeys(Order, { id });
-        const relatedPlannedOrders = await findMultipleByKey(Order, { truckId });
+        const { loadId } = await findByKeys(Order, { id });
+        const relatedPlannedOrders = await Order.findAll({
+            where: { loadId }
+        })
        
-        relatedPlannedOrders.map(async ({customerId}) => {
+        relatedPlannedOrders.map(async ({id}) => {
             const { shipToAddr1 } = await findByKeys(Customer, {
-                customerId
+                id
             });
   
             await updateByKey(
@@ -269,7 +271,7 @@ console.log(printData, '=======');
                     status: 'invoiced',
                     shipTo: shipToAddr1,
                     invoiceId: CommonService.generateReference('RTY'),
-                }, { customerId }
+                }, { id }
             );
         });
    
@@ -283,17 +285,19 @@ console.log(printData, '=======');
     }
 
     async pickOrder({ id }) {
-        const { truckId } = await findByKeys(Order, { id });
-        const relatedPlannedOrders = await findMultipleByKey(Order, { truckId });
+        const { loadId } = await findByKeys(Order, { id });
+        const relatedPlannedOrders = await Order.findAll({
+            where: { loadId }
+        })
 
-        relatedPlannedOrders.map(async({ customerId }) => {
+        relatedPlannedOrders.map(async({ id }) => {
             await updateByKey(
                 Order, {
                     picked: true,
                     status: 'picked',
-                }, { customerId }
+                }, { id}
             );
-        })
+        });
         
         const getOrders = await Order.findOne({
             where: { id },
@@ -303,6 +307,7 @@ console.log(printData, '=======');
         return getOrders;
     }
 
+    
     async searchOrder({ role, status }, { search, orderStatus, page, pageSize  }) {
         const { limit, offset } = paginate({ page, pageSize });
         let optionsObj = {

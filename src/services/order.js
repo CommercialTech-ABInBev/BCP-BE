@@ -303,6 +303,7 @@ export default class OrderService {
         return getOrders;
     }
 
+    
     async searchOrder({ role, status }, { search, orderStatus, page, pageSize  }) {
         const { limit, offset } = paginate({ page, pageSize });
         let optionsObj = {

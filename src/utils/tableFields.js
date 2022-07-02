@@ -67,6 +67,22 @@ export const orderfields = [{
         label: 'Comment',
         value: 'comment',
     },
+    {
+        label: 'Customer Region',
+        value: 'customerRegion',
+    },
+    {
+        label: 'Date Created',
+        value: 'dateCreated',
+    },
+    {
+        label: 'Customer Phone Number',
+        value: 'customerPhoneNumber',
+    }, 
+    {
+        label: 'Same Order Tag',
+        value: 'sameOrderIdtag',
+    },
 ];
 
 export const stockField = [{

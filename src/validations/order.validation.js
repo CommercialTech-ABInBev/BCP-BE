@@ -32,6 +32,9 @@ export const paginateQueryOrder = {
   id: Joi.string(),
   status: Joi.string(),
   loadId: Joi.string(),
+  truckId: Joi.string(),
+  page: Joi.number().required(),
+  pageSize: Joi.number(),
 };
 
 export const queryId = {
@@ -46,6 +49,8 @@ export const planLoadSchema = {
 export const searchOrder = {
   search: Joi.string().required(),
   orderStatus: Joi.string(),
+  page: Joi.number().required(),
+  pageSize: Joi.number(),
 };
 
 export const rePlanOrderSchema = {

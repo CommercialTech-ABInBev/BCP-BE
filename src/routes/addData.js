@@ -70,15 +70,11 @@ router.post(
 );
 router.post(
   '/only/balance',
-  // authMiddleware,
-  // verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkOnlyBalance
 );
 router.patch(
   '/balance',
-  // authMiddleware,
-  // verifyRoles(['superadmin']),
   csvUpload.single('file'),
   updateCustomerBalance
 );

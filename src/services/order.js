@@ -1,6 +1,7 @@
 import sequelize from 'sequelize';
 import { parse } from 'fast-csv';
-import { createReadStream, unlink } from 'fs';
+import { createReadStream, unlink} from 'fs';
+import { groupBy, sumBy, find } from 'lodash';
 
 import db from '../models';
 import DbService from './dbservice';
@@ -8,9 +9,10 @@ import CommonService from './common';
 import AuthUtils from '../utils/auth';
 import paginate from '../utils/paginate';
 import { orderfields } from '../utils/tableFields';
+import { getCasesToPallet, getHectoliters } from '../utils/random'
 
+const { Truck, Order, Customer, Inventory, Order_items } = db;
 const { addEntity, findMultipleByKey, updateByKey, findByKeys } = DbService;
-const { Truck, Order, Customer, Inventory, Order_items, CustomerAddress } = db;
 
 export default class OrderService {
     async createOrder(data, { name }) {
@@ -62,16 +64,24 @@ export default class OrderService {
             );
         });
 
-        const customer = await findByKeys(Customer, { customerId });
+        const { currentBalance, phoneNumber, masterCodeId, region } = await findByKeys(Customer, { customerId });
     
-        if (customer.currentBalance !== null) {
+        if (currentBalance !== null) {
             let option = (
-                Number(customer.currentBalance) + Number(totalAmount)
+                Number(currentBalance) + Number(totalAmount)
             ).toFixed();
 
             await updateByKey(
                 Customer, {
                     currentBalance: option,
+                }, { customerId }
+            );
+
+            await updateByKey(
+                Order, {
+                    customerRegion: region,
+                    customerPhoneNumber: phoneNumber,
+                    customerMasterCodeId: masterCodeId,
                 }, { customerId }
             );
         } else {
@@ -105,7 +115,7 @@ export default class OrderService {
             limit,
             offset,
             distinct: true,
-            order: sequelize.literal('createdAt DESC'),
+            order: sequelize.literal('updatedAt DESC'),
         });
 
         return {
@@ -125,7 +135,7 @@ export default class OrderService {
             limit,
             offset,
             distinct: true,
-            order: sequelize.literal('createdAt DESC'),
+            order: sequelize.literal('updatedAt DESC'),
         });
 
         return {
@@ -133,19 +143,26 @@ export default class OrderService {
             data: rows,
         };
     }
-    async queryOrders(tokenData, { id, status, loadId, truckId}) {
+
+    async queryOrders(tokenData, { id, status, loadId, truckId, page, pageSize }) {
         let whereStatement = {};
+        const { limit, offset } = paginate({ page, pageSize });
         if (id) whereStatement.id = id;
         if (status) whereStatement.status = status;
         if (loadId) whereStatement.loadId = loadId;
         if (truckId) whereStatement.truckId = truckId;
         if (tokenData.role !== 'cic') whereStatement.warehouseId = tokenData.status;
 
-        const data = await Order.findAll({
+        const data = await Order.findAndCountAll({
             where: whereStatement,
             include: ['orderItems'],
-            order: sequelize.literal('createdAt DESC'),
+            limit, 
+            offset,
+            distinct: true,
+            order: sequelize.literal('updatedAt DESC'),
+        
         });
+
         return data;
     }
 
@@ -158,12 +175,12 @@ export default class OrderService {
             await Order.findAll({
                 where: { warehouseId: status },
                 include: ['orderItems'],
-                order: sequelize.literal('createdAt DESC'),
+                order: sequelize.literal('updatedAt DESC'),
             });
-
+        
         let printData = Object.values(data)
             .map((order) =>
-                order.orderItems.map((item) => {
+                order.orderItems.map((item, index) => {
                     return {
                         total: item.total,
                         cases: item.cases,
@@ -175,7 +192,6 @@ export default class OrderService {
                         truckId: order.truckId,
                         account: order.account,
                         comment: order.comment,
-                        vatAmount: order.vatAmount,
                         invoiceId: order.invoiceId,
                         createdBy: order.createdBy,
                         truckOwner: order.truckOwner,
@@ -183,16 +199,19 @@ export default class OrderService {
                         warehouseId: order.warehouseId,
                         productName: item.productName,
                         productCode: item.productCode,
-                        totalAmount: order.totalAmount,
                         deliveryDate: order.deliveryDate,
-                        deliveryDate: order.deliveryDate,
+                        dateOrderCreated: order.createdAt,
+                        sameOrderIdtag: (index + 1) * 10,
                         salesOrderId: order.salesOrderId,
-                        subTotalAmount: order.subTotalAmount,
+                        customerRegion: order.customerRegion,
+                        customerPhoneNumber: order.customerPhoneNumber,
+                        vatAmount: item.productName.includes('Empty') || item.productName.includes('Crate') ? 0 : item.total * 0.075 ,
+                        totalAmount: item.productName.includes('Empty') || item.productName.includes('Crate') ? item.total : item.total * 1.075,
                     };
                 })
             )
             .flat();
-
+console.log(printData, '=======');
         await AuthUtils.downloadResource(res, 'orders.csv', orderfields, printData);
     }
 
@@ -284,7 +303,8 @@ export default class OrderService {
         return getOrders;
     }
 
-    async searchOrder({ role, status }, { search, orderStatus }) {
+    async searchOrder({ role, status }, { search, orderStatus, page, pageSize  }) {
+        const { limit, offset } = paginate({ page, pageSize });
         let optionsObj = {
             where: {
                 [sequelize.Op.or]: [{
@@ -300,8 +320,11 @@ export default class OrderService {
                 ],
             },
             include: ['orderItems'],
+            limit, 
+            offset,
             distinct: true,
         };
+        
         if (orderStatus) optionsObj.where.status = orderStatus;
         let queryOptions;
 
@@ -403,47 +426,73 @@ export default class OrderService {
             if (file == undefined) {
                 return res.status(400).send('Please upload a CSV file!');
               }
+
               let orders = [];
               let path = file.path;
     
               createReadStream(path)
               .pipe(parse({headers: true}))
-              .on('data', (row) => orders .push(row))
-              .on('end',  () => {
-                  orders.forEach((elem , index)=> {
-                    const orderBodyData = {
-                        account: elem.account,
-                        vatAmount,
-                        customerId,
-                        totalAmount,
-                        warehouseId,
-                        deliveryDate,
-                        subTotalAmount,
-                        createdBy: name,
-                        status: 'captured',
-                        salesOrderId: CommonService.generateReference('CTO_'),
+              .on('data', (row) => orders.push(row))
+              .on('end',  async() => {
+                const key = 'salesOrder';
+                const unique = groupBy(orders, index => index[key]);
+                const orderData = Object.keys(unique).map(key => {
+                    const dataMatch = unique[key][0];
+                    return {
+                        status: 'captured', 
+                        account : dataMatch.name,
+                        createdBy: 'Ifeoluwa Subair',
+                        comment: 'Live Order Captured',
+                        customerId: dataMatch.customer,
+                        warehouseId: dataMatch.mWarehouse,
+                        salesOrderId: dataMatch.salesOrder,
+                        deliveryDate: dataMatch.reqShipDate,
+                        vatAmount: sumBy(unique[key], index => +index[' vatAmount ']).toFixed(2),
+                        totalAmount: sumBy(unique[key], index => +index[' totalAmt ']).toFixed(2),
+                        subTotalAmount: sumBy(unique[key], index => +index[' totalOrderValue ']).toFixed(2),
                     };
-                  })
-                  Order.bulkCreate(orders)
-                  .then(() => {
-                    res.status(200).send({
-                        message: 'Uploaded the file successfully: ' + file.originalname,
-                      })
-                  })
-                  .then(unlink(path, err => {
-                    if (err) throw err;
-                  }))
-                  .catch(error => {
+                  });
+
+                const order = await Order.bulkCreate(orderData);
+              
+                const orderItemBulkCreate = orders.reduce((acc, item) => {
+                   const condition = find(order, (elem) => elem.salesOrderId === item.salesOrder);
+                   const brand =  item.brand.toLowerCase() == "betamalt" || item.brand.toLowerCase() == "grand malt" ? item.brand : 'all';
+                   
+                   if ( !!condition ){
+                    const data = Object.assign({}, {   
+                        cases: item.noCases,
+                        orderId: condition.id,
+                        total: item[' totalAmt '],
+                        productName: item.mStockDes,
+                        productCode: item.mStockCode,
+                        pallets: getCasesToPallet(item.size, item.packageType, brand, item.noCases),
+                        volume: /\d/.test(item.mStockDes) ? getHectoliters(item.size, item.mStockCode, item.noCases ) : 0,
+                    });
+                
+                    acc.push(data);
+                   }
+
+                   return acc
+            }, []);
+
+            await Order_items.bulkCreate(orderItemBulkCreate);
+
+            Order
+            .findAll({ include: ['orderItems'] })
+            .then( output  => { res.status(200).send({ output }) })
+            .then( unlink(path, (err) => { if (err) throw err }))
+            .catch( error => {
                     res.status(500).send({
-                        message: 'Fail to import data into database!',
                         error: error.message,
-                      });
-                  })
-              })
+                        message: 'Fail to import data into database!',
+                    });
+                });          
+            });
         } catch (error) {
             res.status(500).send({
                 message: 'Could not upload the file: ' + req.file.originalname,
               });
-        }   
-    }
-}
+        };  
+    };
+};

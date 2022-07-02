@@ -113,7 +113,7 @@ export class OrderController {
 
   async orderLiveUpdate(req, res, next){
     try {
-      await orderService.captureLiveOrderUpload(res, req.file)
+      await orderService.captureLiveOrderUpload(res, req.file);
     } catch (error) {
       next(error);
     }

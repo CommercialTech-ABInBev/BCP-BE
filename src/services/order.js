@@ -211,7 +211,7 @@ export default class OrderService {
                 })
             )
             .flat();
-console.log(printData, '=======');
+
         await AuthUtils.downloadResource(res, 'orders.csv', orderfields, printData);
     }
 
@@ -293,7 +293,7 @@ console.log(printData, '=======');
                     status: 'picked',
                 }, { customerId }
             );
-        })
+        });
         
         const getOrders = await Order.findOne({
             where: { id },

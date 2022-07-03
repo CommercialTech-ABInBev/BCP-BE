@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "coverage": "nyc report --reporter=text-lcov | coveralls",
-        "test": "yarn lint && yarn style:fix && yarn style:check && yarn test:unit && yarn test:functional",
+        "test": "npm style:fix && npm style:check",
         "lint": "eslint ./src ./test --ext .js",
         "lint:fix": "eslint ./src ./test --ext .js --fix",
         "test:functional": "dotenv -e .env -- jest --projects ./test --runInBand ---detectOpenHandles --forceExit",
@@ -17,6 +17,7 @@
         "migrate": "sequelize db:migrate ",
         "migrate:reset": "sequelize db:migrate:undo:all",
         "seed": "sequelize db:seed:all",
+        "dropInventory": "sequelize db:migrate:undo --name 20220310223510-create-inventory.js && sequelize db:migrate:undo --name 20220308162416-create-customer.js ",
         "dropOrders": "sequelize db:migrate:undo --name 20220312060956-create-order.js && sequelize db:migrate:undo --name 20220312061656-create-order-items.js ",
         "migrate:seed": "yarn migrate && yarn seed",
         "style:check": "prettier --check 'src/**/*.js' 'test/**/*.js'",

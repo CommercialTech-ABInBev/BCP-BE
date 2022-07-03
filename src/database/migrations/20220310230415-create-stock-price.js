@@ -14,6 +14,7 @@ export function up(queryInterface, Sequelize) {
     B: Sequelize.STRING,
     C: Sequelize.STRING,
     D: Sequelize.STRING,
+    E: Sequelize.STRING,
     I: Sequelize.STRING,
     K: Sequelize.STRING,
     F: Sequelize.STRING,

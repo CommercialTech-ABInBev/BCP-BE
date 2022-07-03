@@ -9,6 +9,7 @@ export default (sequelize, DataTypes) => {
       B: DataTypes.STRING,
       C: DataTypes.STRING,
       D: DataTypes.STRING,
+      E: DataTypes.STRING,
       I: DataTypes.STRING,
       K: DataTypes.STRING,
       F: DataTypes.STRING,

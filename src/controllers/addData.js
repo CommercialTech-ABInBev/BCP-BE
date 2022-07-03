@@ -16,7 +16,7 @@ const { successResponse, errorResponse } = ToolBox;
 const { Customer, CustomerAddress, Truck, Inventory, Balance, StockPrice } =
   database;
 
-  
+
 const addDataController = {
   async download(req, res, next) {
     try {
@@ -687,6 +687,11 @@ const addDataController = {
           stocks.push(row);
         })
         .on('end', () => {
+          // return res.status(200).send({
+          //         message: 'Fail to import data into database!',
+          //         stocks
+          //       });
+
           StockPrice.bulkCreate(stocks)
             .then(() => {
               res.status(200).send({
@@ -764,7 +769,7 @@ const addDataController = {
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
-
+      // return console.log('uuuu');
       let balances = [];
 
       let path = req.file.path;
@@ -977,6 +982,7 @@ const addDataController = {
     }
   },
 
+
   /**
    * Admin bulk create eligible balance
    * @async
@@ -985,12 +991,12 @@ const addDataController = {
    * @returns {JSON} a JSON response with StockPrice details
    * @memberof const AddDataController
    */
-   async createBulkOnlyBalance(req, res) {
+  async createBulkOnlyBalance(req, res) {
     try {
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
-
+      // return console.log("jjjs");
       let balances = [];
 
       let path = req.file.path;
@@ -1003,6 +1009,8 @@ const addDataController = {
           balances.push(row);
         })
         .on('end', () => {
+          // console.log("hiii");
+
           Balance.bulkCreate(balances)
             .then(() => {
               res.status(200).send({
@@ -1038,12 +1046,12 @@ const addDataController = {
    * @returns {JSON} a JSON response with StockPrice details
    * @memberof const AddDataController
    */
-   async updateCustomerBalance(req, res) {
+  async updateCustomerBalance(req, res) {
     try {
       if (req.file == undefined) {
         return res.status(400).send('Please upload a CSV file!');
       }
-
+      // return console.log("jujjj");
       let balances = [];
 
       let path = req.file.path;
@@ -1060,23 +1068,35 @@ const addDataController = {
             .then((customers) => {
               balances = balances.filter((x) => x != null);
               let result = [];
-              customers.forEach((customer) => {
-                const balanceInfo = balances.find(
-                  (balance) =>
-                    balance.customer === customer.dataValues.customerId
+
+              const uniqueBalance = [];
+
+              for (let i = 0; i < balances.length; i++) {
+                let balance = balances[i];
+                const currentItemIndex = uniqueBalance.findIndex((item) => item.customerId === balance.customerId);
+
+                if (currentItemIndex < 0) {
+                  uniqueBalance.push(balance);
+                } else {
+                  uniqueBalance[currentItemIndex].currentBalance = Number(balance.currentBalance) + Number(uniqueBalance[currentItemIndex].currentBalance)
+                }
+              }
+
+              uniqueBalance.forEach((balance) => {
+                const customerInnfo = customers.find(
+                  (customer) =>
+                    balance.customerId === customer.dataValues.customerId
                 );
 
-                if (balanceInfo !== undefined && balanceInfo !== null) {
+                if (customerInnfo !== undefined && customerInnfo !== null) {
                   result.push({
-                    id: customer.dataValues.id,
-                    customerId: customer.dataValues.customerId,
-                    currentBalance: Number(balanceInfo.currentBalance) + Number(customer.dataValues.currentBalance),
+                    id: customerInnfo.dataValues.id,
+                    customerId: customerInnfo.dataValues.customerId,
+                    currentBalance: Number(balance.currentBalance) + Number(customerInnfo.dataValues.currentBalance),
                   });
                 }
                 return result;
               });
-
-              // return console.log(result)
 
               Customer.bulkCreate(result, {
                 updateOnDuplicate: [

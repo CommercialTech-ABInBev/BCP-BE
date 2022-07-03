@@ -57,8 +57,6 @@ router.delete('/inventories/reset', resetInventoriesDB);
 router.get('/inventories', getAllEligibleInventories);
 router.post(
   '/inventories',
-  // authMiddleware,
-  // verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkInventories
 );
@@ -67,22 +65,16 @@ router.delete('/balance/reset', resetBalanceDB);
 router.get('/balance', getAllEligibleBalance);
 router.post(
   '/balance',
-  // authMiddleware,
-  // verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkBalance
 );
 router.post(
   '/only/balance',
-  authMiddleware,
-  verifyRoles(['superadmin']),
   csvUpload.single('file'),
   createBulkOnlyBalance
 );
 router.patch(
   '/balance',
-  authMiddleware,
-  verifyRoles(['superadmin']),
   csvUpload.single('file'),
   updateCustomerBalance
 );

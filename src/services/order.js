@@ -363,13 +363,13 @@ export default class OrderService {
             }, { id }
         );
 
-        order.orderItems.forEach(async({ total, productCode }) => {
+        order.orderItems.forEach(async({ cases, productCode }) => {
             const options = { stockCode: productCode, warehouse: order.warehouseId };
             const stock = await findByKeys(Inventory, options);
 
             await updateByKey(
                 Inventory, {
-                    freeStockCs: Number(stock.freeStockCs) + Number(total),
+                    freeStockCs: Number(stock.freeStockCs) + Number(cases),
                     dateLastStockMove: dateString,
                 },
                 options
